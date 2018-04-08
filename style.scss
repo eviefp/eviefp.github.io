@@ -1,6 +1,13 @@
 ---
 ---
 
+$background: #0e1827;
+$preBackground: #041229;
+$titleColor: #9aa9fb;
+$strongColor: $titleColor;
+
+$keyword: $titleColor;
+
 * {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
@@ -25,8 +32,8 @@ html {
 }
 
 body {
-  color: #515151;
-  background-color: #fff;
+  color: #fff;
+  background-color: $background;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
@@ -46,8 +53,12 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .5rem;
   font-weight: 600;
   line-height: 1.1;
-  color: #333;
+  color: $titleColor;
   letter-spacing: -.025rem;
+}
+
+h1, h2 {
+  border-bottom: 1px solid;
 }
 
 h1 {
@@ -133,7 +144,7 @@ hr {
 }
 
 strong {
-  color: #333;
+  color: $strongColor;
   font-weight: 600;
 }
 
@@ -168,8 +179,8 @@ pre {
 code {
   padding: .25em .5em;
   font-size: 85%;
-  color: #bf616a;
-  background-color: #f9f9f9;
+  color: #c48a90;
+  background-color: $preBackground;
   border-radius: 3px;
 }
 
@@ -184,7 +195,8 @@ pre {
   white-space: pre-wrap;
   word-break: break-all;
   // word-wrap: break-word;
-  background-color: #f9f9f9;
+  background-color: $preBackground;
+  color: #fff;
 }
 
 pre code {
@@ -197,6 +209,7 @@ pre code {
 .highlight {
   margin-bottom: 1rem;
   border-radius: 4px;
+  color: #fff;
 }
 
 .highlight pre {
@@ -274,7 +287,7 @@ tbody tr:nth-child(odd) th {
     font-weight: 300;
 
     a {
-      color: #333;
+      color: #fff;
 
       &:hover,
       &:focus {
@@ -293,9 +306,10 @@ tbody tr:nth-child(odd) th {
     font-size: .75rem;
     font-weight: 600;
     text-transform: uppercase;
+    border: none;
 
     a {
-      color: #333;
+      color: $titleColor;
 
       &:hover,
       &:focus {
@@ -349,9 +363,10 @@ tbody tr:nth-child(odd) th {
 .list {
   &-post-title {
     margin-bottom: .25rem;
+    border: none;
 
     a {
-      color: #333;
+      color: #fff;
 
       &:hover,
       &:focus {
@@ -375,27 +390,27 @@ tbody tr:nth-child(odd) th {
 .highlight .hll { background-color: #ffffcc }
 .highlight .c { color: #999988; font-style: italic } /* Comment */
 .highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
-.highlight .k { color: #000000; font-weight: bold } /* Keyword */
-.highlight .o { color: #000000; font-weight: bold } /* Operator */
+.highlight .k { color: $keyword; font-weight: bold } /* Keyword */
+.highlight .o { color: $keyword; font-weight: bold } /* Operator */
 .highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
 .highlight .cp { color: #999999; font-weight: bold; font-style: italic } /* Comment.Preproc */
 .highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
 .highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
-.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
-.highlight .ge { color: #000000; font-style: italic } /* Generic.Emph */
+.highlight .gd { color: $keyword; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { color: $keyword; font-style: italic } /* Generic.Emph */
 .highlight .gr { color: #aa0000 } /* Generic.Error */
 .highlight .gh { color: #999999 } /* Generic.Heading */
-.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi { color: $keyword; background-color: #ddffdd } /* Generic.Inserted */
 .highlight .go { color: #888888 } /* Generic.Output */
 .highlight .gp { color: #555555 } /* Generic.Prompt */
 .highlight .gs { font-weight: bold } /* Generic.Strong */
 .highlight .gu { color: #aaaaaa } /* Generic.Subheading */
 .highlight .gt { color: #aa0000 } /* Generic.Traceback */
-.highlight .kc { color: #000000; font-weight: bold } /* Keyword.Constant */
-.highlight .kd { color: #000000; font-weight: bold } /* Keyword.Declaration */
-.highlight .kn { color: #000000; font-weight: bold } /* Keyword.Namespace */
-.highlight .kp { color: #000000; font-weight: bold } /* Keyword.Pseudo */
-.highlight .kr { color: #000000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kc { color: $keyword; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: $keyword; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: $keyword; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: $keyword; font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { color: $keyword; font-weight: bold } /* Keyword.Reserved */
 .highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
 .highlight .m { color: #009999 } /* Literal.Number */
 .highlight .s { color: #d01040 } /* Literal.String */
@@ -411,7 +426,7 @@ tbody tr:nth-child(odd) th {
 .highlight .nn { color: #555555 } /* Name.Namespace */
 .highlight .nt { color: #000080 } /* Name.Tag */
 .highlight .nv { color: #008080 } /* Name.Variable */
-.highlight .ow { color: #000000; font-weight: bold } /* Operator.Word */
+.highlight .ow { color: $keyword; font-weight: bold } /* Operator.Word */
 .highlight .w { color: #bbbbbb } /* Text.Whitespace */
 .highlight .mf { color: #009999 } /* Literal.Number.Float */
 .highlight .mh { color: #009999 } /* Literal.Number.Hex */

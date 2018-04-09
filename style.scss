@@ -263,7 +263,7 @@ th {
 
 tbody tr:nth-child(odd) td,
 tbody tr:nth-child(odd) th {
-  background-color: #f9f9f9;
+  background-color: $preBackground;
 }
 
 .lead {
@@ -389,7 +389,7 @@ tbody tr:nth-child(odd) th {
 
 .highlight .hll { background-color: #ffffcc }
 .highlight .c { color: #999988; font-style: italic } /* Comment */
-.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .err { color: #9aa9fb } /* Error */
 .highlight .k { color: $keyword; font-weight: bold } /* Keyword */
 .highlight .o { color: $keyword; font-weight: bold } /* Operator */
 .highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */

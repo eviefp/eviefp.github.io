@@ -4,6 +4,7 @@ description: "What is a Monoid?"
 author: "cvlad"
 ---
 
+
 # Introduction
 
 Despite the fact that monoid is a simple concept, people seem to get
@@ -19,6 +20,7 @@ How to read:
 - if you know the basic PureScript definition but want to see how Applicative
 is a monoid and Alternative is a Semiring, skip to
 [Applicative Monoid](#applicative-monoid)
+
 
 ## Algebraic Monoid
 
@@ -183,16 +185,17 @@ $$
 0 * a = a * 0 = 0 \; \; \; (annihilation)
 $$
 
+
 ## Monoid in PureScript
 
 In PureScript, we can define semigroup and monoid as a type classes:
 
 ```haskell
 class Semigroup m where
-    append :: m -> m -> m
+    append ∷ m → m → m
 
 class Semigroup m <= Monoid m where
-    mempty  :: m
+    mempty ∷ m
 ```
 
 We can now implement the addition monoid:
@@ -206,129 +209,150 @@ instance Monoid Int where
 ```
 
 However, implementing the monoid for multiplication is impossible because we
-can't define two instances of monoid for the same type. The solution is creating
+can't define two instances of monoid for the same type. One solution is creating
 a _newtype_ wrapper for both addition and multiplication and create two monoid
-instances (Additive and Multiplicative).
+instances. For example, _Sum_ would be:
+
+```haskell
+newtype Sum = Sum Int
+
+instance sumSemigroup ∷ Semigroup Sum where
+  append = (+)
+instance sumMonoid ∷ Monoid Sum where
+  mempty = 0
+```
 
 Here's a few more examples of monoids:
   - boolean disjunction with false as the identity
   - boolean conjuction with true as the identity
   - set union with the empty set as identity
   - list concatenation with empty list as identity
-  - functions with `a -> a` signatures and function identity
-  - functions with `a -> m` signatures where `m` is a monoid and the const
+  - functions with `a → a` signatures and function identity
+  - functions with `a → m` signatures where `m` is a monoid and the const
   function that returns `m`s empty as identity
 
 ### Function Monoids
 There are two possible monoid instances for function types.
 
-The set of functions `a -> m` where `m` is a monoid form a different monoid. The
+The set of functions `a → m` where `m` is a monoid form a different monoid. The
 input is "distributed" to all functions, and their results are combined together
 using the `m` monoid instance to a single value. One example of where this could
 be interesting is functions that return lists, where the composition of such
 functions gives us back a flat list, instead of a list of lists.
 
 ```haskell
-instance Semigroup m <= Semigroup (a -> m) where
-    append f g = \x -> append (f x) (g x)
+instance Semigroup m <= Semigroup (a → m) where
+    append f g = \x → append (f x) (g x)
 
-instance Monoid m <= Monoid (a -> m) where
+instance Monoid m <= Monoid (a → m) where
     mempty = const mempty
 ```
 
-The set of functions `a -> a` can be _plugged_ one after the other to create a
+The set of functions `a → a` can be _plugged_ one after the other to create a
 pipeline of operations on the input.
 
 ```haskell
-instance Semigroup (a -> a) where
+instance Semigroup (a → a) where
     append f g = f . g
 
-instance Monoid (a -> a) where
+instance Monoid (a → a) where
     mempty = id
 ```
 
 ### Applicative Monoid
 
-I will assume you know what `Applicative` is. To simplify things, we will
-group together the definitions of `Apply` and `Applicative`:
+I will assume you know the `Applicative` typeclass. How is this a monoid? Let's
+try to create a different definition and see if we can implement one in terms of
+the other:
 
 ```haskell
-class Applicative f where
-    apply :: forall a b. f (a -> b) -> f a -> f b
-    pure :: forall a. a -> f a
+class TupleMonoid f where
+    tappend ∷ ∀ a b. f a → f b → f (Tuple a b)
+    tempty  ∷ f Unit
 ```
 
-How is this a monoid? Let's try to create a different definition and see if
-we can implement one in terms of the other:
+This is not exactly a monoid, since the type of `append` is quite a bit
+different, however let's consider the _monoid_ laws (`tappend` noted as $(+)$).
+First, associativity:
+
+$$
+\begin{align}
+(a + b) + c &= a + (b + c) \\
+(a, b) + c &= a + (b, c) \\
+((a, b), c) &= (a, (b, c))
+\end{align}
+$$
+
+The types are not exactly equal, but they hold the exact same data and we can
+easily define functions to map between the two. So we say the associativity law
+holds up to isomorphism.
+
+As for identity:
+
+$$
+a + mempty = mempty + a = a
+(a, unit) = (unit, a) = a
+$$
+
+Again, since `unit` is a trivial value, we can easily create isomorphic
+functions between the equalities above.
+
+This _up to isomorphism_ addendum is also why we can't use the default
+Semigroup and Monoid typeclasses, but the `TupleMonoid` will do.
+
+Now, let's try to define `TupleMonoid` for any `f` that has an `Applicative`. We
+will use a newtype just to keep things clean:
 
 ```haskell
-class MonoidApplicative f where
-    append :: forall a b. f a -> f b -> f (Tuple a b)
-    mempty :: f Unit
+newtype TMApplicative f a = TMApplicative (f a)
+
+-- ... derive newtype Functor, Apply, Applicative
+
+instance tmMon ∷ Applicative f ⇒ TupleMonoid (TMApplicative f) where
+    tappend fa fb = Tuple <$> fa <*> fb
+    tempty = TMApplicative <<< pure $ unit
 ```
 
-We can implement MonoidApplicative in terms of Applicative:
+`tappend` basically _lifts_ the `Tuple` constructor so we end up with simple
+implementations for the `TupleMonoid` instance. Try mapping out the types
+if it doesn't make sense.
 
-```
-instance Applicative f <= MonoidApplicative f where
-    append fa fb = Tuple <$> fa <*> fb
-    mempty = pure unit
-```
-
-And this looks like a monoid. Let's see about the laws:
+Now the question is, can we implement it the other way around: given `f` with
+`Functor` and `TupleMonoid` instances, can we implement an `Applicative`
+instance? Turns out we can, although it's a bit trickier:
 
 ```haskell
--- Associativity
-(fa <> fb) <> fc = fa <> (fb <> fc)
-f (Tuple a b) <> f c = fa <> f (Tuple b c)
-f (Tuple (Tuple a b) c) = f (Tuple a (Tuple b c))
+newtype TMMonoid f a = TMMonoid (f a)
 
--- Identity
-fa <> mempty = mempty <> fa = fa
-f (Tuple a Unit) = f (Tuple Unit a) = a
+-- ... derive newtype Functor, TupleMonoid
+
+instance appTM ∷ (Functor f, TupleMonoid f)
+               ⇒ Apply (TMMonoid f) where
+  apply fab fa = tappend fab fa <#> \(Tuple ab a) → ab a
+
+instance applTM ∷ (Functor f, TupleMonoid f)
+                ⇒ Applicative (TMMonoid f) where
+  pure a = a <$ tempty
 ```
 
-Unfortunately, the laws don't hold exactly, but we can see that they there is
-an _isomorphism_ between the Tuples. So, we say the laws hold _up to
-isomorphism_.
+The trick with `apply` is that the result from `tappend fab fa` is of the type
+`f (a → b, a)`, so we `map` (`<#>` is just `flip map`) a function that takes
+a tuple and applies `fst` to `snd` to get a `f b`.
 
-Now that we proved we can implement a monoidal applicative, let's see if we can
-do it the other way around:
-
-```haskell
-instance (MonoidApplicative f, Functor f) <= Applicative f where
-    apply fab fa = tapply <$> tuple
-
-        where
-
-        tuple :: f (Tuple (a -> b) a)
-        tuple = append fab fa
-
-        tapply :: Tuple (a -> b) a -> b
-        tapply (Tuple ab a) = ab a
-    pure a = const a <$> mempty
-```
-
-This is a bit trickier. The idea is that using the monoidal applicative gives us
-a tuple of `a -> b` and `a`, inside an `f` (the `tuple` in the where clause). We
-can then `map` a tuple combinator that applies `snd` to `fst`.
-
-Pure is a bit simpler, we just `map mempty` over `const a` to get `f a`.
-
-This substitute of a proof might not be very interesting or impressive to
-everyone, but the important take-away is that _Applicative is a monoid_.
+As for `pure`, `<$` is implemented as `map (const x)`, so we just discard the
+unit from `tempty` but keep the container, so we get an `f a`.
 
 ### Alt Monoid
 
-Similarly to `Apply` and `Alternative`, PureScript has `Alt` and `Plus` which
-are the rough equivalents of `Semigroup` and `Monoid`:
+Similarly to `Apply` and `Alternative`, PureScript has `Alt` and `Plus`
+typeclasses which are the rough equivalents of `Semigroup` and `Monoid`:
 
 ```haskell
 class Functor f <= Alt f where
-    alt :: forall a. f a -> f a -> f a
+    alt ∷ ∀ a. f a → f a → f a
 
 class Alt f <= Plus f where
-    empty :: forall a. f a
+    empty ∷ ∀ a. f a
 ```
 
 Obviously, `alt` (also known as `<|>`) is `append` and `empty` is identity.
@@ -349,8 +373,19 @@ Additionally, it guarantees the laws:
 empty <*> f = empty -- annihilation
 ```
 
-Which are the laws of `Semiring`.
+Which are the laws of `Semiring`. We are only missing commutativity of `<|>`.
+
 
 ## Why should I care?
 
-Do we even keep this chapter?
+It's an interesting perspective, and we could draw a few analogies:
+
+| Num | Alternative | Array             |
+| --- | ----------- | ----------------- |
+| +   | <&#124;>    | concat            |
+| 0   | empty       | []                |
+| *   | <*>         | cartesian product |
+| 1   | pure        | [a]               |
+
+Check out the [repository](https://github.com/vladciobanu/applicative-monoid)
+with full source code and quickcheck tests.

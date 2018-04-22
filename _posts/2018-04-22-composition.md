@@ -7,12 +7,8 @@ author: "cvlad"
 
 # Introduction
 
-Despite the fact that monoids are a simple concept, people seem to get
-frustrated with them, or just talk
-[nonsense](https://twitter.com/unclebobmartin/status/982229999276060672).
-
 This post will attempt to show what a monoid is from the algebraic perspective 
-and, more practically, through PureScript.
+and apply it through PureScript.
 
 How to read
 - if you know the algebraic definition of a monoid, feel free to skip to

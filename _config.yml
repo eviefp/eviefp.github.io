@@ -25,10 +25,12 @@ markdown:           kramdown
 
 # Navigation
 nav:
-  - name:           "About"
-    href:           "/about"
+#  - name:           "About"
+#    href:           "/about"
   - name:           "Github"
     href:           "//github.com/vladciobanu/"
+  - name:           "Twitter"
+    href:           "//twitter.com/cvlad"
 
 # Sass
 sass:

@@ -8,7 +8,7 @@ author: "cvlad"
 # Introduction
 
 During a very pleasant conversation at a recent
-[Bucharest FP](https://bucharestfp.ro) meetup,
+[Bucharest FP](http://bucharestfp.ro) meetup,
 [somebody](https://twitter.com/igstan) mentioned that `Cont` is, almost exactly,
 _Peirce's law_ from logic. I remembered seeing a
 [tweet](https://twitter.com/paf31/status/1040304689932165120) from Phil Freeman,

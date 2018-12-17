@@ -10,9 +10,10 @@ author: "cvlad"
 During a very pleasant conversation at a recent
 [Bucharest FP](http://bucharestfp.ro) meetup,
 [somebody](https://twitter.com/igstan) mentioned that `Cont` is, almost exactly,
-_Peirce's law_ from logic. I remembered seeing a
-[tweet](https://twitter.com/paf31/status/1040304689932165120) from Phil Freeman,
-so I decided to dig deeper.
+[_Peirce's law_](https://en.wikipedia.org/wiki/Peirce%27s_law). I remembered
+seeing a [tweet](https://twitter.com/paf31/status/1040304689932165120) from Phil
+Freeman which proves that they are indeed equivalent. I thought it would be a
+fun exercise to prove other equivalences from classical logic.
 
 This post assumes you are familar with:
 - the [Curry-Howard correspondence](https://www.youtube.com/watch?v=aeRVdYN6fE8),

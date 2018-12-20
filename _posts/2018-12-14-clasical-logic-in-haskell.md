@@ -256,3 +256,5 @@ instance Monad m => Iso (Lem m) (ImpliesToOr m) where
     from :: ImpliesToOr m -> Lem m
     from (ImpliesToOr im) = Lem $ im pure
 ```
+
+The full source code is available on [my github](https://github.com/vladciobanu/logic-in-haskell).

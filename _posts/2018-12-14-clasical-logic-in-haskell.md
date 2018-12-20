@@ -26,7 +26,7 @@ This post assumes you are familar with:
 # MonadCont and the Law of Excluded Middle
 
 Haskell and PureScript define `MonadCont`, which represent monads that support
-the _call-wth-current-continuation_ (`callCC`) operation:
+the _call-with-current-continuation_ (`callCC`) operation:
 
 ```haskell
 class Monad m => MonadCont m where
@@ -70,7 +70,7 @@ class Iso a b where
 ```
 
 This is just a neat way of having to prove both implications in an iff, packed
-as `to` and `from`. Moving on, we can declare the types:
+as `to` and `from`. Moving on, we can declare the following types:
 
 ### Peirce's law
 Starting with the formula from logic, we can easily write out the Haskell type
@@ -146,7 +146,7 @@ newtype ImpliesToOr m =
 
 ## Proofs
 If this is interesting to you, this would be a good place to look away and try
-for yourself. If you do, keep in mind that typed holes are a very useful in
+for yourself. If you do, keep in mind that typed holes are a very useful tool in
 this process (see [this](https://wiki.haskell.org/GHC/Typed_holes) for an
 example).
 

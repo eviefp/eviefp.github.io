@@ -143,8 +143,6 @@ the program and then extract the proof -- it's really the same thing.
 
 ## Category Theory
 
-[ bla bla basics see X ]
-
 The Curry-Howard-Lambek extends the correspondence to include CT as well. The
 correspondence connects propositions to objects, arrows to implication,
 conjunction to categorical products, etc.
@@ -165,7 +163,7 @@ Before we begin, let's review what a product is:
 `q : A × B → B`, which we will write as `<p, q>`
 - given `A × B` is the product of `A` and `B`, and `C` is an object with two
 arrows `p' : C → A` and `q' : C → B`, there exists an unique arrow
-`m : C → A × B`
+`m : C → A × B` such that `p ∘ m = p'` and `q ∘ m = q'`
 
 Also, remember that we can compose any two arrows `f : A → B` and `g : B → C`
 via `g ∘ f`.
@@ -205,9 +203,14 @@ By **composition** we can obtain the arrow `q' ∘ q ∘ t : T → C`.
 Similarly to the step before, by definition of **product**, since we know
 `(A × B) × C` is a product of `A × B` and `C`, and since we have the arrows
 `l : T → A × B` and `q' ∘ q ∘ t : T → C`, then there must exist an unique
-arrow `t' : (A × B) × C`.
+arrow `t' : T → (A × B) × C`.
+
+Note: there are, in fact, as many arrows `T → (A × B) × C` as are elements in
+`(A × B) × C`, but `t'` is the unique one derived from the initial arrow, `t`.
 
 ![ct4](/content/curry-howard/ct4.jpg "ct4")
+
+Edit: See this [twitter thread for a whiteboard proof of sum associativity](https://twitter.com/BartoszMilewski/status/1093565646036643841).
 
 ## Back to Haskell
 
@@ -235,3 +238,7 @@ If we look back at the Haskell definition:
 `assoc a_bc = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))`
 
 Which means we reached the same implementation/proof, again.
+
+
+Edit: Thank you to [Bartosz Milewski](https://twitter.com/BartoszMilewski) and
+[GhiOm](https://github.com/glmxndr) for their [early feedback](https://github.com/vladciobanu/vladciobanu.github.io/issues/1).

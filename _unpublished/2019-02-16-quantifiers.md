@@ -23,8 +23,8 @@ Forall (∀) is the universal quantifier and is generally written as
 ∀ x. P x
 ```
 where `x` is a variable and `P` is a predicate taking such a variable. A basic
-example of such a proposition could be: "For all numbers x, if you add one to
-x, you get a greater number than x", or:
+example of such a proposition could be: _"For all numbers x, if you add one to
+x, you get a greater number than x"_, or:
 ```
 ∀ x. x + 1 > x
 ```
@@ -33,11 +33,27 @@ Similarly, exists (∃) is the existential quantifier and is written as
 ```
 ∃ x. P x
 ```
-where `x` is a variable and `P` is a predicate, for example: "there exists a
-number that is greater than 10", or:
+where `x` is a variable and `P` is a predicate, for example: _"there exists a
+number that is greater than 10"_, or:
 ```
 ∃ x. x > 10
 ```
+
+Please note that in classical logic, you can prove an existential proposition by
+either finding an `x` for which `P(x)` is _true_, or by assuming there does not
+exist such an `x` and reaching a contradiction (
+[proof by contradiction](https://en.wikipedia.org/wiki/Proof_by_contradiction)).
+In _intuitionistic_ logic, the latter is not possible: we have to find the `x`.
+One could then say that an existential quantifier in intuitionistic logic is
+described by a pair of `x` and `P(x)`.
+
+In the next chapter, we will look at dependent sum and I will say it's the
+Curry-Howard correspondent of existential quantifiers. Most theorem provers that
+rely on this correspondence will use make use of 
+[proof irrelevance](https://www.cs.cmu.edu/~fp/courses/15317-f08/lectures/08-irrelevance.pdf)
+which essentially means that it should not matter whether one picks `11` or `12`
+in order to to prove `∃ x. x > 10`: the proofs should be equivalent. We will not
+look into this, nor will we make use of proof irrelevance in this post.
 
 ## Dependent Sum
 
@@ -58,6 +74,9 @@ Constructing such a term requires a term of the existential type (_evidence_ for
 example above could be written as `∑_intro 11 (11 > 10)`, assuming there
 exists a type `>` which expresses the greater-than relationship.
 
+Please note that the above example is a simplification and going into the
+details of how an inductive type for `>` works is beyond the scope of this post.
+
 ## Dependent Product
 
 Dependent products (∏) are the type theoretic equivalent of universal
@@ -69,10 +88,11 @@ data Π {A : Set} (P : A → Set) : Set where
 
 The ∏ type is also a higher-kinded type. Note that this definition is almost
 identical to the Σ definition, except for the parantheses used in the
-constructor (`Π_intro`).
+constructor (`Π_intro`). This lines up with the intuition that `∀x. P(X)` can
+be described by a function `A -> P(x)`, where `x : A`.
 
 Constructing a ∏ type takes a function from the quantified variable to the
-type described by the predicate. 
+type described by the predicate.
 
 Constructing a term would, for example be `∏_intro (λn. n + 1 > n)`.
 

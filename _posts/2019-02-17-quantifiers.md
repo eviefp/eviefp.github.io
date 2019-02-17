@@ -41,8 +41,8 @@ number that is greater than 10"_, or:
 
 Please note that in classical logic, you can prove an existential proposition by
 either finding an `x` for which `P(x)` is _true_, or by assuming there does not
-exist such an `x` and reaching a contradiction (
-[proof by contradiction](https://en.wikipedia.org/wiki/Proof_by_contradiction)).
+exist such an `x` and reaching a contradiction
+([proof by contradiction](https://en.wikipedia.org/wiki/Proof_by_contradiction)).
 In _intuitionistic_ logic, the latter is not possible: we have to find the `x`.
 One could then say that an existential quantifier in intuitionistic logic is
 described by a pair of `x` and `P(x)`.

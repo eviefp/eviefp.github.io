@@ -1,6 +1,6 @@
 ---
 title: "Quantifiers in Agda"
-description: "More Logic in PL"
+description: "Forall and Exists as Dependent Types"
 author: "cvlad"
 ---
 
@@ -110,24 +110,26 @@ ignores it, returning the type `X`.
 So, if we take `P` to *not* depend on the quantified item and define it using
 `constT`, then we can obtain tuples in the case of ∑ types:
 ```haskell
-data Σ-pair (A B : Set) : Set where
-    Σ-pair_intro : Σ (constT B A) → Σ-pair A B
+Σ-pair : ∀ (A B : Set) → Set
+Σ-pair a b = Σ (constT b a)
 ```
+Note that `Σ-pair` is a type-level function that takes two types and returns the
+type of pairs.
 
 We can then define a simple pair constructor using the constructor above:
 ```haskell
 Σ-mkPair : ∀ {A : Set}  {B : Set} → A → B → Σ-pair A B
-Σ-mkPair a b = Σ-pair_intro (Σ_intro a b)
+Σ-mkPair a b = Σ_intro a b
 ```
 
 And we can have the two projections by simple pattern match, returning the
 appropriate value:
 ```haskell
 Σ-fst : ∀ {A B : Set} → Σ-pair A B → A
-Σ-fst (Σ-pair_intro (Σ_intro a _)) = a
+Σ-fst (Σ_intro a _) = a
 
 Σ-snd : ∀ {A B : Set} → Σ-pair A B → B
-Σ-snd (Σ-pair_intro (Σ_intro _ b)) = b
+Σ-snd (Σ_intro _ b) = b
 ```
 
 This works because Σ types are defined as `a -> P a -> Σ P`, so if we take a 
@@ -141,14 +143,14 @@ We can now say `Σ_snd (Σ_mkPair 1 2)` and get the result `2`.
 Similarly, if we take `P` to be `const B A`, we can obtain functions out of
 ∏ types:
 ```haskell
-data Π-function (A B : Set) : Set where
-    Π-function_intro : Π (constT B A) → Π-function A B
+Π-function : ∀ (A B : Set) → Set
+Π-function a b = Π (constT b a)
 
 Π-mkFunction : ∀ {A B : Set} → (A → B) → Π-function A B
-Π-mkFunction f = Π-function_intro (Π_intro f)
+Π-mkFunction f = Π_intro f
 
 Π-apply : ∀ {A B : Set} → Π-function A B → A → B
-Π-apply (Π-function_intro (Π_intro f)) a = f a
+Π-apply (Π_intro f) a = f a
 ```
 
 As with sum types, this works because Π types are defined as `(a -> P a) -> Π P`,
@@ -169,26 +171,26 @@ bool _ b false = b
 
 Note that `a` and `b` are types! We can now write:
 ```haskell
-data Σ-sum (A B : Set) : Set where
-    Σ-sum_intro : Σ (bool A B) → Σ-sum A B
+Σ-sum : ∀ (A B : Set) → Set 
+Σ-sum a b = Σ (bool a b)
 ```
 
 Now, in order to construct such a type (via _left_ or _right_), we just need
 to pass the appropriate boolean value along with an item of the correct type:
 ```haskell
 Σ-sum_left : ∀ {A : Set} (B : Set) → A → Σ-sum A B
-Σ-sum_left _ a = Σ-sum_intro (Σ_intro true a)
+Σ-sum_left _ a = Σ_intro true a
 
 Σ-sum_right : ∀ {B : Set} (A : Set) → B → Σ-sum A B
-Σ-sum_right _ b = Σ-sum_intro (Σ_intro false b)
+Σ-sum_right _ b = Σ_intro false b
 ```
 
 Eliminating is just a matter of pattern matching on the boolean value and
 applying the correct function:
 ```haskell
 Σ-sum_elim : ∀ {A B R : Set} → (A → R) → (B → R) → Σ-sum A B → R
-Σ-sum_elim f _ (Σ-sum_intro (Σ_intro true  a)) = f a
-Σ-sum_elim _ g (Σ-sum_intro (Σ_intro false b)) = g b
+Σ-sum_elim f _ (Σ_intro true  a) = f a
+Σ-sum_elim _ g (Σ_intro false b) = g b
 ```
 
 As an example, `Σ-sum_elim (const "left") (const "right") (Σ-sum_left Bool 1)`,
@@ -207,8 +209,8 @@ This means that given two types `A` and `B`, we get a type-level function from
 worry about `Set₁` or `Π'` for now:
 
 ```haskell
-data Π-sum (A B : Set) : Set₁ where
-    Π-sum_intro : Π' (prodPredicate A B) → Π-sum A B
+Π-sum : ∀ (A B : Set) → Set₁
+Π-sum a b = Π' (prodPredicate a b)
 ```
 
 This means that in order to build a sum type, we need to pass a type `R` and
@@ -216,7 +218,7 @@ a function `(A -> R) -> (B -> R) -> R`. So, the constructors will look like:
 
 ```haskell
 Π-sum-left : ∀ {A : Set} (B : Set) → A → Π-sum A B
-Π-sum-left _ a = Π-sum_intro (Π'_intro (\_ f _ → f a))
+Π-sum-left _ a = Π'_intro (\_ f _ → f a)
 ```
 
 The lambda is the only interesting bit: we construct a function that given a
@@ -228,12 +230,26 @@ Similarly, we can write a constructor for _right_:
 
 ```haskell
 Π-sum-right : ∀ {A : Set} (B : Set) → B → Π-sum A B
-Π-sum-right _ b = Π-sum_intro (Π'_intro (\_ _ g → g b))
+Π-sum-right _ b = Π'_intro (\_ _ g → g b)
 ```
 
 As for the eliminator, we simply require the two functions `A -> R` and `B -> R`
 in order to pass to our dependent product and get an `R`:
 ```haskell
 Π-sum-elim : ∀ {A B R : Set} → (A → R) → (B → R) → Π-sum A B → R
-Π-sum-elim f g (Π-sum_intro (Π'_intro elim)) = elim _ f g
+Π-sum-elim f g (Π'_intro elim) = elim _ f g
 ```
+
+## Conclusions
+
+We've used three type-level functions to generate a few interesting types:
+
+| Function      | Σ-type      | Π-type      | 
+| ------------- | ----------- | ------------|
+| constT        | tuple       | function    |
+| bool          | either      | tuple       |
+| prodPredicate | -           | either      |
+
+What other interesting type-level functions can you find for Σ and/or Π types?
+
+You can find the [source file here](/content/quantifiers/DT.agda).

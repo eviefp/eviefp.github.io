@@ -229,4 +229,21 @@ proof :: Int :~: String -> Bool :~: Int -> Bool :~: String
 proof = map
 ```
 
+Another thing worth mentioning is the awesome upcoming GHC extension (being
+worked on by [Csongor Kiss](https://twitter.com/Lowert)) which allows type
+families to be partially applied. Using this feature, one could do something
+like:
+```haskell
+type family Id a where Id x = x
+
+instance FunctorOf (->) (->) Id
+  map = ($)
+
+idExample :: Bool
+idExample = map (+1) 1 == 2
+```
+Please note I have not tested the above code; it was suggested by Tom Harding
+(thanks again for the idea and reviewing!).
+
+
 What other uses can you come up with?

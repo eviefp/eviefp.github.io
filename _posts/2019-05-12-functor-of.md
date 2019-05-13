@@ -229,6 +229,8 @@ proof :: Int :~: String -> Bool :~: Int -> Bool :~: String
 proof = map
 ```
 
+Code is available at https://github.com/vladciobanu/functorof/blob/master/src/FunctorOf.hs
+
 Another thing worth mentioning is the awesome upcoming GHC extension (being
 worked on by [Csongor Kiss](https://twitter.com/Lowert)) which allows type
 families to be partially applied. Using this feature, one could do something

@@ -219,7 +219,7 @@ data x :~: y where
   Refl :: x :~: x
 ```
 
-And this means ee can write transitivity as:
+And this means we can write transitivity as:
 ```haskell
 instance FunctorOf (:~:) (->) ((:~:) x) where
   map :: forall a b. a :~: b -> x :~: a -> x :~: b

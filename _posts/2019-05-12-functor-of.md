@@ -231,10 +231,12 @@ proof = map
 
 Code is available [here](https://github.com/vladciobanu/functorof/blob/master/src/FunctorOf.hs).
 
-Another thing worth mentioning is the awesome upcoming GHC extension (being
-worked on by [Csongor Kiss](https://twitter.com/Lowert)) which allows type
-families to be partially applied. Using this feature, one could do something
-like:
+Another thing worth mentioning is the awesome upcoming
+[GHC extension](https://gitlab.haskell.org/kcsongor/ghc/tree/unsaturated_type_families)
+(being worked on by [Csongor Kiss](https://twitter.com/Lowert)) which allows type
+families to be partially applied. If you haven't
+[read the paper](https://www.microsoft.com/en-us/research/publication/higher-order-type-level-programming-in-haskell/), you should!
+Using this feature, one could do something like:
 ```haskell
 type family Id a where Id x = x
 

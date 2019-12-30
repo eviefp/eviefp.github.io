@@ -96,7 +96,7 @@ dd {
 }
 
 ul {
-  list-style: inside circle;
+  list-style: inside disc;
   padding-left: 0;
 
   li {
@@ -178,7 +178,7 @@ pre {
 }
 
 code {
-  padding: .25em .5em;
+  padding: .25em;
   font-size: 85%;
   color: #c48a90;
   background-color: $preBackground;

@@ -146,9 +146,9 @@ instance Contravariant (Op r) where
 newtype Comparison a = Comparison { getComparison :: a -> a -> Ordering }
 ```
 
-*Exercise 6*: Can you think of a type that has both `Functor` and
+*Exercise 7*: Can you think of a type that has both `Functor` and
 `Contravariant` instances?
 
-*Exercise 7*: Can you think of a type that can't have a `Functor` nor a
+*Exercise 8*: Can you think of a type that can't have a `Functor` nor a
 `Contravariant` instance? These types are called `Invariant` functors.
 

@@ -1,8 +1,7 @@
-{-# LANGUAGE NamedFieldPuns        #-}
-{-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DeriveAnyClass        #-}
-{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE OverloadedStrings     #-}
 
 module Main where
 
@@ -13,23 +12,25 @@ import           Data.Aeson.Lens
 import           Data.Time
 import           Development.Shake
 import           Development.Shake.Classes
-import           Development.Shake.Forward
 import           Development.Shake.FilePath
+import           Development.Shake.Forward
 import           GHC.Generics               (Generic)
 import           Slick
 
-import qualified Data.HashMap.Lazy as HML
+import qualified Data.HashMap.Lazy          as HML
 import qualified Data.Text                  as T
 
 ---Config-----------------------------------------------------------------------
 
 siteMeta :: SiteMeta
 siteMeta =
-    SiteMeta { siteAuthor = "Me"
-             , baseUrl = "https://example.com"
-             , siteTitle = "My Slick Site"
-             , twitterHandle = Just "myslickhandle"
-             , githubUser = Just "myslickgithubuser"
+    SiteMeta { siteAuthor = "Vladimir Ciobanu"
+             , baseUrl = "https://cvlad.info"
+             , siteTitle = "Vladimir Ciobanu's Blog"
+             , twitterHandle = Just "cvlad"
+             , githubUser = Just "vladciobanu"
+             , twitchUser = Just "cvladfp"
+             , youtubeUser = Just "UCDvH0v4GelMrYleTKyFBbvQ"
              }
 
 outputFolder :: FilePath
@@ -49,6 +50,8 @@ data SiteMeta =
              , siteTitle     :: String
              , twitterHandle :: Maybe String -- Without @
              , githubUser    :: Maybe String
+             , twitchUser    :: Maybe String
+             , youtubeUser   :: Maybe String
              }
     deriving (Generic, Eq, Ord, Show, ToJSON)
 
@@ -74,18 +77,18 @@ data Post =
     deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
 
 data AtomData =
-  AtomData { title        :: String
-           , domain       :: String
-           , author       :: String
-           , posts        :: [Post]
-           , currentTime  :: String
-           , atomUrl      :: String } deriving (Generic, ToJSON, Eq, Ord, Show)
+  AtomData { title       :: String
+           , domain      :: String
+           , author      :: String
+           , posts       :: [Post]
+           , currentTime :: String
+           , atomUrl     :: String } deriving (Generic, ToJSON, Eq, Ord, Show)
 
 -- | given a list of posts this will build a table of contents
 buildIndex :: [Post] -> Action ()
 buildIndex posts' = do
   indexT <- compileTemplate' "site/templates/index.html"
-  let indexInfo = IndexInfo {posts = posts'}
+  let indexInfo = IndexInfo {posts = reverse posts'}
       indexHTML = T.unpack $ substitute indexT (withSiteMeta $ toJSON indexInfo)
   writeFile' (outputFolder </> "index.html") indexHTML
 

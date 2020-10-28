@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Vladimir Ciobanu&#39;s Blog">
+    <meta name="author" content="Vladimir Ciobanu">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@cvlad">
+<meta name="twitter:creator" content="@cvlad">
+<meta name="twitter:title" content="Curry-Howard Correspondence Example">
+    <meta name="twitter:description" content="More Logic in PL">
+        <title>Curry-Howard Correspondence Example</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://twitch.tv/cvladfp">
+            <img src="/images/twitch-logo.png" alt="Twitch Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://youtube.com/channel/UCDvH0v4GelMrYleTKyFBbvQ">
+            <img src="/images/youtube-logo.png" alt="Youtube Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://github.com/vladciobanu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/cvlad">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Curry-Howard Correspondence Example
+            </span>
+            <br>
+
+            <br>
+            <span class="byline">by Vladimir Ciobanu</span>
+            <br>
+            <span class="date">Feb 02, 2019</span>
+            <br>
+            <div class="metadata">
+            </div>
+            <div class="tags">
+              <span class="tag haskell">haskell</span>
+              <span class="tag theory">theory</span>
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <h1 id="introduction">Introduction</h1>
+<p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
+<p>This post will show how a simple proof works in Logic, Type Theory, and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B) ∧ C</code>.</p>
+<h2 id="logic">Logic</h2>
+<p>In logic, there are several systems that allows us to reason about propositions. One of them is the natural deduction system and is defined using introduction and elimination rules. For each connective, or operator, we will have at least one of each introduction and elimination rules.</p>
+<p>For example, conjunction (<code>∧</code>) has one introduction rule:</p>
+<pre><code> A   B
+------- (∧i)
+ A ∧ B</code></pre>
+<p>which means, if we know <code>A</code> and <code>B</code>, then we can use the introduction rule (<code>∧i</code>) to deduce the proposition <code>A ∧ B</code>.</p>
+<p>There are two elimination rules for <code>∧</code>:</p>
+<pre><code>A ∧ B                 A ∧ B
+----- (∧e1)           ----- (∧e2)
+  A                     B</code></pre>
+<p>which means, if we know <code>A ∧ B</code>, we can obtain <code>A</code> or <code>B</code> if we use the elimination rules <code>∧e1</code> or <code>∧e2</code>.</p>
+<p>So, if we wanted to prove the conclusion<code>(A ∧ B) ∧ C)</code> from the hypothesis <code>A ∧ (B ∧ C)</code>, we would have to: 1. obtain an <code>A</code> by using <code>∧e1</code> on the hypothesis 2. obtain a <code>B ∧ C</code> by using <code>∧e2</code> on the hypothesis 3. obtain a <code>B</code> by using <code>∧e1</code> on (2) 4. obtain a <code>C</code> by using <code>∧e2</code> on (2) 5. obtain a <code>A ∧ B</code> by using <code>∧i</code> on (1) and (3) 6. reach the conclusion <code>(A ∧ B) ∧ C</code> by using <code>∧i</code> on (5) and (4)</p>
+<p>In natural deduction, it looks like this:</p>
+<pre><code>A ∧ (B ∧ C)          A ∧ (B ∧ C)
+----------- (∧e1)   ------------- (∧e2)
+     A                   B ∧ C
+     .              --- (∧e1)  --- (∧e2)
+     A               B          C
+  --------------------- (∧i)    .
+          A ∧ B                 C
+     ------------------------------- (∧i)
+                (A ∧ B) ∧ C</code></pre>
+<h2 id="type-theory">Type Theory</h2>
+<p>The Curry-Howard correspondence tells us that conjunction translates to pairs in type theory, so we'll switch notation to Haskell's tuple type, using the following notation: - Types: capital letters <code>A</code> <code>B</code> <code>C</code> <code>D</code> - Terms: lowercase letters <code>a</code> <code>b</code> <code>c</code> <code>d</code> - Tuple Types: <code>(A, B)</code> for the tuple <code>A</code> <code>B</code> - Tuple Terms: <code>(a, b)</code> for the tuple <code>a</code> <code>b</code> of type <code>(A, B)</code></p>
+<p>Typed lambda calculus has a deduction system as well. Tuple introduction looks very similar to <code>∧i</code>:</p>
+<pre><code>  a : A    b : B
+------------------ ((,)i)
+ (a, b) : (A, B)</code></pre>
+<p>which means, given a term <code>a</code> of type <code>A</code> and a term <code>b</code> of type <code>B</code>, then we can obtain a term <code>(a, b)</code> of type <code>(A, B)</code>. Note that we no longer need to say <em>"given we know <code>A</code> and <code>B</code>"</em>, since the existence of a term of each type is enough to form the tuple.</p>
+<p>Similarly, there are two elimination rules:</p>
+<pre><code>  (a, b) : (A, B)                  (a, b) : (A, B)
+------------------- ((,)e1)      ------------------- ((,)e2)
+       a : A                            b : B</code></pre>
+<p>which means, given a tuple <code>(a, b)</code> of type <code>(A, B)</code> we can obtain a term <code>a</code> or <code>b</code> of type <code>A</code> or <code>B</code>.</p>
+<p>If we translate the proposition above, then we have to prove <code>((A, B), C)</code> from <code>(A, (B, C))</code>.</p>
+<pre><code>(a, (b, c) : (A, (B, C))          (a, (b, c)) : (A, (B, C))
+------------------------ ((,)e1)  ------------------------- ((,)e2)
+         a : A                         (b, c) : (B, C)
+           .                        ------- ((,)e1) ------- ((,)e2)
+         a : A                       b : B           c : C
+  ----------------------------------------- ((,)i)     .  
+                (a, b) : (A, B)                      c : C
+            -------------------------------------------------- ((,)i)
+                        ((a, b), c) : ((A, B), C)</code></pre>
+<p>The form is identical to the logic proof, except we have terms and the rules use <code>(,)</code> instead of <code>∧</code>.</p>
+<h2 id="haskell-proof">Haskell Proof</h2>
+<p>We can write the same thing in Haskell:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">assoc ::</span> (a, (b, c)) <span class="ot">-&gt;</span> ((a, b), c)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>assoc (a, (b, c)) <span class="ot">=</span> ((a, b), c)</span></code></pre></div>
+<p>However, this takes advantage of a powerful Haskell feature known as pattern matching.</p>
+<p>Given the proof above, it's easy to noice that <code>(,)i</code> is exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code> and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at the proof above, we could say, given hypothesis <code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain: 1. <code>a : A</code> from <code>fst h</code> 2. <code>(b, c) : (B, C)</code> from <code>snd h</code> 3. <code>b : B</code> from <code>fst (snd h)</code> 4. <code>c : C</code> from <code>snd (snd h)</code> 5. <code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd h))</code> 6. <code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd h)), snd (snd h))</code></p>
+<p>So, in Haskell:</p>
+<pre><code>assoc&#39; :: (a, (b, c)) -&gt; ((a, b), c)
+assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
+<p>This is a neat effect of the Curry-Howard correspondence: proofs are programs. So, once we write the proof, we also have the program. We could even write the program and then extract the proof -- it's really the same thing.</p>
+<h2 id="category-theory">Category Theory</h2>
+<p>The Curry-Howard-Lambek extends the correspondence to include CT as well. The correspondence connects propositions to objects, arrows to implication, conjunction to categorical products, etc.</p>
+<p>While in logic we said "given a proof of <code>A</code>", and in type theory we said "given a term of type <code>A</code>", the only way we can do the same in CT is to say "given an arrow from the terminal object <code>T</code> to <code>A</code>, <code>f : T → A</code>". This works because the terminal object represents <code>True</code> / <code>Unit</code> in logic / type theory, so it means "given we can deduce <code>A</code> from <code>True</code>", or "given we can obtain a term <code>a : A</code> from <code>() : ()</code>".</p>
+<p>Armed with this, we can now express the same problem in CT terms: - given an arrow <code>h : T → (A × (B × C))</code> - obtain an arrow <code>p : T → ((A × B) × C))</code></p>
+<p>Before we begin, let's review what a product is: - given <code>A × B</code>, we know there are two arrows <code>p : A × B → A</code> and <code>q : A × B → B</code>, which we will write as <code>&lt;p, q&gt;</code> - given <code>A × B</code> is the product of <code>A</code> and <code>B</code>, and <code>C</code> is an object with two arrows <code>p' : C → A</code> and <code>q' : C → B</code>, there exists an unique arrow <code>m : C → A × B</code> such that <code>p ∘ m = p'</code> and <code>q ∘ m = q'</code></p>
+<p>Also, remember that we can compose any two arrows <code>f : A → B</code> and <code>g : B → C</code> via <code>g ∘ f</code>.</p>
+<p>Now we are ready for the proof:</p>
+<p><code>T</code> is the terminal object, and <code>t : T → A × (B × C)</code> is what we start with. We need to be able to obtain an arrow <code>t' : T → (A × B) × C)</code>.</p>
+<p><img src="/content/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
+<p>By <strong>product</strong> <code>A × (B × C)</code>, we know there exists <code>p : A × (B × C) → A</code> and <code>q : A × (B × C) → B × C</code>.</p>
+<p>By <strong>composition</strong>, we can obtain the arrows <code>p ∘ t : T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
+<p>By <strong>product</strong> <code>B × C</code>, we know there exists <code>p' : B × C → B</code> and <code>q' : B × C → C</code>.</p>
+<p>By <strong>composition</strong>, we can obtain the arrow <code>p' ∘ q ∘ t : T → B</code>.</p>
+<p>So now, we have the following arrows: - <code>p ∘ t : T → A</code> - <code>p' ∘ q ∘ t : T → B</code></p>
+<p><img src="/content/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
+<p>By definition of <strong>product</strong>, since we know <code>A × B</code> is the product of <code>A</code> and <code>B</code>, and since we have the arrows <code>T → A</code> and <code>T → B</code>, then we know there must be an unique arrow which we'll name <code>l : T → A × B</code>.</p>
+<p>By <strong>composition</strong> we can obtain the arrow <code>q' ∘ q ∘ t : T → C</code>.</p>
+<p><img src="/content/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
+<p>Similarly to the step before, by definition of <strong>product</strong>, since we know <code>(A × B) × C</code> is a product of <code>A × B</code> and <code>C</code>, and since we have the arrows <code>l : T → A × B</code> and <code>q' ∘ q ∘ t : T → C</code>, then there must exist an unique arrow <code>t' : T → (A × B) × C</code>.</p>
+<p>Note: there are, in fact, as many arrows <code>T → (A × B) × C</code> as are elements in <code>(A × B) × C</code>, but <code>t'</code> is the unique one derived from the initial arrow, <code>t</code>.</p>
+<p><img src="/content/curry-howard/ct4.jpg" title="ct4" alt="ct4" /></p>
+<p>Edit: See this <a href="https://twitter.com/BartoszMilewski/status/1093565646036643841">twitter thread for a whiteboard proof of sum associativity</a>.</p>
+<h2 id="back-to-haskell">Back to Haskell</h2>
+<p>If we follow the CT arrows as we followed the logic proof: - we could rewrite the <code>l : T → A × B</code> arrow as <code>&lt;i,j&gt; : T → A × B</code>, where <code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q ∘ t : T → B</code>. - we already have <code>k = q' ∘ q ∘ t : T → C</code></p>
+<p>So, if instead of <code>t</code> we write <code>a_bc</code> to denote our hypothesis, or inputs, let's look closer at what <code>i</code>, <code>j</code> and <code>k</code> are: - <code>i</code> is <code>p ∘ t</code>, which is the left projection of the premise, or <code>fst a_bc</code></p>
+<p>You may ask: Why?!? Well, <code>p ∘ t</code> means <code>p after t</code>. In our case, <code>t</code> represents the input, so it's equivalent to <code>a_bc</code>, and <code>p</code> is the left projection, which is equivalent to <code>fst</code>. Keep in mind that <code>a ∘ b ∘ c</code> means <code>c first, then b, then a</code> when reading the following.</p>
+<ul>
+<li><code>j</code> is <code>p' ∘ q ∘ t</code>, which is <code>fst (snd a_bc)</code></li>
+<li><code>l = &lt;i,j&gt;</code>, so <code>l = (fst a_bc, fst (snd a_bc))</code></li>
+<li><code>k</code> is <code>snd (snd a_bc)</code></li>
+<li>the result, <code>T → (A × B) × C</code> is <code>&lt; &lt;i,j&gt;, k &gt; = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></li>
+</ul>
+<p>If we look back at the Haskell definition: <code>assoc a_bc = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
+<p>Which means we reached the same implementation/proof, again.</p>
+<p>Edit: Thank you to <a href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a href="https://github.com/glmxndr">GhiOm</a> for their <a href="https://github.com/vladciobanu/vladciobanu.github.io/issues/1">early feedback</a>.</p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://cvlad.info" data-text="Check out: Curry-Howard Correspondence Example - " data-via="cvlad">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/cvlad" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @cvlad</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

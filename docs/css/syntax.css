@@ -2,13 +2,23 @@ pre {
     background-color: #F5FCFF;
 }
 
+.dark pre {
+    background-color: #393c31;
+}
+
 code {
     background-color: #F5FCFF;
     color: #268BD2;
 }
 
+.dark code {
+    background-color: #393c31;
+}
+
+
 /* KeyWordTok */
 .sourceCode .kw { color: #600095; }
+.dark .sourceCode .kw { color: #b584d0; }
 /* DataTypeTok */
 .sourceCode .dt { color: #268BD2; }
 
@@ -26,6 +36,7 @@ code {
 .sourceCode .al { color: #A6E22E; font-weight: bold; }
 /* FunctionTok */
 .sourceCode .fu { color: #333; }
+.dark .sourceCode .fu { color: #a873a2; }
 /* RegionMarkerTok */
 .sourceCode .re { }
 /* ErrorTok */

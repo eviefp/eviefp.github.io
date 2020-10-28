@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Vladimir Ciobanu&#39;s Blog">
+    <meta name="author" content="Vladimir Ciobanu">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@cvlad">
+<meta name="twitter:creator" content="@cvlad">
+<meta name="twitter:title" content="The Functor Family: Contravariant">
+    <meta name="twitter:description" content="A look into contravariant functors.">
+        <title>The Functor Family: Contravariant</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://twitch.tv/cvladfp">
+            <img src="/images/twitch-logo.png" alt="Twitch Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://youtube.com/channel/UCDvH0v4GelMrYleTKyFBbvQ">
+            <img src="/images/youtube-logo.png" alt="Youtube Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://github.com/vladciobanu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/cvlad">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                The Functor Family: Contravariant
+            </span>
+            <br>
+
+            <br>
+            <span class="byline">by Vladimir Ciobanu</span>
+            <br>
+            <span class="date">Jan 07, 2020</span>
+            <br>
+            <div class="metadata">
+            </div>
+            <div class="tags">
+              <span class="tag haskell">haskell</span>
+              <span class="tag functor">functor</span>
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <h2 id="prerequisites">Prerequisites</h2>
+<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>(-&gt;) r</code></p>
+<h2 id="why">Why</h2>
+<p>Not all higher kinded types <code>* -&gt; *</code> can have a <code>Functor</code> instance. While types like <code>Maybe a</code>, <code>(x, a)</code>, <code>r -&gt; a</code>, <code>Either e a</code> and <code>[a]</code> are <code>Functors</code> in <code>a</code>, there are some types that cannot have a <code>Functor</code> instance. A good example is <code>Predicate</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Predicate</span> a <span class="ot">=</span> <span class="dt">Predicate</span> {<span class="ot"> getPredicate ::</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span> }</span></code></pre></div>
+<p>We call this type a predicate in <code>a</code> because, given some value of type <code>a</code> we can obtain a <code>True</code> or a <code>False</code>. So, for example: - <code>Predicate (&gt; 10)</code> is a predicate in <code>Int</code> which returns true if the number is greater than 10, - <code>Predicate (== "hello")</code> is a predicate in <code>String</code> which returns true if the string is equal to <em>"hello"</em>, and - <code>Predicate not</code> is a predicate in <code>Bool</code> which returns the negation of the boolean value it receives.</p>
+<p>We can try writing a <code>Functor</code> instance and see what we can learn:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Predicate</span> <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  fmap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Predicate</span> a <span class="ot">-&gt;</span> <span class="dt">Predicate</span> b</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmap</span> f (<span class="dt">Predicate</span> g) <span class="ot">=</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Predicate</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span> \b <span class="ot">-&gt;</span> _welp</span></code></pre></div>
+<p>As the type hole above would suggest, we need to return a <code>Bool</code> value, and we have: - <code>b :: b</code> - <code>f :: a -&gt; b</code> - <code>g :: a -&gt; Bool</code></p>
+<p>There is no way we can combine these terms at all, let alone in such a way as to obtain a <code>Bool</code> value. The only way we would be able to obtain a <code>Bool</code> value is by calling <code>g</code>, but for that, we need an <code>a</code> -- but all we have is a <code>b</code>.</p>
+<p>What if <code>f</code> was reversed, though? If we had <code>f' :: b -&gt; a</code>, then we could apply <code>b</code> to it <code>f' b :: a</code> and then pass it to <code>g</code> to get a <code>Bool</code>. Let's write this function outside of the <code>Functor</code> class:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapPredicate ::</span> (b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> <span class="dt">Predicate</span> a <span class="ot">-&gt;</span> <span class="dt">Predicate</span> b</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mapPredicate f (<span class="dt">Predicate</span> g) <span class="ot">=</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Predicate</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span> \b <span class="ot">-&gt;</span> g (f b)</span></code></pre></div>
+<p>This looks very weird, compared to <code>Functor</code>s, right? If you want to go from <code>Predicate a</code> to <code>Predicate b</code>, you need a <code>b -&gt; a</code> function?</p>
+<p><em>Exercise 1</em>: fill in the typed hole <code>_e1</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">greaterThan10 ::</span> <span class="dt">Predicate</span> <span class="dt">Int</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>greaterThan10 <span class="ot">=</span> <span class="dt">Predicate</span> (<span class="op">&gt;</span> <span class="dv">10</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ot">exercise1 ::</span> <span class="dt">Predicate</span> <span class="dt">String</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>exercise1 <span class="ot">=</span> mapPredicate _e1 greaterThan10</span></code></pre></div>
+<p><em>Exercise 2</em>: write <code>mapShowable</code> for the following type:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Showable</span> a <span class="ot">=</span> <span class="dt">Showable</span> {<span class="ot"> getShowable ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span> }</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ot">mapShowable ::</span> (b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> <span class="dt">Showable</span> a <span class="ot">-&gt;</span> <span class="dt">Showable</span> b</span></code></pre></div>
+<p><em>Exercise 3</em>: Use <code>mapShowable</code> and <code>showableInt</code> to implement <code>exercise3</code> such that <code>getShowable exercise3 True</code> is <code>"1"</code> and <code>getShowable exercise3 False</code> is <code>"2"</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">showableInt ::</span> <span class="dt">Showable</span> <span class="dt">Int</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>showableInt <span class="ot">=</span> <span class="dt">Showable</span> <span class="fu">show</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ot">exercise3 ::</span> <span class="dt">Showable</span> <span class="dt">Bool</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>exercise3 <span class="ot">=</span></span></code></pre></div>
+<h2 id="how">How</h2>
+<p><code>Predicate</code> and <code>Showable</code> are very similar, and types like them admit a <code>Contravariant</code> instance. Let's start by looking at it:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Contravariant</span> f <span class="kw">where</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  contramap ::</span> (b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span></code></pre></div>
+<p>The instances for <code>Predicate</code> and <code>Showable</code> are trivial: they are exactly <code>mapPredicate</code> and <code>mapShowable</code>. The difference between <code>Functor</code> and <code>Contravariant</code> is exactly the function they receive: one is "forward" and the other is "backward", and it's all about how the data type is defined.</p>
+<p>All <code>Functor</code> types have their type parameter <code>a</code> in what we call a <em>positive</em> position. This usually means there can be some <code>a</code> available in the type (which is always the case for tuples, or sometimes the case for <code>Maybe</code>, <code>Either</code> or <code>[]</code>). It can also mean <em>we can obtain an <code>a</code></em>, like is the case for <code>r -&gt; a</code>. Sure, we need some <code>r</code> to do that, but we are able to obtain an <code>a</code> afterwards.</p>
+<p>On the opposite side, <code>Contravariant</code> types have their type parameter <code>a</code> in what we call a <em>negative</em> position: they <em>need</em> to consume an <code>a</code> in order to produce something else (a <code>Bool</code> or a <code>String</code> for our examples).</p>
+<p><em>Exercise 4</em>: Look at the following types and decide which can have a <code>Functor</code> instance and which can have a <code>Contravariant</code> instance. Write the instances down:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">T0</span> a <span class="ot">=</span> <span class="dt">T0</span> a <span class="dt">Int</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">T1</span> a <span class="ot">=</span> <span class="dt">T1</span> (a <span class="ot">-&gt;</span> <span class="dt">Int</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">T2</span> a <span class="ot">=</span> <span class="dt">T2L</span> a <span class="op">|</span> <span class="dt">T2R</span> <span class="dt">Int</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">T3</span> a <span class="ot">=</span> <span class="dt">T3</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">T4</span> a <span class="ot">=</span> <span class="dt">T4L</span> a <span class="op">|</span> <span class="dt">T4R</span> a</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">T5</span> a <span class="ot">=</span> <span class="dt">T5L</span> (a <span class="ot">-&gt;</span> <span class="dt">Int</span>) <span class="op">|</span> <span class="dt">T5R</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>)</span></code></pre></div>
+<p>As with <code>Functor</code>s, we can partially apply higher kinded types to write a <code>Contravariant</code> instance. The most common case is for the flipped version of <code>-&gt;</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Op</span> a b <span class="ot">=</span> <span class="dt">Op</span> {<span class="ot"> getOp ::</span> b <span class="ot">-&gt;</span> a }</span></code></pre></div>
+<p>While <code>a -&gt; b</code> has a <code>Functor</code> instance, because the type is actually <code>(-&gt;) a b</code>, and <code>b</code> is in a <em>positive</em> position, its flipped version has a <code>Contravariant</code> instance.</p>
+<p><em>Exercise 5</em>: Write the <code>Contravariant</code> instance for <code>Op</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Contravariant</span> (<span class="dt">Op</span> r) <span class="kw">where</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  contramap ::</span> (b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> <span class="dt">Op</span> r a <span class="ot">-&gt;</span> <span class="dt">Op</span> r b</span></code></pre></div>
+<p><em>Exercise 6</em>: Write a <code>Contravariant</code> instance for <code>Comparison</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Comparison</span> a <span class="ot">=</span> <span class="dt">Comparison</span> {<span class="ot"> getComparison ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Ordering</span> }</span></code></pre></div>
+<p><em>Exercise 7</em>: Can you think of a type that has both <code>Functor</code> and <code>Contravariant</code> instances?</p>
+<p><em>Exercise 8</em>: Can you think of a type that can't have a <code>Functor</code> nor a <code>Contravariant</code> instance? These types are called <code>Invariant</code> functors.</p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://cvlad.info" data-text="Check out: The Functor Family: Contravariant - " data-via="cvlad">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/cvlad" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @cvlad</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

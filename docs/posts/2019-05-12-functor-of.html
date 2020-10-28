@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Vladimir Ciobanu&#39;s Blog">
+    <meta name="author" content="Vladimir Ciobanu">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@cvlad">
+<meta name="twitter:creator" content="@cvlad">
+<meta name="twitter:title" content="Functor-Of">
+    <meta name="twitter:description" content="Towards a more general Functor class">
+        <title>Functor-Of</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://twitch.tv/cvladfp">
+            <img src="/images/twitch-logo.png" alt="Twitch Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://youtube.com/channel/UCDvH0v4GelMrYleTKyFBbvQ">
+            <img src="/images/youtube-logo.png" alt="Youtube Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://github.com/vladciobanu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/cvlad">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Functor-Of
+            </span>
+            <br>
+
+            <br>
+            <span class="byline">by Vladimir Ciobanu</span>
+            <br>
+            <span class="date">May 12, 2019</span>
+            <br>
+            <div class="metadata">
+            </div>
+            <div class="tags">
+              <span class="tag haskell">haskell</span>
+              <span class="tag functor">functor</span>
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <h1 id="introduction">Introduction</h1>
+<p>Due to kind restrictions, the Haskell <em>Functor</em> cannot represent a lot of valid functors: functors of higher kinded types (higher than <code>* -&gt; *</code>), contravariant functors, invariant functors, etc.</p>
+<p>This post will show an alternate <code>Functor</code> that can handle all of the above. I got this idea from the awesome <a href="https://twitter.com/am_i_tom">Tom Harding</a>, and he apparently got it from <a href="https://twitter.com/Iceland_jack">@Iceland_jack</a>.</p>
+<p>Although this is not new, I could not find any blog post or paper covering it.</p>
+<h2 id="the-actual-problem">The actual problem</h2>
+<p>The problem is quite straight-forward. Let's say we want to define a functor instance for <code>(a, b)</code> which changes the <code>a</code>, to <code>c</code> using an <code>a -&gt; c</code> function. This should be possible, but there is no way to write it using <code>Functor</code> and <code>fmap</code>.</p>
+<p>There are two ways to do this in Haskell using <code>Prelude</code>: - by using <code>Bifunctor</code>/<code>first</code>, or - by using the <code>Flip</code> newtype.</p>
+<p>While both the above options work, they are not particularly elegant. On top of that, there is no common <em>Trifunctor</em> package, and flipping arguments around and wrapping/unwrapping newtypes is not very appealing, which means the approach doesn't quite scale well.</p>
+<h2 id="functorof-to-the-rescue">FunctorOf to the rescue</h2>
+<p>There are two problems with <code>Functor</code>: - <code>f</code> has the wrong kind if we want to allow higher kinded functors, and - the arrow of the mapped function is the wrong type if we want to allow contravariant or invariant functors (or even other types of mappings!).</p>
+<p>We can fix both problems by adding additional types to the class:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">FunctorOf</span> (<span class="ot">p ::</span> k <span class="ot">-&gt;</span> k <span class="ot">-&gt;</span> <span class="dt">Type</span>) (<span class="ot">q ::</span> l <span class="ot">-&gt;</span> l <span class="ot">-&gt;</span> <span class="dt">Type</span>) f <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> p a b <span class="ot">-&gt;</span> q (f a) (f b)</span></code></pre></div>
+<p><code>p</code> represents a relationshiop (arrow) between <code>a</code> and <code>b</code>. In case of a regular functor, it's just <code>-&gt;</code>, but we can change it to a reverse arrow for contravariants.</p>
+<p><code>q</code> is normally just an optional layer on top of <code>-&gt;</code>, in order to allow mapping over other arguments. For example, if we want to map over the second-to-last argument, we'd use natural transforms (<code>~&gt;</code>).</p>
+<p>The regular functor instance can be obtained by simply:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>) f <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> <span class="ot">=</span> <span class="fu">fmap</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ot">functorExample ::</span> [<span class="dt">String</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>functorExample <span class="ot">=</span> <span class="fu">map</span> <span class="fu">show</span> ([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]<span class="ot"> ::</span> [<span class="dt">Int</span>])</span></code></pre></div>
+<h2 id="functor-for-hkd">Functor for HKD</h2>
+<p>I'll use the <code>Bifunctor</code> instance in order to show all bifunctors can have such a <code>FunctorOf</code> instance. Of course, one could define instances manually for any <code>Bifunctor</code>.</p>
+<p>Going back to our original example, we can define a <code>FunctorOf</code> instance for <code>* -&gt; * -&gt; *</code> types in the first argument via:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> (<span class="op">~&gt;</span>) f g <span class="ot">=</span> <span class="dt">Natural</span> (<span class="kw">forall</span> x<span class="op">.</span> f x <span class="ot">-&gt;</span> g x)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Bifunctor</span> f <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="op">~&gt;</span>) f <span class="kw">where</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="op">~&gt;</span> f b</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> f <span class="ot">=</span> <span class="dt">Natural</span> <span class="op">$</span> first f</span></code></pre></div>
+<p>In order to avoid fiddling about with newtypes, we can define a helper <code>bimap'</code> function for <code>* -&gt; * -&gt; *</code> that maps both arguments:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bimap&#39;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="kw">forall</span> a b c d f</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span>  <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>) (f a)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="op">~&gt;</span>) f</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> (c <span class="ot">-&gt;</span> d)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> f a c</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> f b d</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>bimap&#39; f g fac <span class="ot">=</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> <span class="fu">map</span> f <span class="kw">of</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Natural</span> a2b <span class="ot">-&gt;</span> a2b (<span class="fu">map</span> g fac)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ot">bifunctorExample ::</span> (<span class="dt">String</span>, <span class="dt">String</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>bifunctorExample <span class="ot">=</span> bimap&#39; <span class="fu">show</span> <span class="fu">show</span> (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>)</span></code></pre></div>
+<h2 id="contravariant">Contravariant</h2>
+<p>Okay, cool. But what about <em>contravariant</em> functors? We can use <code>Op</code> from <code>Data.Functor.Contravariant</code> (defined as <code>data Op a b = Op (b -&gt; a)</code>):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Contravariant</span> f <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> <span class="dt">Op</span> (<span class="ot">-&gt;</span>) f <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> (<span class="dt">Op</span> b a) <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f a</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> (<span class="dt">Op</span> f) <span class="ot">=</span> contramap f</span></code></pre></div>
+<p>This is pretty cool since we only need to change the mapped function's type to be <code>Op</code> instead of <code>-&gt;</code>! As before, we can make things easier by defining a helper:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cmap</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="kw">forall</span> a b f</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span>  <span class="dt">FunctorOf</span> <span class="dt">Op</span> (<span class="ot">-&gt;</span>) f</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> (b <span class="ot">-&gt;</span> a)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> f a</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> f b</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>cmap f fa <span class="ot">=</span> <span class="fu">map</span> (<span class="dt">Op</span> f) fa</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ot">contraExample ::</span> <span class="dt">Predicate</span> <span class="dt">Int</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>contraExample <span class="ot">=</span> cmap <span class="fu">show</span> (<span class="dt">Predicate</span> (<span class="op">==</span> <span class="st">&quot;5&quot;</span>))</span></code></pre></div>
+<h2 id="what-about-profunctors">What about Profunctors?</h2>
+<p>I'm glad you asked! It's as easy as 1-2-3, or well, as easy as "functor in the last argument" - "contravariant in the previous" - "write helper function":</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">`instance Profunctor p =&gt; FunctorOf Op (~&gt;) p where</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map :: forall a b. (Op b a) -&gt; p b ~&gt; p a</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ot">  map (Op f) = Natural $ lmap f</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ot">dimap&#39;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  :: forall a b c d p</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ot">  .  FunctorOf (-&gt;) (-&gt;) (p a)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ot">  =&gt; FunctorOf Op   (~&gt;) p</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ot">  =&gt; (b -&gt; a)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; (c -&gt; d)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; p a c</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; p b d</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ot">dimap&#39; f g pac =</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="ot">  case map (Op f) of</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ot">    Natural b2a -&gt; b2a (map g pac)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample :: String -&gt; String</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample = dimap&#39; read show (+ (1 :: Int))</span></span></code></pre></div>
+<h2 id="trifunctors">Tri..functors?</h2>
+<p>Yep. We only need to define a higher-kinded natural transform and write the <code>FunctorOf</code> instance, along with the helper:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> (<span class="op">~~&gt;</span>) f g <span class="ot">=</span> <span class="dt">NatNat</span> (<span class="kw">forall</span> x<span class="op">.</span> f x <span class="op">~&gt;</span> g x)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Triple</span> a b c <span class="ot">=</span> <span class="dt">Triple</span> a b c <span class="kw">deriving</span> (<span class="dt">Functor</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="ot">{-# overlapping #-}</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="op">~&gt;</span>) (<span class="dt">Triple</span> x) <span class="kw">where</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Triple</span> x a <span class="op">~&gt;</span> <span class="dt">Triple</span> x b</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> f <span class="ot">=</span> <span class="dt">Natural</span> <span class="op">$</span> \(<span class="dt">Triple</span> x a y) <span class="ot">-&gt;</span> <span class="dt">Triple</span> x (f a) y</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="op">~~&gt;</span>) <span class="dt">Triple</span> <span class="kw">where</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Triple</span> a <span class="op">~~&gt;</span> <span class="dt">Triple</span> b</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> f <span class="ot">=</span> <span class="dt">NatNat</span> <span class="op">$</span> <span class="dt">Natural</span> <span class="op">$</span> \(<span class="dt">Triple</span> a x y) <span class="ot">-&gt;</span> <span class="dt">Triple</span> (f a) x y</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>triple</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="kw">forall</span> a b c d e f t</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span>  <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>)  (t a c)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="op">~&gt;</span>)  (t a)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="op">~~&gt;</span>) t</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> (c <span class="ot">-&gt;</span> d)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> (e <span class="ot">-&gt;</span> f)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> t a c e</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> t b d f</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>triple f g h <span class="ot">=</span> a2b <span class="op">.</span> c2d <span class="op">.</span> <span class="fu">map</span> h</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    (<span class="dt">Natural</span> c2d) <span class="ot">=</span> <span class="fu">map</span> g</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    (<span class="dt">NatNat</span> (<span class="dt">Natural</span> a2b)) <span class="ot">=</span> <span class="fu">map</span> f</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="ot">tripleExample ::</span> <span class="dt">Triple</span> <span class="dt">String</span> <span class="dt">String</span> <span class="dt">String</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>tripleExample <span class="ot">=</span> triple <span class="fu">show</span> <span class="fu">show</span> <span class="fu">show</span> (<span class="dt">Triple</span> (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>) (<span class="dv">2</span><span class="ot"> ::</span> <span class="dt">Int</span>) (<span class="dv">3</span><span class="ot"> ::</span> <span class="dt">Int</span>))</span></code></pre></div>
+<p>The pattern is pretty simple: - we need a <code>FunctorOf</code> instance for every argument we want to map - for each such argument, we need to use <code>-&gt;</code> for variant and <code>Op</code> for contravariant arguments as the first argument to <code>FunctorOf</code> - from right to left, we need to use increasing level of transforms to map the type arguments (<code>-&gt;</code>, <code>~&gt;</code>, <code>~~&gt;</code>, etc)</p>
+<h2 id="what-about-invariants">What about invariants?</h2>
+<p>We can define an instance for <code>Endo</code> using:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Iso</span> a b <span class="ot">=</span> <span class="dt">Iso</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  {<span class="ot"> to   ::</span> a <span class="ot">-&gt;</span> b</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  ,<span class="ot"> from ::</span> b <span class="ot">-&gt;</span> a</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">FunctorOf</span> <span class="dt">Iso</span> (<span class="ot">-&gt;</span>) <span class="dt">Endo</span> <span class="kw">where</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> <span class="dt">Iso</span> a b <span class="ot">-&gt;</span> <span class="dt">Endo</span> a <span class="ot">-&gt;</span> <span class="dt">Endo</span> b</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> <span class="dt">Iso</span> { to, from } (<span class="dt">Endo</span> f) <span class="ot">=</span> <span class="dt">Endo</span> <span class="op">$</span> to <span class="op">.</span> f <span class="op">.</span> from</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ot">endoExample ::</span> <span class="dt">Endo</span> <span class="dt">String</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>endoExample <span class="ot">=</span> <span class="fu">map</span> (<span class="dt">Iso</span> <span class="fu">show</span> <span class="fu">read</span>) (<span class="dt">Endo</span> (<span class="op">+</span> (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>)))</span></code></pre></div>
+<p>We can even go further:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>) f <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> <span class="dt">Iso</span> <span class="dt">Iso</span> f <span class="kw">where</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="dt">Iso</span> a b <span class="ot">-&gt;</span> <span class="dt">Iso</span> (f a) (f b)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> <span class="dt">Iso</span> { to, from } <span class="ot">=</span> <span class="dt">Iso</span> (<span class="fu">map</span> to) (<span class="fu">map</span> from)</span></code></pre></div>
+<p>which is to say, given an isomorphism between <code>a</code> and <code>b</code>, we can obtain an isomorphism between <code>f a</code> and <code>f b</code>!</p>
+<h2 id="future-work-ideas">Future work ideas</h2>
+<p>I think this instance can be also used for proofs. For example, using the <code>Refl</code> equality type:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> x <span class="op">:~:</span> y <span class="kw">where</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Refl</span><span class="ot"> ::</span> x <span class="op">:~:</span> x</span></code></pre></div>
+<p>And this means we can write transitivity as:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">FunctorOf</span> (<span class="op">:~:</span>) (<span class="ot">-&gt;</span>) ((<span class="op">:~:</span>) x) <span class="kw">where</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> a <span class="op">:~:</span> b <span class="ot">-&gt;</span> x <span class="op">:~:</span> a <span class="ot">-&gt;</span> x <span class="op">:~:</span> b</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> <span class="dt">Refl</span> <span class="dt">Refl</span> <span class="ot">=</span> <span class="dt">Refl</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ot">proof ::</span> <span class="dt">Int</span> <span class="op">:~:</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="op">:~:</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="op">:~:</span> <span class="dt">String</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>proof <span class="ot">=</span> <span class="fu">map</span></span></code></pre></div>
+<p>Code is available <a href="https://github.com/vladciobanu/functorof/blob/master/src/FunctorOf.hs">here</a>.</p>
+<p>Another thing worth mentioning is the awesome upcoming <a href="https://gitlab.haskell.org/kcsongor/ghc/tree/unsaturated_type_families">GHC extension</a> (being worked on by <a href="https://twitter.com/Lowert">Csongor Kiss</a>) which allows type families to be partially applied. If you haven't <a href="https://www.microsoft.com/en-us/research/publication/higher-order-type-level-programming-in-haskell/">read the paper</a>, you should! Using this feature, one could do something like:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">Id</span> a <span class="kw">where</span> <span class="dt">Id</span> x <span class="ot">=</span> x</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>) <span class="dt">Id</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> <span class="ot">=</span> (<span class="op">$</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ot">idExample ::</span> <span class="dt">Bool</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>idExample <span class="ot">=</span> <span class="fu">map</span> (<span class="op">+</span><span class="dv">1</span>) <span class="dv">1</span> <span class="op">==</span> <span class="dv">2</span></span></code></pre></div>
+<p>Please note I have not tested the above code; it was suggested by Tom Harding (thanks again for the idea and reviewing!).</p>
+<p>What other uses can you come up with?</p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://cvlad.info" data-text="Check out: Functor-Of - " data-via="cvlad">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/cvlad" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @cvlad</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -2,15 +2,15 @@
 <html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
     <meta charset="UTF-8">
-    <meta name="description" content="My Slick Site">
+    <meta name="description" content="Vladimir Ciobanu&#39;s Blog">
     <meta name="author" content="Me">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@myslickhandle">
-<meta name="twitter:creator" content="@myslickhandle">
+    <meta name="twitter:site" content="@cvlad">
+<meta name="twitter:creator" content="@cvlad">
 <meta name="twitter:title" content="Sample Post">
     <meta name="twitter:description" content="My first blog post using slick">
-    <meta name="twitter:image" content="https://example.com/images/code.jpg">
+    <meta name="twitter:image" content="https://cvlad.info/images/code.jpg">
     <title>Sample Post</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/syntax.css">
@@ -24,11 +24,11 @@
         </nav>
     
         <div class="right-sidebar">
-            <a class="ext-link" href="https://github.com/myslickgithubuser">
+            <a class="ext-link" href="https://github.com/vladciobanu">
             <img src="/images/github-logo.png" alt="Github Profile"/>
         </a>
 
-            <a class="ext-link" href="https://twitter.com/myslickhandle">
+            <a class="ext-link" href="https://twitter.com/cvlad">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
     <div id="theme-button">DAY</div>
@@ -58,7 +58,149 @@
         </div>
     </div>
     <article class="post">
-        <p>Welcome to your first blog post!</p>
+        <h1 id="slick-template">Slick Template</h1>
+<p>A cloneable template for building a static site with <a href="https://github.com/ChrisPenner/slick">slick</a>!</p>
+<p>For an example of what the site will look like, check out <a href="https://chrispenner.ca">my blog</a>!</p>
+<p><img src="./site-example.png" alt="my site" /></p>
+<p>Here's <a href="https://github.com/ChrisPenner/ChrisPenner.github.io/blob/site/app/Main.hs">the configuration</a> for my site if you're curious.</p>
+<p>Get up and running with slick in no time!</p>
+<p>Here's all you need to do to have your own site:</p>
+<ol>
+<li>Click the green <code>Use this template</code> button at the top of this page (next to "clone")</li>
+<li>Clone your new site repo</li>
+<li>Edit your <code>siteMeta</code> inside <code>Main.hs</code></li>
+<li>Add some awesome blog posts in <code>site/posts/</code> by copying the sample post there</li>
+<li>run <code>stack build</code>; <code>stack exec build-site</code></li>
+<li>Serve your <code>docs</code> directory by enabling Github Pages in your repository's settings</li>
+<li>...?</li>
+<li>Profit!</li>
+</ol>
+<p>If you want a quick tool for serving your file system during development I recommend using <code>serve</code>:</p>
+<pre class="shell"><code>$ npm install -g serve
+$ serve docs</code></pre>
+<p>Then navigate to the port which is serving (usually <a href="http://localhost:3000" class="uri">http://localhost:3000</a> or <a href="http://localhost:5000" class="uri">http://localhost:5000</a> )</p>
+<hr />
+<h1 id="tips">Tips</h1>
+<ul>
+<li>Everything is just html, css, and javascript! Edit things to your heart's content!</li>
+<li>Templates are in <code>site/tempates</code>; they use the <a href="https://mustache.github.io/">Mustache</a> template language.</li>
+<li>You'll need to delete your <code>.shake</code> directory when you edit <code>Main.hs</code> to avoid stale build caches.</li>
+<li>Slick is good at <strong>updating</strong> and <strong>creating</strong> files, but it doesn't delete stale files. When in doubt you can delete your whole output directory.</li>
+</ul>
+<h1 id="caching-guide">Caching guide</h1>
+<p>Shake takes care of most of the tricky parts, but there're still a few things you need to know.</p>
+<p>Cache-busting in Slick works using <a href="https://hackage.haskell.org/package/shake/docs/Development-Shake-Forward.html"><code>Development.Shake.Forward</code></a>. The idea is that you can wrap actions with <a href="https://hackage.haskell.org/package/shake-0.18.3/docs/Development-Shake-Forward.html#v:cacheAction"><code>cacheAction</code></a>, providing an unique identifier for each time it runs. Shake will track any dependencies which are triggered during the first run of that action and can use them to detect when that particular action must be re-run. Typically you'll want to cache an action for each "thing" you have to load, e.g. when you load a post, or when you build a page. You can also nest these caches if you like.</p>
+<p>When using <code>cacheAction</code> Shake will automatically serialize and store the results of that action to disk so that on a later build it can simply 'hydrate' that asset without running the command. For this reason, your data models should probably implement <code>Binary</code>. Here's an example data model:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE DeriveGeneric #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE DeriveAnyClass #-}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Aeson</span> (<span class="dt">ToJSON</span>, <span class="dt">FromJSON</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Development.Shake.Classes</span> (<span class="dt">Binary</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">GHC.Generics</span> (<span class="dt">Generic</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Data for a blog post</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Post</span> <span class="ot">=</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Post</span> {<span class="ot"> title   ::</span> <span class="dt">String</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> author  ::</span> <span class="dt">String</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> content ::</span> <span class="dt">String</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> url     ::</span> <span class="dt">String</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> date    ::</span> <span class="dt">String</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> image   ::</span> <span class="dt">Maybe</span> <span class="dt">String</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>         }</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Eq</span>, <span class="dt">Ord</span>, <span class="dt">Show</span>, <span class="dt">FromJSON</span>, <span class="dt">ToJSON</span>, <span class="dt">Binary</span>)</span></code></pre></div>
+<p>If you need to run arbitrary shell commands you can use <a href="https://hackage.haskell.org/package/shake-0.18.3/docs/Development-Shake-Forward.html#v:cache"><code>cache</code></a>; it will do its best to track file use during the run of the command and cache-bust on that; results may vary. It's likely better to use explicit tracking commands like <code>readFile'</code> when possible, (or even just use <code>readFile'</code> on the files you depend on, then throw away the results. It's equivalent to explicitly depending on the file contents).</p>
+<p>Shake has many dependency tracking combinators available; whenever possible you should use the shake variants of these (e.g. <code>copyFileChanged</code>, <code>readFile'</code>, <code>writeFile'</code>, etc.). This will allow shake to detect when and what it needs to rebuild.</p>
+<p>Note: You'll likely need to delete <code>.shake</code> in your working directory after editing your <code>Main.hs</code> file as shake can get confused if rules change without it noticing.</p>
+<h2 id="example">Example</h2>
+<p>Here's a FULL static website! This is the <a href="app/Main.hs"><code>Main.hs</code></a> for this template repo.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE DeriveGeneric #-}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE DeriveAnyClass #-}</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE OverloadedStrings #-}</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Control.Lens</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Control.Monad</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.Aeson</span>                 <span class="kw">as</span> <span class="dt">A</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.Aeson.Lens</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Development.Shake</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Development.Shake.Classes</span> (<span class="dt">Binary</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Development.Shake.Forward</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Development.Shake.FilePath</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">GHC.Generics</span>               (<span class="dt">Generic</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Slick</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span>                  <span class="kw">as</span> <span class="dt">T</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="ot">outputFolder ::</span> <span class="dt">FilePath</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>outputFolder <span class="ot">=</span> <span class="st">&quot;docs/&quot;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Data for the index page</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">IndexInfo</span> <span class="ot">=</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="dt">IndexInfo</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    {<span class="ot"> posts ::</span> [<span class="dt">Post</span>]</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    } <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Show</span>, <span class="dt">FromJSON</span>, <span class="dt">ToJSON</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Data for a blog post</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Post</span> <span class="ot">=</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Post</span> {<span class="ot"> title   ::</span> <span class="dt">String</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> author  ::</span> <span class="dt">String</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> content ::</span> <span class="dt">String</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> url     ::</span> <span class="dt">String</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> date    ::</span> <span class="dt">String</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>         ,<span class="ot"> image   ::</span> <span class="dt">Maybe</span> <span class="dt">String</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>         }</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Eq</span>, <span class="dt">Ord</span>, <span class="dt">Show</span>, <span class="dt">FromJSON</span>, <span class="dt">ToJSON</span>, <span class="dt">Binary</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">-- | given a list of posts this will build a table of contents</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="ot">buildIndex ::</span> [<span class="dt">Post</span>] <span class="ot">-&gt;</span> <span class="dt">Action</span> ()</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>buildIndex posts&#39; <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  indexT <span class="ot">&lt;-</span> compileTemplate&#39; <span class="st">&quot;site/templates/index.html&quot;</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> indexInfo <span class="ot">=</span> <span class="dt">IndexInfo</span> {posts <span class="ot">=</span> posts&#39;}</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>      indexHTML <span class="ot">=</span> T.unpack <span class="op">$</span> substitute indexT (toJSON indexInfo)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  writeFile&#39; (outputFolder <span class="op">&lt;/&gt;</span> <span class="st">&quot;index.html&quot;</span>) indexHTML</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Find and build all posts</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="ot">buildPosts ::</span> <span class="dt">Action</span> [<span class="dt">Post</span>]</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>buildPosts <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  pPaths <span class="ot">&lt;-</span> getDirectoryFiles <span class="st">&quot;.&quot;</span> [<span class="st">&quot;site/posts//*.md&quot;</span>]</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  forP pPaths buildPost</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Load a post, process metadata, write it to output, then return the post object</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">-- Detects changes to either post content or template</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ot">buildPost ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">Action</span> <span class="dt">Post</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>buildPost srcPath <span class="ot">=</span> cacheAction (<span class="st">&quot;build&quot;</span><span class="ot"> ::</span> <span class="dt">T.Text</span>, srcPath) <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  liftIO <span class="op">.</span> <span class="fu">putStrLn</span> <span class="op">$</span> <span class="st">&quot;Rebuilding post: &quot;</span> <span class="op">&lt;&gt;</span> srcPath</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  postContent <span class="ot">&lt;-</span> readFile&#39; srcPath</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- load post content and metadata as JSON blob</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>  postData <span class="ot">&lt;-</span> markdownToHTML <span class="op">.</span> T.pack <span class="op">$</span> postContent</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> postUrl <span class="ot">=</span> T.pack <span class="op">.</span> dropDirectory1 <span class="op">$</span> srcPath <span class="op">-&lt;.&gt;</span> <span class="st">&quot;html&quot;</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>      withPostUrl <span class="ot">=</span> _Object <span class="op">.</span> at <span class="st">&quot;url&quot;</span> <span class="op">?~</span> <span class="dt">String</span> postUrl</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Add additional metadata we&#39;ve been able to compute</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> fullPostData <span class="ot">=</span> withPostUrl <span class="op">$</span> postData</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>  template <span class="ot">&lt;-</span> compileTemplate&#39; <span class="st">&quot;site/templates/post.html&quot;</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>  writeFile&#39; (outputFolder <span class="op">&lt;/&gt;</span> T.unpack postUrl) <span class="op">.</span> T.unpack <span class="op">$</span> substitute template fullPostData</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Convert the metadata into a Post object</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>  convert fullPostData</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Copy all static files from the listed folders to their destination</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="ot">copyStaticFiles ::</span> <span class="dt">Action</span> ()</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>copyStaticFiles <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    filepaths <span class="ot">&lt;-</span> getDirectoryFiles <span class="st">&quot;./site/&quot;</span> [<span class="st">&quot;images//*&quot;</span>, <span class="st">&quot;css//*&quot;</span>, <span class="st">&quot;js//*&quot;</span>]</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    void <span class="op">$</span> forP filepaths <span class="op">$</span> \filepath <span class="ot">-&gt;</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        copyFileChanged (<span class="st">&quot;site&quot;</span> <span class="op">&lt;/&gt;</span> filepath) (outputFolder <span class="op">&lt;/&gt;</span> filepath)</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Specific build rules for the Shake system</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="co">--   defines workflow to build the website</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="ot">buildRules ::</span> <span class="dt">Action</span> ()</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>buildRules <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>  allPosts <span class="ot">&lt;-</span> buildPosts</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>  buildIndex allPosts</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>  copyStaticFiles</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> slick buildRules</span></code></pre></div>
 
         <br>
         <br>
@@ -66,9 +208,9 @@
         <!--Share buttons-->
         <div class="social-buttons">
             <a href="https://twitter.com/share" class="twitter-share-button"
-                                                data-url="https://example.com" data-text="Check out: Sample Post - " data-via="myslickhandle">Tweet</a>
+                                                data-url="https://cvlad.info" data-text="Check out: Sample Post - " data-via="cvlad">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <a href="https://twitter.com/myslickhandle" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @myslickhandle</a>
+            <a href="https://twitter.com/cvlad" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @cvlad</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
             <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
         </div>

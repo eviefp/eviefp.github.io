@@ -6,8 +6,6 @@ tags: [haskell, functor]
 description: "A look into contravariant functors."
 ---
 
-## Prerequisites
-
 This post assumes prior knowledge of
 - the `Functor` class / concept
 - the functor instance for `(->) r`

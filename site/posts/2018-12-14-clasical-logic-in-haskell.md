@@ -6,9 +6,6 @@ tags: [theory, logic, haskell]
 description: "Because why not"
 ---
 
-
-# Introduction
-
 During a very pleasant conversation at a recent
 [Bucharest FP](http://bucharestfp.ro) meetup,
 [somebody](https://twitter.com/igstan) mentioned that `Cont` is, almost exactly,

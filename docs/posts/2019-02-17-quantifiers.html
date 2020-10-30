@@ -64,8 +64,7 @@
         </div>
     </div>
     <article class="post">
-        <h1 id="introduction">Introduction</h1>
-<p>I previously showed a <a href="/curry-howard">single proof</a> in logic, type theory, and category theory, and some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence.</p>
+        <p>I previously showed a <a href="/curry-howard">single proof</a> in logic, type theory, and category theory, and some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence.</p>
 <p>This post will go a bit further than that and show the type theoretic equivalents of existential and universal quantifiers. I'll then explore some interesting properties of these types. This post will not go into the category theory part of this, although I may do that in a future post.</p>
 <h2 id="quantifiers-in-logic">Quantifiers in Logic</h2>
 <p>Forall (∀) is the universal quantifier and is generally written as</p>
@@ -205,6 +204,14 @@
 </article>
 
 </div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
 
 <footer>
     Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️

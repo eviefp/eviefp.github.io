@@ -6,8 +6,6 @@ tags: [haskell, functor]
 description: "A look into profunctors"
 ---
 
-## Prerequisites
-
 This post assumes prior knowledge of
 - [Contravariant](/contravariant)
 - [Bifunctor](/bifunctor)

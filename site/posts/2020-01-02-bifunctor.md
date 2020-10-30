@@ -6,8 +6,6 @@ tags: [haskell, functor]
 description: "A look into bifunctors."
 ---
 
-## Prerequisites
-
 This post assumes prior knowledge of
 - the `Functor` class / concept
 - the functor instance for `Either a`, `(,) a`

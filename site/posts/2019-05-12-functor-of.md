@@ -6,7 +6,6 @@ tags: [haskell, functor]
 description: "Towards a more general Functor class"
 ---
 
-# Introduction
 Due to kind restrictions, the Haskell _Functor_ cannot represent a lot of valid
 functors: functors of higher kinded types (higher than `* -> *`), contravariant
 functors, invariant functors, etc.

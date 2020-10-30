@@ -6,7 +6,6 @@ tags: [haskell, theory]
 description: "More Logic in PL"
 ---
 
-# Introduction
 I previously showed some fun
 [classical logic proofs in Haskell](/clasical-logic-in-haskell/), thanks to the
 Curry-Howard correspondence. I recommend you also check out my
@@ -175,7 +174,7 @@ Now we are ready for the proof:
 `T` is the terminal object, and `t : T → A × (B × C)` is what we start with.
 We need to be able to obtain an arrow `t' : T → (A × B) × C)`.
 
-![ct1](/content/curry-howard/ct1.jpg "ct1")
+![ct1](/images/curry-howard/ct1.jpg "ct1")
 
 By **product** `A × (B × C)`, we know there exists `p : A × (B × C) → A` and
 `q : A × (B × C) → B × C`.
@@ -192,7 +191,7 @@ So now, we have the following arrows:
 - `p ∘ t : T → A`
 - `p' ∘ q ∘ t : T → B`
 
-![ct2](/content/curry-howard/ct2.jpg "ct2")
+![ct2](/images/curry-howard/ct2.jpg "ct2")
 
 By definition of **product**, since we know `A × B` is the product of `A` and
 `B`, and since we have the arrows `T → A` and `T → B`, then we know there must
@@ -200,7 +199,7 @@ be an unique arrow which we'll name `l : T → A × B`.
 
 By **composition** we can obtain the arrow `q' ∘ q ∘ t : T → C`.
 
-![ct3](/content/curry-howard/ct3.jpg "ct3")
+![ct3](/images/curry-howard/ct3.jpg "ct3")
 
 Similarly to the step before, by definition of **product**, since we know
 `(A × B) × C` is a product of `A × B` and `C`, and since we have the arrows
@@ -210,7 +209,7 @@ arrow `t' : T → (A × B) × C`.
 Note: there are, in fact, as many arrows `T → (A × B) × C` as are elements in
 `(A × B) × C`, but `t'` is the unique one derived from the initial arrow, `t`.
 
-![ct4](/content/curry-howard/ct4.jpg "ct4")
+![ct4](/images/curry-howard/ct4.jpg "ct4")
 
 Edit: See this [twitter thread for a whiteboard proof of sum associativity](https://twitter.com/BartoszMilewski/status/1093565646036643841).
 

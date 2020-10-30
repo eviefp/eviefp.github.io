@@ -64,8 +64,7 @@
         </div>
     </div>
     <article class="post">
-        <h2 id="prerequisites">Prerequisites</h2>
-<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>Either a</code>, <code>(,) a</code> - basic kind knowledge, e.g. the difference between <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
+        <p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>Either a</code>, <code>(,) a</code> - basic kind knowledge, e.g. the difference between <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
 <h2 id="why">Why</h2>
 <p>In Haskell, functors can only be defined for types of kind <code>* -&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>. Their instances allow us to use <code>fmap</code> (or <code>&lt;$&gt;</code>) to go from <code>Maybe a</code> to <code>Maybe b</code> using some <code>a -&gt; b</code>, like:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></span>
@@ -137,6 +136,14 @@
 </article>
 
 </div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
 
 <footer>
     Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️

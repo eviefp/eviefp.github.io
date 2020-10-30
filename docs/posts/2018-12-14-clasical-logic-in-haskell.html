@@ -65,8 +65,7 @@
         </div>
     </div>
     <article class="post">
-        <h1 id="introduction">Introduction</h1>
-<p>During a very pleasant conversation at a recent <a href="http://bucharestfp.ro">Bucharest FP</a> meetup, <a href="https://twitter.com/igstan">somebody</a> mentioned that <code>Cont</code> is, almost exactly, <a href="https://en.wikipedia.org/wiki/Peirce%27s_law"><em>Peirce's law</em></a>. I remembered seeing a <a href="https://twitter.com/paf31/status/1040304689932165120">tweet</a> from Phil Freeman which proves that they are indeed equivalent. I thought it would be a fun exercise to prove other equivalences from classical logic.</p>
+        <p>During a very pleasant conversation at a recent <a href="http://bucharestfp.ro">Bucharest FP</a> meetup, <a href="https://twitter.com/igstan">somebody</a> mentioned that <code>Cont</code> is, almost exactly, <a href="https://en.wikipedia.org/wiki/Peirce%27s_law"><em>Peirce's law</em></a>. I remembered seeing a <a href="https://twitter.com/paf31/status/1040304689932165120">tweet</a> from Phil Freeman which proves that they are indeed equivalent. I thought it would be a fun exercise to prove other equivalences from classical logic.</p>
 <p>This post assumes you are familar with: - the <a href="https://www.youtube.com/watch?v=aeRVdYN6fE8">Curry-Howard correspondence</a>, - classical and intuitionistic logic (for example, see it explained using Coq in <a href="https://softwarefoundations.cis.upenn.edu/current/lf-current/Logic.html">Software Foundations</a>), and - one of Haskell, Agda, Idris or Coq.</p>
 <h1 id="monadcont-and-the-law-of-excluded-middle">MonadCont and the Law of Excluded Middle</h1>
 <p>Haskell and PureScript define <code>MonadCont</code>, which represent monads that support the <em>call-with-current-continuation</em> (<code>callCC</code>) operation:</p>
@@ -246,6 +245,14 @@
 </article>
 
 </div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
 
 <footer>
     Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️

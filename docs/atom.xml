@@ -2,219 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Vladimir Ciobanu&#39;s Blog</title>
     <link href="https://cvlad.info/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-10-28T23:00:SZ</updated>
+  <updated>2020-10-29T23:07:SZ</updated>
   <author>
       <name>Vladimir Ciobanu</name>
   </author>
   <id>https://cvlad.info/</id>
 
-  <entry>
-      <title>Composition</title>
-      <link href="https://cvlad.infoposts/2018-04-22-composition.html"/>
-      <id>https://cvlad.infoposts/2018-04-22-composition.html</id>
-      <updated>2018-04-22T00:00:SZ</updated>
-      <category term="purescript"/>
-      <category term="fp"/>
-      <summary>What is a Monoid?</summary>
-      <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>This post will attempt to show what a monoid is from the algebraic perspective and apply it through PureScript.</p>
-<p>How to read - if you know the algebraic definition of a monoid, feel free to skip to <a href="#monoid-in-purescript">Monoid in PureScript</a> - if you know the basic PureScript definition but want to see how Applicative is a monoid and Alternative is a Semiring, skip to <a href="#applicative-monoid">Applicative Monoid</a></p>
-<h2 id="monoid-in-algebra">Monoid in Algebra</h2>
-<p>Before I can introduce a monoid, I need to give a brief (and extremely informal) definition of sets, operations, associativity, identity, etc.</p>
-<h3 id="sets">Sets</h3>
-<p>We are used to grouping things together. We sometimes call such a group a <em>set</em> of things. For example, the numbers 1 through 10 form the set $ A = \{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 \} $.</p>
-<p>Similarly, we have the set of boolean values $ B = \{ true, false \} $, the set of musical notes $ Notes = \{ A, A\#, B, C, C\#, D, D\#, E, F, F\#, G, G\# \} $, the set of friends of a person, etc.</p>
-<p>It's worth mentioning that there's also infinite sets, for example $ \Bbb{N} $ for all natural numbers (0 through infinity), $ \Bbb{Z} $ for all integral numbers (minus infinity through infinity), $ \Bbb{R} $ for all real numbers, etc.</p>
-<h3 id="operations">Operations</h3>
-<p>We can define operations on these sets. For example, an operation that adds 1 to an element of the natural numbers set $\Bbb{N}$ would look like</p>
-<p>$$ addOne : \Bbb{N} \rightarrow \Bbb{N} $$</p>
-<p>This means that <strong>addOne</strong> <em>takes</em> a natural number and <em>returns</em> a natural number. We <em>call</em> it by just putting a number next to the operation, such as</p>
-<p>$$ addOne \: 0 = 1 \ addOne \: 1 = 2 \ addOne \: 5 = 6 $$</p>
-<p>Operations do not need to be arithmetic. For example, we can define an operation that gives us the next musical note</p>
-<p>$$ next : Notes \rightarrow Notes $$</p>
-<p>and use it</p>
-<p>$$ \begin{align} next \; A &amp;= A# \ next \; A# &amp;= B \ next \; B &amp;= C \end{align} $$</p>
-<p>These operations are <em>unary</em> operations. <em>Binary</em> operations take <em>two</em> inputs. For example, addition of two numbers is</p>
-<p>$$(+) : \Bbb{N} \rightarrow \Bbb{N} \rightarrow \Bbb{N}$$</p>
-<p>This means that $(+)$ takes two numbers and returns a number</p>
-<p>$$ 1 + 0 = 1 \ 1 + 1 = 2 \ 3 + 4 = 7 $$</p>
-<h3 id="associativity">Associativity</h3>
-<p>Associativity of a binary operator simply means that, if you have any three elements (e.g., a, b, c) from a set and a binary operation (e.g., $(+)$) on the set, then the order in which you apply the operation does not matter</p>
-<p>$$ (a + b) + c = a + (b + c) $$</p>
-<h3 id="semigroup">Semigroup</h3>
-<p>A semigroup has two components: a set and an associative binary operation.</p>
-<p>As an example, consider all notes and possible combination of chords (i.e., two or more notes, played at the same time) and an operation $(+)$ that is the set union between the two (i.e., all notes are used, duplicates are removed)</p>
-<p>$$ { A } + { C } = { A, C } \ { A, C } + { E } = { A, C, E } \ { A, C, E } + { A, C } = { A, C, E } $$</p>
-<p>The order does not matter because we play all the notes at the same time.</p>
-<h3 id="identity">Identity</h3>
-<p>The identity element for a binary operation $(+)$ is an element $e$ that is neutral for the operation, i.e., for any element $a$ from the set, the following hold:</p>
-<p>$$ a + e = a \ e + a = a $$</p>
-<p>This is another way of saying that there exists an element in the set such that, combining that element with any other element, we get that other element back.</p>
-<p>For example, 0 is the neutral element for addition of numbers. Whatever number you add to 0, you get that number back. Same goes for multiplication of numbers and the number 1.</p>
-<h3 id="monoid">Monoid</h3>
-<p>A <em>monoid</em> is a semigroup with identity.</p>
-<p>A monoid $\mathcal{M}$ has a set M, an associative binary operation $(+)$, and an identity element $e$, and for all elements $a$, $b$, and $c$ in M</p>
-<p>$$ (a + b) + c = a + (b + c) \ a + e = a \ e + a = a $$</p>
-<h3 id="semiring">Semiring</h3>
-<p>A <em>semiring</em> combines two monoids, along with a couple of new laws.</p>
-<p>A semiring $\mathcal{S}$ has a set S, and <em>two</em> associative binary operations $(+)$ and $(*)$, and each of these operations has its own identity element ($0$ for $(+)$ and $1$ for $(*)$).</p>
-<p>There are two new laws that must be obeyed: <em>distributivity</em> of $(*)$ over $(+)$ and <em>annihilation</em> of $0$ over $(*)$.</p>
-<p>Formally</p>
-<ul>
-<li>S, $(+)$ and $0$ form a <em>commutative</em> monoid that</li>
-</ul>
-<p>$$ \begin{align} (a + b) + c = a + (b + c) &amp; \; \; \; (associative) \ 0 + a = a + 0 = a &amp; \; \; \; (identity) \ a + b = b + a &amp; \; \; \; (commutative) \end{align} $$</p>
-<ul>
-<li>S, $(*)$ and $1$ form a monoid</li>
-</ul>
-<p>$$ \begin{align} (a * b) * c = a * (b * c) &amp; \; \; \; (associative) \ 1 * a = a * 1 = a &amp; \; \; \; (identity) \end{align} $$</p>
-<ul>
-<li>$(*)$ distributes over $(+)$</li>
-</ul>
-<p>$$ \begin{align} a * (b + c) = (a * b) + (b * c) &amp; \; \; \; (left \: distributivity) \ (a + b) * c = (a * c) + (b * c) &amp; \; \; \; (right \: distributivity) \end{align} $$</p>
-<ul>
-<li>$0$ annihilates $(*)$</li>
-</ul>
-<p>$$ 0 * a = a * 0 = 0 \; \; \; (annihilation) $$</p>
-<h2 id="monoid-in-purescript">Monoid in PureScript</h2>
-<p>In PureScript, we can define semigroups and monoids as type classes</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Semigroup</span> m <span class="kw">where</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    append <span class="ot">∷</span> m <span class="ot">→</span> m <span class="ot">→</span> m</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Semigroup</span> m <span class="op">&lt;=</span> <span class="dt">Monoid</span> m <span class="kw">where</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mempty</span> <span class="ot">∷</span> m</span></code></pre></div>
-<p>For example, we can implement the addition monoid</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Semigroup</span> <span class="dt">Int</span> <span class="kw">where</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    append a b <span class="ot">=</span> a <span class="op">+</span> b</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">Int</span> <span class="kw">where</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mempty</span> <span class="ot">=</span> <span class="dv">0</span></span></code></pre></div>
-<p>However, implementing the Int monoid for multiplication is impossible because we can't define two instances of monoid for the same type. One solution is creating a <em>newtype</em> wrapper for both addition and multiplication and create two monoid instances.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Sum</span> <span class="ot">=</span> <span class="dt">Sum</span> <span class="dt">Int</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> sumSemigroup <span class="ot">∷</span> <span class="dt">Semigroup</span> <span class="dt">Sum</span> <span class="kw">where</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  append <span class="ot">=</span> (<span class="op">+</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> sumMonoid <span class="ot">∷</span> <span class="dt">Monoid</span> <span class="dt">Sum</span> <span class="kw">where</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mempty</span> <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Product</span> <span class="ot">=</span> <span class="dt">Product</span> <span class="dt">Int</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> prodSemigroup <span class="ot">∷</span> <span class="dt">Semigroup</span> <span class="dt">Product</span> <span class="kw">where</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  append <span class="ot">=</span> (<span class="op">*</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> prodMonoid <span class="ot">∷</span> <span class="dt">Monoid</span> <span class="dt">Product</span> <span class="kw">where</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mempty</span> <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
-<p>Here's a few more examples of monoids - boolean disjunction with false as the identity - boolean conjuction with true as the identity - set union with the empty set as identity - list concatenation with empty list as identity</p>
-<h3 id="function-monoids">Function Monoids</h3>
-<p>There are two possible monoid instances for function types.</p>
-<p>The set of functions <code>a → m</code> where <code>m</code> is a monoid form a monoid. The input is <em>distributed</em> to all functions, and their results are combined together using the <code>m</code> monoid instance to a single value. One example is functions that return lists, where the composition of such functions gives us back a flat list, instead of a list of lists.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> fnSemigroup1 <span class="ot">∷</span> <span class="dt">Semigroup</span> m <span class="op">&lt;=</span> <span class="dt">Semigroup</span> (a <span class="ot">→</span> m) <span class="kw">where</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    append f g <span class="ot">=</span> \x <span class="ot">→</span> append (f x) (g x)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> fnMonoid1 <span class="ot">∷</span> <span class="dt">Monoid</span> m <span class="op">&lt;=</span> <span class="dt">Monoid</span> (a <span class="ot">→</span> m) <span class="kw">where</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mempty</span> <span class="ot">=</span> <span class="fu">const</span> <span class="fu">mempty</span></span></code></pre></div>
-<p>The set of functions <code>a → a</code> can be <em>sequenced</em> one after the other to create a pipeline of operations on the input.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> fnSemigroup2 <span class="ot">∷</span> <span class="dt">Semigroup</span> (a <span class="ot">→</span> a) <span class="kw">where</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    append f g <span class="ot">=</span> f <span class="op">&lt;&lt;&lt;</span> g</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> fnMonoid2 <span class="ot">∷</span> <span class="dt">Monoid</span> (a <span class="ot">→</span> a) <span class="kw">where</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mempty</span> <span class="ot">=</span> <span class="fu">id</span></span></code></pre></div>
-<h3 id="applicative-monoid">Applicative Monoid</h3>
-<p>I will assume familiarity with the <code>Applicative</code> class.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Functor</span> f <span class="op">&lt;=</span> <span class="dt">Apply</span> f <span class="kw">where</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  apply <span class="ot">∷</span> <span class="ot">∀</span> a b<span class="op">.</span> f (a <span class="ot">→</span> b) <span class="ot">→</span> f a <span class="ot">→</span> f b</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Apply</span> f <span class="op">&lt;=</span> <span class="dt">Applicative</span> f <span class="kw">where</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pure</span> <span class="ot">∷</span> <span class="ot">∀</span> a<span class="op">.</span> a <span class="ot">→</span> f a</span></code></pre></div>
-<p>How is this a monoid? Let's try to create a different definition and see if we can implement one in terms of the other</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">TupleMonoid</span> f <span class="kw">where</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    tappend <span class="ot">∷</span> <span class="ot">∀</span> a b<span class="op">.</span> f a <span class="ot">→</span> f b <span class="ot">→</span> f (<span class="dt">Tuple</span> a b)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    tempty  <span class="ot">∷</span> f <span class="dt">Unit</span></span></code></pre></div>
-<p>The types for <code>tappend</code> and <code>tempty</code> do not match exactly the types required for the monoid <code>append</code> and <code>empty</code>, which is why we need a new class. Let's consider associativity for <code>TupleMonoid</code>, where $(+)$ is <code>tappend</code> and $(a, b)$ is <code>Tuple a b</code></p>
-<p>$$ \begin{align} (a + b) + c &amp;= a + (b + c) \ (a, b) + c &amp;= a + (b, c) \ ((a, b), c) &amp;= (a, (b, c)) \end{align} $$</p>
-<p>The types are not exactly equal, but they hold the exact same data and we can easily define functions that map between the two. So we say the associativity law holds up to isomorphism.</p>
-<p>As for identity</p>
-<p>$$ a + mempty = mempty + a = a \ (a, unit) = (unit, a) = a $$</p>
-<p>Again, since <code>unit</code> is a trivial value, we can easily create isomorphic functions between the equalities above.</p>
-<p>This <em>up to isomorphism</em> addendum is also why we can't use the default Semigroup and Monoid lasses, but the <code>TupleMonoid</code> will do.</p>
-<p>Now, let's try to define <code>TupleMonoid</code> for any <code>f</code> that has an <code>Applicative</code>. We will use a newtype just to keep things clean</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">TMApplicative</span> f a <span class="ot">=</span> <span class="dt">TMApplicative</span> (f a)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- ... derive newtype Functor, Apply, Applicative</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> tmMon <span class="ot">∷</span> <span class="dt">Applicative</span> f <span class="ot">⇒</span> <span class="dt">TupleMonoid</span> (<span class="dt">TMApplicative</span> f) <span class="kw">where</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    tappend fa fb <span class="ot">=</span> <span class="dt">Tuple</span> <span class="op">&lt;$&gt;</span> fa <span class="op">&lt;*&gt;</span> fb</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    tempty <span class="ot">=</span> <span class="dt">TMApplicative</span> <span class="op">&lt;&lt;&lt;</span> <span class="fu">pure</span> <span class="op">$</span> unit</span></code></pre></div>
-<p><code>tappend</code> basically <em>lifts</em> the <code>Tuple</code> constructor so we end up with simple implementations for the <code>TupleMonoid</code> instance. Try mapping out the types if it doesn't make sense.</p>
-<p>Now the question is, can we implement it the other way around: given <code>f</code> with <code>Functor</code> and <code>TupleMonoid</code> instances, can we implement an <code>Applicative</code> instance? Turns out we can, although it's a bit trickier</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">TMMonoid</span> f a <span class="ot">=</span> <span class="dt">TMMonoid</span> (f a)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- ... derive newtype Functor, TupleMonoid</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> appTM <span class="ot">∷</span> (<span class="dt">Functor</span> f, <span class="dt">TupleMonoid</span> f)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>               <span class="ot">⇒</span> <span class="dt">Apply</span> (<span class="dt">TMMonoid</span> f) <span class="kw">where</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  apply fab fa <span class="ot">=</span> tappend fab fa <span class="op">&lt;#&gt;</span> \(<span class="dt">Tuple</span> ab a) <span class="ot">→</span> ab a</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> applTM <span class="ot">∷</span> (<span class="dt">Functor</span> f, <span class="dt">TupleMonoid</span> f)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                <span class="ot">⇒</span> <span class="dt">Applicative</span> (<span class="dt">TMMonoid</span> f) <span class="kw">where</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pure</span> a <span class="ot">=</span> a <span class="op">&lt;$</span> tempty</span></code></pre></div>
-<p>The trick with <code>apply</code> is that <code>tappend fab fa ∷ f (a → b, a)</code>, so we <code>map</code> (<code>&lt;#&gt;</code> is just <code>flip map</code>) a function that takes a tuple and applies <code>fst</code> to <code>snd</code> to get a <code>f b</code>.</p>
-<p>As for <code>pure</code>, <code>&lt;$</code> is implemented as <code>map (const x)</code>, so we just discard the unit from <code>tempty</code> but keep the container to get an <code>f a</code>.</p>
-<h3 id="alt-monoid">Alt Monoid</h3>
-<p>Similarly to <code>Apply</code> and <code>Alternative</code>, PureScript has <code>Alt</code> and <code>Plus</code> classes which are the rough equivalents of <code>Semigroup</code> and <code>Monoid</code></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Functor</span> f <span class="op">&lt;=</span> <span class="dt">Alt</span> f <span class="kw">where</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    alt <span class="ot">∷</span> <span class="ot">∀</span> a<span class="op">.</span> f a <span class="ot">→</span> f a <span class="ot">→</span> f a</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Alt</span> f <span class="op">&lt;=</span> <span class="dt">Plus</span> f <span class="kw">where</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    empty <span class="ot">∷</span> <span class="ot">∀</span> a<span class="op">.</span> f a</span></code></pre></div>
-<p>Obviously, <code>alt</code> (also known as <code>&lt;|&gt;</code>) is <code>append</code> and <code>empty</code> is identity. These classes already look like a monoid, so there's not much work to do here.</p>
-<h3 id="the-alternative-semiring">The Alternative Semiring</h3>
-<p>The <code>Alternative</code> class is</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> (<span class="dt">Applicative</span> f, <span class="dt">Plus</span> f) <span class="op">&lt;=</span> <span class="dt">Alternative</span> f</span></code></pre></div>
-<p>Additionally, it guarantees the laws</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(f <span class="op">&lt;|&gt;</span> g) <span class="op">&lt;*&gt;</span> x <span class="ot">=</span> (f <span class="op">&lt;*&gt;</span> x) <span class="op">&lt;|&gt;</span> (g <span class="op">&lt;*&gt;</span> x) <span class="co">-- distributivity</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>empty <span class="op">&lt;*&gt;</span> f <span class="ot">=</span> empty                       <span class="co">-- annihilation</span></span></code></pre></div>
-<p>Which are the laws of <code>Semiring</code>. We are only missing commutativity of <code>&lt;|&gt;</code>, but this is not possible to obtain from (most) <code>Alt</code> instances.</p>
-<h2 id="why-should-i-care">Why should I care?</h2>
-<p>It's an interesting perspective, and we could draw a few analogies and perhaps some insight into the reasons of how some <code>Applicative</code> and <code>Alternative</code> instances work.</p>
-<table>
-<thead>
-<tr class="header">
-<th>Num</th>
-<th>Alternative</th>
-<th>Array</th>
-<th>Maybe</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>+</td>
-<td>&lt;|&gt;</td>
-<td>concat</td>
-<td>first non-Nothing</td>
-</tr>
-<tr class="even">
-<td>0</td>
-<td>empty</td>
-<td>[]</td>
-<td>Nothing</td>
-</tr>
-<tr class="odd">
-<td>*</td>
-<td>&lt;*&gt;</td>
-<td>cartesian product</td>
-<td>Nothing annihilates</td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td>pure</td>
-<td>[a]</td>
-<td>Just a</td>
-</tr>
-</tbody>
-</table>
-<p>Check out the <a href="https://github.com/vladciobanu/applicative-monoid">repository</a> with full source code and quickcheck tests.</p>]]></content>
-  </entry>
   <entry>
       <title>My Haskell Journey</title>
       <link href="https://cvlad.infoposts/2018-08-10-haskell.html"/>
@@ -223,8 +16,7 @@
       <category term="fp"/>
       <category term="personal"/>
       <summary>How I learned Haskell</summary>
-      <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>It's been a while since my previous post, but it's been a crazy few months. I'm happy to be able to write again, and I'll try to do it more regularly. This post will be a bit different; it will be a personal and entirely subjective description of my journey so far in functional programming. The reason I'm writing this now is because I will soon start working at <a href="https://twitter.com/cvlad/status/1023957257841778688">Runtime Verification</a>, my first FP job.</p>
+      <content type="html"><![CDATA[<p>It's been a while since my previous post, but it's been a crazy few months. I'm happy to be able to write again, and I'll try to do it more regularly. This post will be a bit different; it will be a personal and entirely subjective description of my journey so far in functional programming. The reason I'm writing this now is because I will soon start working at <a href="https://twitter.com/cvlad/status/1023957257841778688">Runtime Verification</a>, my first FP job.</p>
 <h2 id="background">Background</h2>
 <p>I've been doing C# web development for about 15 years. Although I did not really understand much of FP, I was an eager early adopter of all functional-style features C# added over the years (LINQ, anonymous functions/lambdas, etc). Every other year, I'd look up the latest Haskell books or tutorials and give it a go, but it never really worked out for me due to various reasons (no real purpose, no sense of achieving anything, not understanding the benefits of what I'm learning, etc). Ultimately, I was never able to get past toy functions in the interpreter. But I was very intrigued by Haskell's elegance.</p>
 <h2 id="the-fp-slack-community">The FP Slack Community</h2>
@@ -275,8 +67,7 @@
       <category term="logic"/>
       <category term="haskell"/>
       <summary>Because why not</summary>
-      <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>During a very pleasant conversation at a recent <a href="http://bucharestfp.ro">Bucharest FP</a> meetup, <a href="https://twitter.com/igstan">somebody</a> mentioned that <code>Cont</code> is, almost exactly, <a href="https://en.wikipedia.org/wiki/Peirce%27s_law"><em>Peirce's law</em></a>. I remembered seeing a <a href="https://twitter.com/paf31/status/1040304689932165120">tweet</a> from Phil Freeman which proves that they are indeed equivalent. I thought it would be a fun exercise to prove other equivalences from classical logic.</p>
+      <content type="html"><![CDATA[<p>During a very pleasant conversation at a recent <a href="http://bucharestfp.ro">Bucharest FP</a> meetup, <a href="https://twitter.com/igstan">somebody</a> mentioned that <code>Cont</code> is, almost exactly, <a href="https://en.wikipedia.org/wiki/Peirce%27s_law"><em>Peirce's law</em></a>. I remembered seeing a <a href="https://twitter.com/paf31/status/1040304689932165120">tweet</a> from Phil Freeman which proves that they are indeed equivalent. I thought it would be a fun exercise to prove other equivalences from classical logic.</p>
 <p>This post assumes you are familar with: - the <a href="https://www.youtube.com/watch?v=aeRVdYN6fE8">Curry-Howard correspondence</a>, - classical and intuitionistic logic (for example, see it explained using Coq in <a href="https://softwarefoundations.cis.upenn.edu/current/lf-current/Logic.html">Software Foundations</a>), and - one of Haskell, Agda, Idris or Coq.</p>
 <h1 id="monadcont-and-the-law-of-excluded-middle">MonadCont and the Law of Excluded Middle</h1>
 <p>Haskell and PureScript define <code>MonadCont</code>, which represent monads that support the <em>call-with-current-continuation</em> (<code>callCC</code>) operation:</p>
@@ -449,8 +240,7 @@
       <category term="haskell"/>
       <category term="theory"/>
       <summary>More Logic in PL</summary>
-      <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
+      <content type="html"><![CDATA[<p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
 <p>This post will show how a simple proof works in Logic, Type Theory, and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B) ∧ C</code>.</p>
 <h2 id="logic">Logic</h2>
 <p>In logic, there are several systems that allows us to reason about propositions. One of them is the natural deduction system and is defined using introduction and elimination rules. For each connective, or operator, we will have at least one of each introduction and elimination rules.</p>
@@ -516,19 +306,19 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <p>Also, remember that we can compose any two arrows <code>f : A → B</code> and <code>g : B → C</code> via <code>g ∘ f</code>.</p>
 <p>Now we are ready for the proof:</p>
 <p><code>T</code> is the terminal object, and <code>t : T → A × (B × C)</code> is what we start with. We need to be able to obtain an arrow <code>t' : T → (A × B) × C)</code>.</p>
-<p><img src="/content/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
+<p><img src="/images/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
 <p>By <strong>product</strong> <code>A × (B × C)</code>, we know there exists <code>p : A × (B × C) → A</code> and <code>q : A × (B × C) → B × C</code>.</p>
 <p>By <strong>composition</strong>, we can obtain the arrows <code>p ∘ t : T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
 <p>By <strong>product</strong> <code>B × C</code>, we know there exists <code>p' : B × C → B</code> and <code>q' : B × C → C</code>.</p>
 <p>By <strong>composition</strong>, we can obtain the arrow <code>p' ∘ q ∘ t : T → B</code>.</p>
 <p>So now, we have the following arrows: - <code>p ∘ t : T → A</code> - <code>p' ∘ q ∘ t : T → B</code></p>
-<p><img src="/content/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
+<p><img src="/images/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
 <p>By definition of <strong>product</strong>, since we know <code>A × B</code> is the product of <code>A</code> and <code>B</code>, and since we have the arrows <code>T → A</code> and <code>T → B</code>, then we know there must be an unique arrow which we'll name <code>l : T → A × B</code>.</p>
 <p>By <strong>composition</strong> we can obtain the arrow <code>q' ∘ q ∘ t : T → C</code>.</p>
-<p><img src="/content/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
+<p><img src="/images/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
 <p>Similarly to the step before, by definition of <strong>product</strong>, since we know <code>(A × B) × C</code> is a product of <code>A × B</code> and <code>C</code>, and since we have the arrows <code>l : T → A × B</code> and <code>q' ∘ q ∘ t : T → C</code>, then there must exist an unique arrow <code>t' : T → (A × B) × C</code>.</p>
 <p>Note: there are, in fact, as many arrows <code>T → (A × B) × C</code> as are elements in <code>(A × B) × C</code>, but <code>t'</code> is the unique one derived from the initial arrow, <code>t</code>.</p>
-<p><img src="/content/curry-howard/ct4.jpg" title="ct4" alt="ct4" /></p>
+<p><img src="/images/curry-howard/ct4.jpg" title="ct4" alt="ct4" /></p>
 <p>Edit: See this <a href="https://twitter.com/BartoszMilewski/status/1093565646036643841">twitter thread for a whiteboard proof of sum associativity</a>.</p>
 <h2 id="back-to-haskell">Back to Haskell</h2>
 <p>If we follow the CT arrows as we followed the logic proof: - we could rewrite the <code>l : T → A × B</code> arrow as <code>&lt;i,j&gt; : T → A × B</code>, where <code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q ∘ t : T → B</code>. - we already have <code>k = q' ∘ q ∘ t : T → C</code></p>
@@ -552,8 +342,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <category term="agda"/>
       <category term="dependent types"/>
       <summary>Forall and Exists as Dependent Types</summary>
-      <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>I previously showed a <a href="/curry-howard">single proof</a> in logic, type theory, and category theory, and some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence.</p>
+      <content type="html"><![CDATA[<p>I previously showed a <a href="/curry-howard">single proof</a> in logic, type theory, and category theory, and some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence.</p>
 <p>This post will go a bit further than that and show the type theoretic equivalents of existential and universal quantifiers. I'll then explore some interesting properties of these types. This post will not go into the category theory part of this, although I may do that in a future post.</p>
 <h2 id="quantifiers-in-logic">Quantifiers in Logic</h2>
 <p>Forall (∀) is the universal quantifier and is generally written as</p>
@@ -686,8 +475,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <category term="haskell"/>
       <category term="functor"/>
       <summary>Towards a more general Functor class</summary>
-      <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>Due to kind restrictions, the Haskell <em>Functor</em> cannot represent a lot of valid functors: functors of higher kinded types (higher than <code>* -&gt; *</code>), contravariant functors, invariant functors, etc.</p>
+      <content type="html"><![CDATA[<p>Due to kind restrictions, the Haskell <em>Functor</em> cannot represent a lot of valid functors: functors of higher kinded types (higher than <code>* -&gt; *</code>), contravariant functors, invariant functors, etc.</p>
 <p>This post will show an alternate <code>Functor</code> that can handle all of the above. I got this idea from the awesome <a href="https://twitter.com/am_i_tom">Tom Harding</a>, and he apparently got it from <a href="https://twitter.com/Iceland_jack">@Iceland_jack</a>.</p>
 <p>Although this is not new, I could not find any blog post or paper covering it.</p>
 <h2 id="the-actual-problem">The actual problem</h2>
@@ -849,8 +637,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <category term="fp"/>
       <category term="haskell"/>
       <summary>A plea to senior developers and team leads</summary>
-      <content type="html"><![CDATA[<h2 id="tldr">TL;DR</h2>
-<p>I think the reason we don't have more people doing Haskell is we're not actually hiring junior developers, and when we do, we don't set them up for success by properly training them.</p>
+      <content type="html"><![CDATA[<p>I think the reason we don't have more people doing Haskell is we're not actually hiring junior developers, and when we do, we don't set them up for success by properly training them.</p>
 <h2 id="introduction">Introduction</h2>
 <p>This post was sparked by a few other posts in the Haskell world. They are, to my knowledge, in chronological order: - Michal Snoyman's <a href="https://www.snoyman.com/blog/2019/11/boring-haskell-manifesto">Boring Haskell Manifesto</a> - Matt Parsons' <a href="https://www.parsonsmatt.org/2019/12/26/write_junior_code.html">Write Junior Code</a> - Marco Sampellegrini's <a href="https://alpacaaa.net/thoughts-on-haskell-2020/">My thoughts on Haskell in 2020</a></p>
 <p>Snoyman's manifesto is a call to define a safe subset of the Haskell language and common libraries, provide documentation, tutorials, cookbooks, and continuously evolve, update, and help engineers use and get "boring Haskell" adopted.</p>
@@ -899,8 +686,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <category term="haskell"/>
       <category term="functor"/>
       <summary>A look into bifunctors.</summary>
-      <content type="html"><![CDATA[<h2 id="prerequisites">Prerequisites</h2>
-<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>Either a</code>, <code>(,) a</code> - basic kind knowledge, e.g. the difference between <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
+      <content type="html"><![CDATA[<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>Either a</code>, <code>(,) a</code> - basic kind knowledge, e.g. the difference between <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
 <h2 id="why">Why</h2>
 <p>In Haskell, functors can only be defined for types of kind <code>* -&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>. Their instances allow us to use <code>fmap</code> (or <code>&lt;$&gt;</code>) to go from <code>Maybe a</code> to <code>Maybe b</code> using some <code>a -&gt; b</code>, like:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></span>
@@ -965,8 +751,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <category term="haskell"/>
       <category term="functor"/>
       <summary>A look into contravariant functors.</summary>
-      <content type="html"><![CDATA[<h2 id="prerequisites">Prerequisites</h2>
-<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>(-&gt;) r</code></p>
+      <content type="html"><![CDATA[<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>(-&gt;) r</code></p>
 <h2 id="why">Why</h2>
 <p>Not all higher kinded types <code>* -&gt; *</code> can have a <code>Functor</code> instance. While types like <code>Maybe a</code>, <code>(x, a)</code>, <code>r -&gt; a</code>, <code>Either e a</code> and <code>[a]</code> are <code>Functors</code> in <code>a</code>, there are some types that cannot have a <code>Functor</code> instance. A good example is <code>Predicate</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Predicate</span> a <span class="ot">=</span> <span class="dt">Predicate</span> {<span class="ot"> getPredicate ::</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span> }</span></code></pre></div>
@@ -1034,8 +819,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <category term="haskell"/>
       <category term="functor"/>
       <summary>A look into profunctors</summary>
-      <content type="html"><![CDATA[<h2 id="prerequisites">Prerequisites</h2>
-<p>This post assumes prior knowledge of - <a href="/contravariant">Contravariant</a> - <a href="/bifunctor">Bifunctor</a></p>
+      <content type="html"><![CDATA[<p>This post assumes prior knowledge of - <a href="/contravariant">Contravariant</a> - <a href="/bifunctor">Bifunctor</a></p>
 <h2 id="why">Why</h2>
 <p>We've seen how types of kind <code>* -&gt; *</code> can have instances for <code>Functor</code> or <code>Contravariant</code>, depending on the position of the type argument. We have also seen that types of kind <code>* -&gt; * -&gt; *</code> can have <code>Bifunctor</code> instances. These types are morally <code>Functor</code> in both type arguments. We're left with one very common type which we can't map both arguments of: <code>a -&gt; b</code>. It does have a <code>Functor</code> instance for <code>b</code>, but the <code>a</code> is morally <code>Contravariant</code> (so it can't have a <code>Bifunctor</code> instance). This is where <code>Profunctor</code>s come in.</p>
 <p>Here's a list of a few common types with the instances they allow:</p>

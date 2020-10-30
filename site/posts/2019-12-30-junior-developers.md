@@ -6,8 +6,6 @@ tags: [personal, fp, haskell]
 description: "A plea to senior developers and team leads"
 ---
 
-## TL;DR
-
 I think the reason we don't have more people doing Haskell is we're not actually
 hiring junior developers, and when we do, we don't set them up for success by
 properly training them.

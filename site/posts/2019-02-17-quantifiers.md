@@ -6,8 +6,6 @@ tags: [agda, dependent types]
 description: "Forall and Exists as Dependent Types"
 ---
 
-# Introduction
-
 I previously showed a [single proof](/curry-howard) in logic, type theory,
 and category theory, and some fun
 [classical logic proofs in Haskell](/clasical-logic-in-haskell/), thanks to the

@@ -64,8 +64,7 @@
         </div>
     </div>
     <article class="post">
-        <h1 id="introduction">Introduction</h1>
-<p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
+        <p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
 <p>This post will show how a simple proof works in Logic, Type Theory, and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B) ∧ C</code>.</p>
 <h2 id="logic">Logic</h2>
 <p>In logic, there are several systems that allows us to reason about propositions. One of them is the natural deduction system and is defined using introduction and elimination rules. For each connective, or operator, we will have at least one of each introduction and elimination rules.</p>
@@ -131,19 +130,19 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <p>Also, remember that we can compose any two arrows <code>f : A → B</code> and <code>g : B → C</code> via <code>g ∘ f</code>.</p>
 <p>Now we are ready for the proof:</p>
 <p><code>T</code> is the terminal object, and <code>t : T → A × (B × C)</code> is what we start with. We need to be able to obtain an arrow <code>t' : T → (A × B) × C)</code>.</p>
-<p><img src="/content/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
+<p><img src="/images/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
 <p>By <strong>product</strong> <code>A × (B × C)</code>, we know there exists <code>p : A × (B × C) → A</code> and <code>q : A × (B × C) → B × C</code>.</p>
 <p>By <strong>composition</strong>, we can obtain the arrows <code>p ∘ t : T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
 <p>By <strong>product</strong> <code>B × C</code>, we know there exists <code>p' : B × C → B</code> and <code>q' : B × C → C</code>.</p>
 <p>By <strong>composition</strong>, we can obtain the arrow <code>p' ∘ q ∘ t : T → B</code>.</p>
 <p>So now, we have the following arrows: - <code>p ∘ t : T → A</code> - <code>p' ∘ q ∘ t : T → B</code></p>
-<p><img src="/content/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
+<p><img src="/images/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
 <p>By definition of <strong>product</strong>, since we know <code>A × B</code> is the product of <code>A</code> and <code>B</code>, and since we have the arrows <code>T → A</code> and <code>T → B</code>, then we know there must be an unique arrow which we'll name <code>l : T → A × B</code>.</p>
 <p>By <strong>composition</strong> we can obtain the arrow <code>q' ∘ q ∘ t : T → C</code>.</p>
-<p><img src="/content/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
+<p><img src="/images/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
 <p>Similarly to the step before, by definition of <strong>product</strong>, since we know <code>(A × B) × C</code> is a product of <code>A × B</code> and <code>C</code>, and since we have the arrows <code>l : T → A × B</code> and <code>q' ∘ q ∘ t : T → C</code>, then there must exist an unique arrow <code>t' : T → (A × B) × C</code>.</p>
 <p>Note: there are, in fact, as many arrows <code>T → (A × B) × C</code> as are elements in <code>(A × B) × C</code>, but <code>t'</code> is the unique one derived from the initial arrow, <code>t</code>.</p>
-<p><img src="/content/curry-howard/ct4.jpg" title="ct4" alt="ct4" /></p>
+<p><img src="/images/curry-howard/ct4.jpg" title="ct4" alt="ct4" /></p>
 <p>Edit: See this <a href="https://twitter.com/BartoszMilewski/status/1093565646036643841">twitter thread for a whiteboard proof of sum associativity</a>.</p>
 <h2 id="back-to-haskell">Back to Haskell</h2>
 <p>If we follow the CT arrows as we followed the logic proof: - we could rewrite the <code>l : T → A × B</code> arrow as <code>&lt;i,j&gt; : T → A × B</code>, where <code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q ∘ t : T → B</code>. - we already have <code>k = q' ∘ q ∘ t : T → C</code></p>
@@ -174,6 +173,14 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 </article>
 
 </div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
 
 <footer>
     Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️

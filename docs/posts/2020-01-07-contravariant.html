@@ -64,8 +64,7 @@
         </div>
     </div>
     <article class="post">
-        <h2 id="prerequisites">Prerequisites</h2>
-<p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>(-&gt;) r</code></p>
+        <p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>(-&gt;) r</code></p>
 <h2 id="why">Why</h2>
 <p>Not all higher kinded types <code>* -&gt; *</code> can have a <code>Functor</code> instance. While types like <code>Maybe a</code>, <code>(x, a)</code>, <code>r -&gt; a</code>, <code>Either e a</code> and <code>[a]</code> are <code>Functors</code> in <code>a</code>, there are some types that cannot have a <code>Functor</code> instance. A good example is <code>Predicate</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Predicate</span> a <span class="ot">=</span> <span class="dt">Predicate</span> {<span class="ot"> getPredicate ::</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span> }</span></code></pre></div>
@@ -140,6 +139,14 @@
 </article>
 
 </div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
 
 <footer>
     Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️

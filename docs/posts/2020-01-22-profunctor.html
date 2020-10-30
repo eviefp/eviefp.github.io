@@ -64,8 +64,7 @@
         </div>
     </div>
     <article class="post">
-        <h2 id="prerequisites">Prerequisites</h2>
-<p>This post assumes prior knowledge of - <a href="/contravariant">Contravariant</a> - <a href="/bifunctor">Bifunctor</a></p>
+        <p>This post assumes prior knowledge of - <a href="/contravariant">Contravariant</a> - <a href="/bifunctor">Bifunctor</a></p>
 <h2 id="why">Why</h2>
 <p>We've seen how types of kind <code>* -&gt; *</code> can have instances for <code>Functor</code> or <code>Contravariant</code>, depending on the position of the type argument. We have also seen that types of kind <code>* -&gt; * -&gt; *</code> can have <code>Bifunctor</code> instances. These types are morally <code>Functor</code> in both type arguments. We're left with one very common type which we can't map both arguments of: <code>a -&gt; b</code>. It does have a <code>Functor</code> instance for <code>b</code>, but the <code>a</code> is morally <code>Contravariant</code> (so it can't have a <code>Bifunctor</code> instance). This is where <code>Profunctor</code>s come in.</p>
 <p>Here's a list of a few common types with the instances they allow:</p>
@@ -186,6 +185,14 @@
 </article>
 
 </div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
 
 <footer>
     Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️

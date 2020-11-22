@@ -58,8 +58,8 @@
             <div class="metadata">
             </div>
             <div class="tags">
-              <span class="tag haskell">haskell</span>
-              <span class="tag functor">functor</span>
+              <a class="tag" href="/tag/haskell">haskell</a>
+              <a class="tag" href="/tag/functor">functor</a>
             </div>
         </div>
     </div>
@@ -126,24 +126,24 @@
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>contraExample <span class="ot">=</span> cmap <span class="fu">show</span> (<span class="dt">Predicate</span> (<span class="op">==</span> <span class="st">&quot;5&quot;</span>))</span></code></pre></div>
 <h2 id="what-about-profunctors">What about Profunctors?</h2>
 <p>I'm glad you asked! It's as easy as 1-2-3, or well, as easy as "functor in the last argument" - "contravariant in the previous" - "write helper function":</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">`instance Profunctor p =&gt; FunctorOf Op (~&gt;) p where</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map :: forall a b. (Op b a) -&gt; p b ~&gt; p a</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ot">  map (Op f) = Natural $ lmap f</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Profunctor</span> p <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> <span class="dt">Op</span> (<span class="op">~&gt;</span>) p <span class="kw">where</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> (<span class="dt">Op</span> b a) <span class="ot">-&gt;</span> p b <span class="op">~&gt;</span> p a</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> (<span class="dt">Op</span> f) <span class="ot">=</span> <span class="dt">Natural</span> <span class="op">$</span> lmap f</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ot">dimap&#39;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  :: forall a b c d p</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ot">  .  FunctorOf (-&gt;) (-&gt;) (p a)</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ot">  =&gt; FunctorOf Op   (~&gt;) p</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ot">  =&gt; (b -&gt; a)</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; (c -&gt; d)</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; p a c</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; p b d</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ot">dimap&#39; f g pac =</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="ot">  case map (Op f) of</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ot">    Natural b2a -&gt; b2a (map g pac)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dimap&#39;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="kw">forall</span> a b c d p</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span>  <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>) (p a)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> <span class="dt">Op</span>   (<span class="op">~&gt;</span>) p</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> (b <span class="ot">-&gt;</span> a)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> (c <span class="ot">-&gt;</span> d)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> p a c</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> p b d</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>dimap&#39; f g pac <span class="ot">=</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> <span class="fu">map</span> (<span class="dt">Op</span> f) <span class="kw">of</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Natural</span> b2a <span class="ot">-&gt;</span> b2a (<span class="fu">map</span> g pac)</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample :: String -&gt; String</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample = dimap&#39; read show (+ (1 :: Int))</span></span></code></pre></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>profunctorExample <span class="ot">=</span> dimap&#39; <span class="fu">read</span> <span class="fu">show</span> (<span class="op">+</span> (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>))</span></code></pre></div>
 <h2 id="trifunctors">Tri..functors?</h2>
 <p>Yep. We only need to define a higher-kinded natural transform and write the <code>FunctorOf</code> instance, along with the helper:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> (<span class="op">~~&gt;</span>) f g <span class="ot">=</span> <span class="dt">NatNat</span> (<span class="kw">forall</span> x<span class="op">.</span> f x <span class="op">~&gt;</span> g x)</span>

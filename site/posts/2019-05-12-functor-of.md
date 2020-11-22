@@ -124,8 +124,9 @@ contraExample = cmap show (Predicate (== "5"))
 ## What about Profunctors?
 I'm glad you asked! It's as easy as 1-2-3, or well, as easy as "functor in the
 last argument" - "contravariant in the previous" - "write helper function":
+
 ```haskell
-`instance Profunctor p => FunctorOf Op (~>) p where
+instance Profunctor p => FunctorOf Op (~>) p where
   map :: forall a b. (Op b a) -> p b ~> p a
   map (Op f) = Natural $ lmap f
 

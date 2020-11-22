@@ -125,6 +125,7 @@ Given the proof above, it's easy to noice that `(,)i` is exactly the tuple
 constructor, `(,)e1` is `fst` and `(,)e2` is `snd`. Knowing this, and looking at
 the proof above, we could say, given hypothesis
 `h = (a, (b, c)) : (A, (B, C))`, we can obtain:
+
 1. `a : A` from `fst h`
 2. `(b, c) : (B, C)` from `snd h`
 3. `b : B` from `fst (snd h)`

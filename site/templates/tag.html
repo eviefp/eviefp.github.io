@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="{{siteTitle}}">
+    <meta name="author" content="{{author}}">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    {{>site/templates/meta-data.html}}
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    {{>site/templates/header.html}}
+
+<div id="page">
+            <section class="table-of-contents">
+                <h1>{{tag}}</h1>
+                {{>site/templates/post-list.html}}
+        </section>
+</div>
+
+{{>site/templates/footer.html}}
+
+</body>
+</html>

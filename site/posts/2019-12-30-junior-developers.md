@@ -14,6 +14,7 @@ properly training them.
 
 This post was sparked by a few other posts in the Haskell world. They are, to my
 knowledge, in chronological order:
+
 - Michal Snoyman's [Boring Haskell Manifesto](https://www.snoyman.com/blog/2019/11/boring-haskell-manifesto)
 - Matt Parsons' [Write Junior Code](https://www.parsonsmatt.org/2019/12/26/write_junior_code.html)
 - Marco Sampellegrini's [My thoughts on Haskell in 2020](https://alpacaaa.net/thoughts-on-haskell-2020/)
@@ -30,6 +31,7 @@ wrote simple, junior-level Haskell, we would be able to hire junior developers
 and have them be productive.
 
 Sampellegrini's post points out a few key problems:
+
 - there's a lot of extensions we need to keep track of, which makes things hard
 - if an idea looks good on paper, it doesn't mean it's going to be easy to
   maintain in the long run
@@ -101,6 +103,7 @@ Haskell.
 I am proud to say that all three junior devs are doing great. I obviously can't take
 any significant part of the credit (they are all very smart and hard working),
 but I think that there are a few things that contributed to their success:
+
 - **Kindness** we've all gone through this. We're all trying our best. Be kind and
   supportive. Praise them when they do a good job. Encourage them to come up
   with ideas and to bring their ideas forward.
@@ -183,7 +186,7 @@ some projects, this may be worth it.
 
 I don't think a blessed set of libraries or extensions will help with this.
 Which streaming library gets to be picked? Will it be `conduit` over `pipes`?
-What about `streaming`? 
+What about `streaming`?
 
 As I said, I think it's the wrong thing to focus on.
 
@@ -208,4 +211,4 @@ that are somewhat familiar with monads?
 Go out there, convince your team that they're not actually living in an ivory
 tower. It's not that hard, and we're not special for understanding how to use
 these language extensions and libraries. We can teach junior developers how to
-use them. 
+use them.

@@ -1,7 +1,7 @@
 let
-  sources = import ./nix;
-  tooling = sources.tooling;
+  sources = import ./nix/sources.nix;
+  tooling = import sources.nix-tooling;
   pkgs = tooling.pkgs;
-  gis = sources.gis;
+  gis = import sources.gitignore { inherit (pkgs) lib; };
 in
-  pkgs.haskell.packages.ghc883.callCabal2nix "learn-brick" (gis.gitignoreSource ./.) {}
+  pkgs.haskell.packages.ghc8102.callCabal2nix "cvlad-blog" (gis.gitignoreSource ./.) {}

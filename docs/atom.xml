@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Vladimir Ciobanu&#39;s Blog</title>
     <link href="https://cvlad.info/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-10-29T23:07:SZ</updated>
+  <updated>2020-11-22T23:13:SZ</updated>
   <author>
       <name>Vladimir Ciobanu</name>
   </author>
@@ -24,10 +24,10 @@
 <h3 id="installing-haskell">Installing Haskell</h3>
 <p>In my experience, the best way to install Haskell is using <code>stack</code>. It's a cross-platform tool for developing Haskell projects, and it helps with managing dependencies as well as GHC (the Glasgow Haskell Compiler) versions for each of your projects. Please check their <a href="https://docs.haskellstack.org/en/stable/README/">documentation page</a> on how to install. If you already have it, make sure you upgrade it via <code>stack upgrade</code>.</p>
 <p>In order to start a new project, you can run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code$ stack new project</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code$ cd project</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code/project$ stack build</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code/project$ stack exec -- project-exe</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> new project</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> project</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> build</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> exec -- project-exe</span></code></pre></div>
 <p>You should now be able to edit either <code>app/Main.hs</code> or <code>src/Lib.hs</code> to change your program.</p>
 <h3 id="writing-haskell-programs">Writing Haskell Programs</h3>
 <p>I regret not listening to people's advice about this sooner and spending a lot of time looking for the best Haskell IDE / development tools. In the end, everybody else was right and unfortunately, the current state of the available tools is <em>not good enough</em>. The process that most people seem to use, and the one I also adopted is using my favorite text editor with syntax highlighting. I have a few separate console windows that run <code>ghcid</code> and <code>ghci</code>.</p>
@@ -43,7 +43,14 @@
 <p>The most recommended book on the FP slack is <a href="http://haskellbook.com/">Haskell Programming from first principles</a>, and for good reason - it was absolutely key in my learning process. It's filled with exercises guiding you through the Haskell language, as well as excellent explanations and tips. There isn't much more I can say other than, if you want to learn Haskell, this is where you should start, and if you do, please work through the exercises.</p>
 <h2 id="blogs-and-other-resources">Blogs and other resources</h2>
 <p>There are a lot of awesome blogs and resources for Haskell out there, and I want to mention particularly <a href="http://www.parsonsmatt.org/">Matt Parson's blog</a> and <a href="http://dev.stephendiehl.com/hask/">Stephen Diehl's What I wish I knew when learning Haskell</a> as being excellent resources.</p>
-<p>My personal interest in CS led me to reading several books on topics such as Type Theory or Category Theory. They are in no way required or necessary in order to learn Haskell, but they helped me and I think they are interesting: * Bartosz Mileski's <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">blogs</a> / <a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_">videos</a> * David Spivak's <a href="https://www.youtube.com/watch?v=IBeceQHz2x8">videos</a> and books (<a href="https://github.com/mmai/Category-Theory-for-the-Sciences">one</a> and <a href="http://math.mit.edu/~dspivak/teaching/sp18/">two</a>) * <a href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">TAPL</a> * <a href="https://www.amazon.com/Type-Theory-Formal-Proof-Introduction/dp/110703650X">Type Theory and Formal Proof</a> * <a href="https://softwarefoundations.cis.upenn.edu/current/index.html">Software Foundations</a></p>
+<p>My personal interest in CS led me to reading several books on topics such as Type Theory or Category Theory. They are in no way required or necessary in order to learn Haskell, but they helped me and I think they are interesting:</p>
+<ul>
+<li>Bartosz Mileski's <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">blogs</a> / <a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_">videos</a></li>
+<li>David Spivak's <a href="https://www.youtube.com/watch?v=IBeceQHz2x8">videos</a> and books (<a href="https://github.com/mmai/Category-Theory-for-the-Sciences">one</a> and <a href="http://math.mit.edu/~dspivak/teaching/sp18/">two</a>)</li>
+<li><a href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">TAPL</a></li>
+<li><a href="https://www.amazon.com/Type-Theory-Formal-Proof-Introduction/dp/110703650X">Type Theory and Formal Proof</a></li>
+<li><a href="https://softwarefoundations.cis.upenn.edu/current/index.html">Software Foundations</a></li>
+</ul>
 <h2 id="show-and-tell">Show and tell</h2>
 <p>Soon after I started reading the Haskell Book, I started understanding the benefits of FP. During this time, we were having some issues at work with the quality of our TypeScript code base. The code was brittle and we were often afraid to change it. I proposed we spent some time learning FP and try out PureScript (which is very similar to Haskell, but generates JavaScript).</p>
 <p>For the next few months, I went through the Haskell Book and presented it bit by bit to my colleagues and did exercises together. This helped me immensely. Just preparing the chapters in order to present them to other people does wonders on your understanding; and actually presenting and trying to figure out answers to their questions was important for me.</p>
@@ -293,7 +300,15 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">assoc ::</span> (a, (b, c)) <span class="ot">-&gt;</span> ((a, b), c)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>assoc (a, (b, c)) <span class="ot">=</span> ((a, b), c)</span></code></pre></div>
 <p>However, this takes advantage of a powerful Haskell feature known as pattern matching.</p>
-<p>Given the proof above, it's easy to noice that <code>(,)i</code> is exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code> and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at the proof above, we could say, given hypothesis <code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain: 1. <code>a : A</code> from <code>fst h</code> 2. <code>(b, c) : (B, C)</code> from <code>snd h</code> 3. <code>b : B</code> from <code>fst (snd h)</code> 4. <code>c : C</code> from <code>snd (snd h)</code> 5. <code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd h))</code> 6. <code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd h)), snd (snd h))</code></p>
+<p>Given the proof above, it's easy to noice that <code>(,)i</code> is exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code> and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at the proof above, we could say, given hypothesis <code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain:</p>
+<ol>
+<li><code>a : A</code> from <code>fst h</code></li>
+<li><code>(b, c) : (B, C)</code> from <code>snd h</code></li>
+<li><code>b : B</code> from <code>fst (snd h)</code></li>
+<li><code>c : C</code> from <code>snd (snd h)</code></li>
+<li><code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd h))</code></li>
+<li><code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd h)), snd (snd h))</code></li>
+</ol>
 <p>So, in Haskell:</p>
 <pre><code>assoc&#39; :: (a, (b, c)) -&gt; ((a, b), c)
 assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
@@ -537,24 +552,24 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>contraExample <span class="ot">=</span> cmap <span class="fu">show</span> (<span class="dt">Predicate</span> (<span class="op">==</span> <span class="st">&quot;5&quot;</span>))</span></code></pre></div>
 <h2 id="what-about-profunctors">What about Profunctors?</h2>
 <p>I'm glad you asked! It's as easy as 1-2-3, or well, as easy as "functor in the last argument" - "contravariant in the previous" - "write helper function":</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">`instance Profunctor p =&gt; FunctorOf Op (~&gt;) p where</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map :: forall a b. (Op b a) -&gt; p b ~&gt; p a</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ot">  map (Op f) = Natural $ lmap f</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Profunctor</span> p <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> <span class="dt">Op</span> (<span class="op">~&gt;</span>) p <span class="kw">where</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  map ::</span> <span class="kw">forall</span> a b<span class="op">.</span> (<span class="dt">Op</span> b a) <span class="ot">-&gt;</span> p b <span class="op">~&gt;</span> p a</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span> (<span class="dt">Op</span> f) <span class="ot">=</span> <span class="dt">Natural</span> <span class="op">$</span> lmap f</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ot">dimap&#39;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  :: forall a b c d p</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ot">  .  FunctorOf (-&gt;) (-&gt;) (p a)</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ot">  =&gt; FunctorOf Op   (~&gt;) p</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ot">  =&gt; (b -&gt; a)</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; (c -&gt; d)</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; p a c</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ot">  -&gt; p b d</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ot">dimap&#39; f g pac =</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="ot">  case map (Op f) of</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ot">    Natural b2a -&gt; b2a (map g pac)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dimap&#39;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="kw">forall</span> a b c d p</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span>  <span class="dt">FunctorOf</span> (<span class="ot">-&gt;</span>) (<span class="ot">-&gt;</span>) (p a)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> <span class="dt">FunctorOf</span> <span class="dt">Op</span>   (<span class="op">~&gt;</span>) p</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=&gt;</span> (b <span class="ot">-&gt;</span> a)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> (c <span class="ot">-&gt;</span> d)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> p a c</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">-&gt;</span> p b d</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>dimap&#39; f g pac <span class="ot">=</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> <span class="fu">map</span> (<span class="dt">Op</span> f) <span class="kw">of</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Natural</span> b2a <span class="ot">-&gt;</span> b2a (<span class="fu">map</span> g pac)</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample :: String -&gt; String</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample = dimap&#39; read show (+ (1 :: Int))</span></span></code></pre></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ot">profunctorExample ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>profunctorExample <span class="ot">=</span> dimap&#39; <span class="fu">read</span> <span class="fu">show</span> (<span class="op">+</span> (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>))</span></code></pre></div>
 <h2 id="trifunctors">Tri..functors?</h2>
 <p>Yep. We only need to define a higher-kinded natural transform and write the <code>FunctorOf</code> instance, along with the helper:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> (<span class="op">~~&gt;</span>) f g <span class="ot">=</span> <span class="dt">NatNat</span> (<span class="kw">forall</span> x<span class="op">.</span> f x <span class="op">~&gt;</span> g x)</span>
@@ -639,10 +654,21 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
       <summary>A plea to senior developers and team leads</summary>
       <content type="html"><![CDATA[<p>I think the reason we don't have more people doing Haskell is we're not actually hiring junior developers, and when we do, we don't set them up for success by properly training them.</p>
 <h2 id="introduction">Introduction</h2>
-<p>This post was sparked by a few other posts in the Haskell world. They are, to my knowledge, in chronological order: - Michal Snoyman's <a href="https://www.snoyman.com/blog/2019/11/boring-haskell-manifesto">Boring Haskell Manifesto</a> - Matt Parsons' <a href="https://www.parsonsmatt.org/2019/12/26/write_junior_code.html">Write Junior Code</a> - Marco Sampellegrini's <a href="https://alpacaaa.net/thoughts-on-haskell-2020/">My thoughts on Haskell in 2020</a></p>
+<p>This post was sparked by a few other posts in the Haskell world. They are, to my knowledge, in chronological order:</p>
+<ul>
+<li>Michal Snoyman's <a href="https://www.snoyman.com/blog/2019/11/boring-haskell-manifesto">Boring Haskell Manifesto</a></li>
+<li>Matt Parsons' <a href="https://www.parsonsmatt.org/2019/12/26/write_junior_code.html">Write Junior Code</a></li>
+<li>Marco Sampellegrini's <a href="https://alpacaaa.net/thoughts-on-haskell-2020/">My thoughts on Haskell in 2020</a></li>
+</ul>
 <p>Snoyman's manifesto is a call to define a safe subset of the Haskell language and common libraries, provide documentation, tutorials, cookbooks, and continuously evolve, update, and help engineers use and get "boring Haskell" adopted.</p>
 <p>Parsons notes that Haskell has a hiring problem: there are few jobs, and most of those are for senior developers. The reason for this is that we over-indulge in fancy Haskell, making our code needlessly complicated. If we wrote simple, junior-level Haskell, we would be able to hire junior developers and have them be productive.</p>
-<p>Sampellegrini's post points out a few key problems: - there's a lot of extensions we need to keep track of, which makes things hard - if an idea looks good on paper, it doesn't mean it's going to be easy to maintain in the long run - inclusivity might be a problem: "I don't want a PhD to be a requirement to work with Haskell" - they argue there's marginal benefit to fancy types/Haskell</p>
+<p>Sampellegrini's post points out a few key problems:</p>
+<ul>
+<li>there's a lot of extensions we need to keep track of, which makes things hard</li>
+<li>if an idea looks good on paper, it doesn't mean it's going to be easy to maintain in the long run</li>
+<li>inclusivity might be a problem: "I don't want a PhD to be a requirement to work with Haskell"</li>
+<li>they argue there's marginal benefit to fancy types/Haskell</li>
+</ul>
 <p>While I understand where all of these feelings are coming from, and I agree to some of the ideas, I think they have their marks on the wrong problem.</p>
 <h2 id="the-real-problem">The Real Problem</h2>
 <p>I think the real problem is that we are not putting up jobs for junior devs. We're not even giving them a chance. And when we are, we usually don't give them enough support (through training and making sure they know who to ask, and that it's okay to do so) to succeed.</p>
@@ -654,7 +680,14 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <p>I have not been working with Haskell for very long. I actually come from OOP-land (you can <a href="https://cvlad.info/haskell/">read my story here</a>), and I have a lot of experience as a team lead. I have hired, trained, and mentored a decent number of junior devs, most of them in my OOP days, but also three of them recently, at the place I currently work. For the past year and a half, I have been the main developer in charge of training and making sure the junior devs are productive.</p>
 <p>Our codebases (you can <a href="https://github.com/kframework/kore">see one of them here</a>) are pretty complicated: besides the fact that they use notoriously complex Haskell libraries such as <code>lens</code>, <code>servant</code>, and <code>recursion-schemes</code>, the domain problem is pretty complicated as well: we're essentially building an automated prover for a rewrite-based executable semantic framework (the other project is a pretty standard servant app, so not too much to go over there, although it does use <code>lens</code>, <code>generic-lens</code>, <code>persistent</code>/<code>esqueleto</code> and obviously <code>servant</code>).</p>
 <p>This prelude was needed because I can't really speak about junior developers in general, but I can tell you about my experience with on-boarding junior Haskell developers on our projects. However, before that, I would like to add that the junior devs we hired were all either senior year at the local university, or fresh graduates. They were picked because they are all excited about FP, despite the fact that none of them had any previous professional experience related to FP or Haskell.</p>
-<p>I am proud to say that all three junior devs are doing great. I obviously can't take any significant part of the credit (they are all very smart and hard working), but I think that there are a few things that contributed to their success: - <strong>Kindness</strong> we've all gone through this. We're all trying our best. Be kind and supportive. Praise them when they do a good job. Encourage them to come up with ideas and to bring their ideas forward. - <strong>Confidence</strong> make sure they know it's okay to not know things; there's a ton of things I don't know, and I make sure to be loud about it. I also make sure to show them how I find the answers to things I don't know. Of course, on top of literally telling them it's okay to ask questions and not know stuff, even if it feels like it's something they should know (there's no such thing, really: we all have our blind spots). - <strong>Support</strong> be there for them. We have daily meetings and we make sure we know what everybody's up to. We make sure to ask everybody if they're stuck or not, if they need help or more work. - <strong>Training</strong> at least until they get comfortable, make sure you go over the things that are "fancy" in the codebase. At the very least, make sure you go over a few examples and show them how it works. Make sure they understand. A few exercises where you work together can be particularly useful as well. - <strong>Clarity</strong> it is vitally important that tasks are as crystal-clear as they can be. Make extra sure the tasks that junior devs work on won't take them too far off the beaten path. Try to add comments/more notes to these tasks: where to start, a very rough sketch of the solution, how to test: anything can help.</p>
+<p>I am proud to say that all three junior devs are doing great. I obviously can't take any significant part of the credit (they are all very smart and hard working), but I think that there are a few things that contributed to their success:</p>
+<ul>
+<li><strong>Kindness</strong> we've all gone through this. We're all trying our best. Be kind and supportive. Praise them when they do a good job. Encourage them to come up with ideas and to bring their ideas forward.</li>
+<li><strong>Confidence</strong> make sure they know it's okay to not know things; there's a ton of things I don't know, and I make sure to be loud about it. I also make sure to show them how I find the answers to things I don't know. Of course, on top of literally telling them it's okay to ask questions and not know stuff, even if it feels like it's something they should know (there's no such thing, really: we all have our blind spots).</li>
+<li><strong>Support</strong> be there for them. We have daily meetings and we make sure we know what everybody's up to. We make sure to ask everybody if they're stuck or not, if they need help or more work.</li>
+<li><strong>Training</strong> at least until they get comfortable, make sure you go over the things that are "fancy" in the codebase. At the very least, make sure you go over a few examples and show them how it works. Make sure they understand. A few exercises where you work together can be particularly useful as well.</li>
+<li><strong>Clarity</strong> it is vitally important that tasks are as crystal-clear as they can be. Make extra sure the tasks that junior devs work on won't take them too far off the beaten path. Try to add comments/more notes to these tasks: where to start, a very rough sketch of the solution, how to test: anything can help.</li>
+</ul>
 <p>Only one of the three junior developers we hired was slightly familiar with monad transformers at the time they were hired. The other two were familiar with monads. We were able to get all three to contribute PRs in less than a week after they started. Within 3 to 6 months, I noticed they started being able to complete tasks with little supervision. One of them has been with us for little over an year, and they are now able to take on complicated tasks (major refactoring, learning new concepts, etc.) pretty much on their own.</p>
 <h2 id="you-cant-possibly-teach-a-junior-x-in-y-days">You can't possibly teach a junior X in Y days</h2>
 <p>Since the subject is hot, I just saw a <a href="https://twitter.com/jkachmar/status/1210977393197883393">tweet from Joe Kachmar</a> which expresses the very idea I want to combat: these things aren't THAT hard to teach. Of course a junior won't be able to invent a new type of lenses, add a new layer to our application's monad stack, or re-invent <code>generic-lens</code>, but nobody's expecting them to.</p>

@@ -58,8 +58,8 @@
             <div class="metadata">
             </div>
             <div class="tags">
-              <span class="tag fp">fp</span>
-              <span class="tag personal">personal</span>
+              <a class="tag" href="/tag/fp">fp</a>
+              <a class="tag" href="/tag/personal">personal</a>
             </div>
         </div>
     </div>
@@ -72,10 +72,10 @@
 <h3 id="installing-haskell">Installing Haskell</h3>
 <p>In my experience, the best way to install Haskell is using <code>stack</code>. It's a cross-platform tool for developing Haskell projects, and it helps with managing dependencies as well as GHC (the Glasgow Haskell Compiler) versions for each of your projects. Please check their <a href="https://docs.haskellstack.org/en/stable/README/">documentation page</a> on how to install. If you already have it, make sure you upgrade it via <code>stack upgrade</code>.</p>
 <p>In order to start a new project, you can run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code$ stack new project</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code$ cd project</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code/project$ stack build</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vlad@rhaaw</span>:~/code/project$ stack exec -- project-exe</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> new project</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> project</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> build</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> exec -- project-exe</span></code></pre></div>
 <p>You should now be able to edit either <code>app/Main.hs</code> or <code>src/Lib.hs</code> to change your program.</p>
 <h3 id="writing-haskell-programs">Writing Haskell Programs</h3>
 <p>I regret not listening to people's advice about this sooner and spending a lot of time looking for the best Haskell IDE / development tools. In the end, everybody else was right and unfortunately, the current state of the available tools is <em>not good enough</em>. The process that most people seem to use, and the one I also adopted is using my favorite text editor with syntax highlighting. I have a few separate console windows that run <code>ghcid</code> and <code>ghci</code>.</p>
@@ -91,7 +91,14 @@
 <p>The most recommended book on the FP slack is <a href="http://haskellbook.com/">Haskell Programming from first principles</a>, and for good reason - it was absolutely key in my learning process. It's filled with exercises guiding you through the Haskell language, as well as excellent explanations and tips. There isn't much more I can say other than, if you want to learn Haskell, this is where you should start, and if you do, please work through the exercises.</p>
 <h2 id="blogs-and-other-resources">Blogs and other resources</h2>
 <p>There are a lot of awesome blogs and resources for Haskell out there, and I want to mention particularly <a href="http://www.parsonsmatt.org/">Matt Parson's blog</a> and <a href="http://dev.stephendiehl.com/hask/">Stephen Diehl's What I wish I knew when learning Haskell</a> as being excellent resources.</p>
-<p>My personal interest in CS led me to reading several books on topics such as Type Theory or Category Theory. They are in no way required or necessary in order to learn Haskell, but they helped me and I think they are interesting: * Bartosz Mileski's <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">blogs</a> / <a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_">videos</a> * David Spivak's <a href="https://www.youtube.com/watch?v=IBeceQHz2x8">videos</a> and books (<a href="https://github.com/mmai/Category-Theory-for-the-Sciences">one</a> and <a href="http://math.mit.edu/~dspivak/teaching/sp18/">two</a>) * <a href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">TAPL</a> * <a href="https://www.amazon.com/Type-Theory-Formal-Proof-Introduction/dp/110703650X">Type Theory and Formal Proof</a> * <a href="https://softwarefoundations.cis.upenn.edu/current/index.html">Software Foundations</a></p>
+<p>My personal interest in CS led me to reading several books on topics such as Type Theory or Category Theory. They are in no way required or necessary in order to learn Haskell, but they helped me and I think they are interesting:</p>
+<ul>
+<li>Bartosz Mileski's <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">blogs</a> / <a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_">videos</a></li>
+<li>David Spivak's <a href="https://www.youtube.com/watch?v=IBeceQHz2x8">videos</a> and books (<a href="https://github.com/mmai/Category-Theory-for-the-Sciences">one</a> and <a href="http://math.mit.edu/~dspivak/teaching/sp18/">two</a>)</li>
+<li><a href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">TAPL</a></li>
+<li><a href="https://www.amazon.com/Type-Theory-Formal-Proof-Introduction/dp/110703650X">Type Theory and Formal Proof</a></li>
+<li><a href="https://softwarefoundations.cis.upenn.edu/current/index.html">Software Foundations</a></li>
+</ul>
 <h2 id="show-and-tell">Show and tell</h2>
 <p>Soon after I started reading the Haskell Book, I started understanding the benefits of FP. During this time, we were having some issues at work with the quality of our TypeScript code base. The code was brittle and we were often afraid to change it. I proposed we spent some time learning FP and try out PureScript (which is very similar to Haskell, but generates JavaScript).</p>
 <p>For the next few months, I went through the Haskell Book and presented it bit by bit to my colleagues and did exercises together. This helped me immensely. Just preparing the chapters in order to present them to other people does wonders on your understanding; and actually presenting and trying to figure out answers to their questions was important for me.</p>

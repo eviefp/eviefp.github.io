@@ -58,8 +58,8 @@
             <div class="metadata">
             </div>
             <div class="tags">
-              <span class="tag haskell">haskell</span>
-              <span class="tag theory">theory</span>
+              <a class="tag" href="/tag/haskell">haskell</a>
+              <a class="tag" href="/tag/theory">theory</a>
             </div>
         </div>
     </div>
@@ -117,7 +117,15 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">assoc ::</span> (a, (b, c)) <span class="ot">-&gt;</span> ((a, b), c)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>assoc (a, (b, c)) <span class="ot">=</span> ((a, b), c)</span></code></pre></div>
 <p>However, this takes advantage of a powerful Haskell feature known as pattern matching.</p>
-<p>Given the proof above, it's easy to noice that <code>(,)i</code> is exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code> and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at the proof above, we could say, given hypothesis <code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain: 1. <code>a : A</code> from <code>fst h</code> 2. <code>(b, c) : (B, C)</code> from <code>snd h</code> 3. <code>b : B</code> from <code>fst (snd h)</code> 4. <code>c : C</code> from <code>snd (snd h)</code> 5. <code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd h))</code> 6. <code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd h)), snd (snd h))</code></p>
+<p>Given the proof above, it's easy to noice that <code>(,)i</code> is exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code> and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at the proof above, we could say, given hypothesis <code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain:</p>
+<ol>
+<li><code>a : A</code> from <code>fst h</code></li>
+<li><code>(b, c) : (B, C)</code> from <code>snd h</code></li>
+<li><code>b : B</code> from <code>fst (snd h)</code></li>
+<li><code>c : C</code> from <code>snd (snd h)</code></li>
+<li><code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd h))</code></li>
+<li><code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd h)), snd (snd h))</code></li>
+</ol>
 <p>So, in Haskell:</p>
 <pre><code>assoc&#39; :: (a, (b, c)) -&gt; ((a, b), c)
 assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>

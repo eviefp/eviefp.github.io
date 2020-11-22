@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass        #-}
 {-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE NamedFieldPuns        #-}
 {-# LANGUAGE OverloadedStrings     #-}
 
 module Main where
@@ -9,6 +10,10 @@ import           Control.Lens
 import           Control.Monad
 import           Data.Aeson                 as A
 import           Data.Aeson.Lens
+import           Data.Function              (on)
+import           Data.List                  (sortBy)
+import qualified Data.Map                   as M
+import qualified Data.Set                   as S
 import           Data.Time
 import           Development.Shake
 import           Development.Shake.Classes
@@ -56,12 +61,16 @@ data SiteMeta =
     deriving (Generic, Eq, Ord, Show, ToJSON)
 
 -- | Data for the index page
-data IndexInfo =
+newtype IndexInfo =
   IndexInfo
     { posts :: [Post]
     } deriving (Generic, Show, FromJSON, ToJSON)
 
-type Tag = String
+data Tag = Tag
+    { tag   :: String
+    , posts :: [Post]
+    , url   :: String
+    } deriving (Generic, Show, ToJSON)
 
 -- | Data for a blog post
 data Post =
@@ -70,7 +79,7 @@ data Post =
          , content     :: String
          , url         :: String
          , date        :: String
-         , tags        :: [Tag]
+         , tags        :: [String]
          , description :: String
          , image       :: Maybe String
          }
@@ -83,6 +92,35 @@ data AtomData =
            , posts       :: [Post]
            , currentTime :: String
            , atomUrl     :: String } deriving (Generic, ToJSON, Eq, Ord, Show)
+
+buildTags :: [Tag] -> Action ()
+buildTags t = void $ forP t writeTag
+
+writeTag :: Tag -> Action ()
+writeTag t@Tag{url} = do
+    tagTempl <- compileTemplate' "site/templates/tag.html"
+    writeFile' (outputFolder <> url -<.> "html") . T.unpack $ substitute tagTempl (toJSON t)
+
+getTags :: [Post] -> Action [Tag]
+getTags posts = do
+   let tagToPostsSet = M.unionsWith mappend (toMap <$> posts)
+       tagToPostsList = fmap S.toList tagToPostsSet
+       tagObjects =
+         M.foldMapWithKey
+           (\tag ps -> [Tag {tag, posts = reverse $ sortByDate ps, url = "/tag/" <> tag}])
+           tagToPostsList
+   return tagObjects
+  where
+    toMap :: Post -> M.Map String (S.Set Post)
+    toMap p@Post {tags} = M.unionsWith mappend (embed p <$> tags)
+
+    embed :: Post -> String -> M.Map String (S.Set Post)
+    embed post tag = M.singleton tag (S.singleton post)
+
+sortByDate :: [Post] -> [Post]
+sortByDate = sortBy compareDates
+  where
+    compareDates = compare `on` (formatDate . date)
 
 -- | given a list of posts this will build a table of contents
 buildIndex :: [Post] -> Action ()
@@ -155,7 +193,9 @@ buildFeed posts = do
 --   defines workflow to build the website
 buildRules :: Action ()
 buildRules = do
-  allPosts <- buildPosts
+  allPosts <- sortByDate <$> buildPosts
+  allTags <- getTags allPosts
+  buildTags allTags
   buildIndex allPosts
   buildFeed allPosts
   copyStaticFiles

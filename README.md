@@ -1,8 +1,8 @@
 # TODO
 - [x] tags
 - [x] styling
-- [ ] comment by opening issue on gh...
-- [ ] feed
+- [x] comment by opening issue on gh...
+- [x] feed
 - [ ] other pages
     - [ ] resume
     - [ ] stream schedule

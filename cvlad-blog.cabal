@@ -1,0 +1,65 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           cvlad-blog
+version:        0.1.0.0
+homepage:       https://github.com/vladciobanu/vladciobanu.github.io#readme
+bug-reports:    https://github.com/vladciobanu/vladciobanu.github.io/issues
+author:         Vladimir Ciobanu
+maintainer:     blog@cvlad.info
+copyright:      2020 Vladimir Ciobanu
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/vladciobanu/vladciobanu.github.io
+
+library
+  other-modules:
+      Paths_cvlad_blog
+  hs-source-dirs:
+      src
+  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveAnyClass DeriveDataTypeable DeriveFunctor DeriveTraversable DeriveFoldable DeriveGeneric DerivingStrategies EmptyDataDecls FlexibleContexts FlexibleInstances GADTs GeneralizedNewtypeDeriving ImportQualifiedPost InstanceSigs LambdaCase MultiParamTypeClasses NamedFieldPuns NoImplicitPrelude NoMonomorphismRestriction OverloadedStrings QuasiQuotes RankNTypes RecordWildCards ScopedTypeVariables TupleSections TypeFamilies TypeOperators
+  ghc-options: -Weverything -Wno-missing-home-modules -Wno-redundant-constraints -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-missing-export-lists -Wno-missing-local-signatures -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , containers
+    , lens
+    , lens-aeson
+    , shake
+    , slick
+    , text
+    , time
+    , unordered-containers
+  default-language: Haskell2010
+
+executable build-site
+  main-is: Main.hs
+  other-modules:
+      Paths_cvlad_blog
+  hs-source-dirs:
+      app
+  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveAnyClass DeriveDataTypeable DeriveFunctor DeriveTraversable DeriveFoldable DeriveGeneric DerivingStrategies EmptyDataDecls FlexibleContexts FlexibleInstances GADTs GeneralizedNewtypeDeriving ImportQualifiedPost InstanceSigs LambdaCase MultiParamTypeClasses NamedFieldPuns NoImplicitPrelude NoMonomorphismRestriction OverloadedStrings QuasiQuotes RankNTypes RecordWildCards ScopedTypeVariables TupleSections TypeFamilies TypeOperators
+  ghc-options: -Weverything -Wno-missing-home-modules -Wno-redundant-constraints -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-missing-export-lists -Wno-missing-local-signatures -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , containers
+    , cvlad-blog
+    , lens
+    , lens-aeson
+    , shake
+    , slick
+    , text
+    , time
+    , unordered-containers
+  default-language: Haskell2010

@@ -1,8 +1,8 @@
-{-# LANGUAGE DeriveAnyClass        #-}
-{-# LANGUAGE DeriveGeneric         #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NamedFieldPuns        #-}
-{-# LANGUAGE OverloadedStrings     #-}
+{-# language DeriveAnyClass        #-}
+{-# language DeriveGeneric         #-}
+{-# language DuplicateRecordFields #-}
+{-# language NamedFieldPuns        #-}
+{-# language OverloadedStrings     #-}
 
 module Main where
 
@@ -10,8 +10,10 @@ import           Control.Lens
 import           Control.Monad
 import           Data.Aeson                 as A
 import           Data.Aeson.Lens
-import           Data.Function              (on)
-import           Data.List                  (sortBy)
+import           Data.Function
+    (on)
+import           Data.List
+    (sortBy)
 import qualified Data.Map                   as M
 import qualified Data.Set                   as S
 import           Data.Time
@@ -19,11 +21,12 @@ import           Development.Shake
 import           Development.Shake.Classes
 import           Development.Shake.FilePath
 import           Development.Shake.Forward
-import           GHC.Generics               (Generic)
+import           GHC.Generics
+    (Generic)
 import           Slick
 
-import qualified Data.HashMap.Lazy          as HML
-import qualified Data.Text                  as T
+import qualified Data.HashMap.Lazy as HML
+import qualified Data.Text         as T
 
 ---Config-----------------------------------------------------------------------
 
@@ -49,16 +52,19 @@ withSiteMeta (Object obj) = Object $ HML.union obj siteMetaObj
     Object siteMetaObj = toJSON siteMeta
 withSiteMeta _ = error "only add site meta to objects"
 
-data SiteMeta =
-    SiteMeta { siteAuthor    :: String
-             , baseUrl       :: String -- e.g. https://example.ca
-             , siteTitle     :: String
-             , twitterHandle :: Maybe String -- Without @
-             , githubUser    :: Maybe String
-             , twitchUser    :: Maybe String
-             , youtubeUser   :: Maybe String
-             }
-    deriving (Generic, Eq, Ord, Show, ToJSON)
+data SiteMeta
+  = SiteMeta
+      { siteAuthor    :: String
+        -- e.g. https://example.ca
+      , baseUrl       :: String -- e.g. https://example.ca
+      , siteTitle     :: String
+        -- Without @
+      , twitterHandle :: Maybe String -- Without @
+      , githubUser    :: Maybe String
+      , twitchUser    :: Maybe String
+      , youtubeUser   :: Maybe String
+      }
+  deriving (Generic, Eq, Ord, Show, ToJSON)
 
 -- | Data for the index page
 newtype IndexInfo =
@@ -66,32 +72,38 @@ newtype IndexInfo =
     { posts :: [Post]
     } deriving (Generic, Show, FromJSON, ToJSON)
 
-data Tag = Tag
-    { tag   :: String
-    , posts :: [Post]
-    , url   :: String
-    } deriving (Generic, Show, ToJSON)
+data Tag
+  = Tag
+      { tag   :: String
+      , posts :: [Post]
+      , url   :: String
+      }
+  deriving (Generic, Show, ToJSON)
 
 -- | Data for a blog post
-data Post =
-    Post { title       :: String
-         , author      :: String
-         , content     :: String
-         , url         :: String
-         , date        :: String
-         , tags        :: [String]
-         , description :: String
-         , image       :: Maybe String
-         }
-    deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
+data Post
+  = Post
+      { title       :: String
+      , author      :: String
+      , content     :: String
+      , url         :: String
+      , date        :: String
+      , tags        :: [String]
+      , description :: String
+      , image       :: Maybe String
+      }
+  deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
 
-data AtomData =
-  AtomData { title       :: String
-           , domain      :: String
-           , author      :: String
-           , posts       :: [Post]
-           , currentTime :: String
-           , atomUrl     :: String } deriving (Generic, ToJSON, Eq, Ord, Show)
+data AtomData
+  = AtomData
+      { title       :: String
+      , domain      :: String
+      , author      :: String
+      , posts       :: [Post]
+      , currentTime :: String
+      , atomUrl     :: String
+      }
+  deriving (Generic, ToJSON, Eq, Ord, Show)
 
 buildTags :: [Tag] -> Action ()
 buildTags t = void $ forP t writeTag
@@ -189,12 +201,18 @@ buildFeed posts = do
       mkAtomPost :: Post -> Post
       mkAtomPost p = p { date = formatDate $ date p }
 
+buildPages :: Action ()
+buildPages = do
+    pages <- getDirectoryFiles "." ["site/pages//*.md"]
+    void $ forP pages buildPost
+
 -- | Specific build rules for the Shake system
 --   defines workflow to build the website
 buildRules :: Action ()
 buildRules = do
   allPosts <- sortByDate <$> buildPosts
   allTags <- getTags allPosts
+  buildPages
   buildTags allTags
   buildIndex allPosts
   buildFeed allPosts

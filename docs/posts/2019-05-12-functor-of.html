@@ -3,7 +3,7 @@
 <head profile="http://www.w3.org/2005/10/profile">
     <meta charset="UTF-8">
     <meta name="description" content="Evie&#39;s Blog">
-    <meta name="author" content="Vladimir Ciobanu">
+    <meta name="author" content="Evie Ciobanu">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@evie_fp">
@@ -47,7 +47,7 @@
             <br>
 
             <br>
-            <span class="byline">by Vladimir Ciobanu</span>
+            <span class="byline">by Evie Ciobanu</span>
             <br>
             <span class="date">May 12, 2019</span>
             <br>
@@ -201,7 +201,7 @@
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ot">proof ::</span> <span class="dt">Int</span> <span class="op">:~:</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="op">:~:</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="op">:~:</span> <span class="dt">String</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>proof <span class="ot">=</span> <span class="fu">map</span></span></code></pre></div>
-<p>Code is available <a href="https://github.com/vladciobanu/functorof/blob/master/src/FunctorOf.hs">here</a>.</p>
+<p>Code is available <a href="https://github.com/eviefp/functorof/blob/master/src/FunctorOf.hs">here</a>.</p>
 <p>Another thing worth mentioning is the awesome upcoming <a href="https://gitlab.haskell.org/kcsongor/ghc/tree/unsaturated_type_families">GHC extension</a> (being worked on by <a href="https://twitter.com/Lowert">Csongor Kiss</a>) which allows type families to be partially applied. If you haven't <a href="https://www.microsoft.com/en-us/research/publication/higher-order-type-level-programming-in-haskell/">read the paper</a>, you should! Using this feature, one could do something like:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">Id</span> a <span class="kw">where</span> <span class="dt">Id</span> x <span class="ot">=</span> x</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>

@@ -1,6 +1,6 @@
 ---
 title: "Classical Logic in Haskell"
-author: `Evie Ciobanu
+author: Evie Ciobanu
 date: Dec 14, 2018
 tags: [theory, logic, haskell]
 description: "Because why not"

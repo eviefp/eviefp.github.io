@@ -3,7 +3,7 @@
 <head profile="http://www.w3.org/2005/10/profile">
     <meta charset="UTF-8">
     <meta name="description" content="Evie&#39;s Blog">
-    <meta name="author" content="Vladimir Ciobanu">
+    <meta name="author" content="Evie Ciobanu">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@evie_fp">
@@ -47,7 +47,7 @@
             <br>
 
             <br>
-            <span class="byline">by Vladimir Ciobanu</span>
+            <span class="byline">by Evie Ciobanu</span>
             <br>
             <span class="date">Feb 02, 2019</span>
             <br>
@@ -60,7 +60,7 @@
         </div>
     </div>
     <article class="post">
-        <p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
+        <p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence.</p>
 <p>This post will show how a simple proof works in Logic, Type Theory, and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B) ∧ C</code>.</p>
 <h2 id="logic">Logic</h2>
 <p>In logic, there are several systems that allows us to reason about propositions. One of them is the natural deduction system and is defined using introduction and elimination rules. For each connective, or operator, we will have at least one of each introduction and elimination rules.</p>
@@ -160,7 +160,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 </ul>
 <p>If we look back at the Haskell definition: <code>assoc a_bc = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
 <p>Which means we reached the same implementation/proof, again.</p>
-<p>Edit: Thank you to <a href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a href="https://github.com/glmxndr">GhiOm</a> for their <a href="https://github.com/vladciobanu/vladciobanu.github.io/issues/1">early feedback</a>.</p>
+<p>Edit: Thank you to <a href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a href="https://github.com/glmxndr">GhiOm</a> for their <a href="https://github.com/eviefp/eviefp.github.io/issues/1">early feedback</a>.</p>
 
         <br>
         <br>

@@ -2,69 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie&#39;s Blog</title>
     <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2021-12-09T12:30:SZ</updated>
+  <updated>2021-12-09T13:38:SZ</updated>
   <author>
       <name>Evie Ciobanu</name>
   </author>
   <id>https://eevie.ro/</id>
 
-  <entry>
-      <title>My Haskell Journey</title>
-      <link href="https://eevie.roposts/2018-08-10-haskell.html"/>
-      <id>https://eevie.roposts/2018-08-10-haskell.html</id>
-      <updated>2018-08-10T00:00:SZ</updated>
-      <category term="fp"/>
-      <category term="personal"/>
-      <summary>How I learned Haskell</summary>
-      <content type="html"><![CDATA[<p>It's been a while since my previous post, but it's been a crazy few months. I'm happy to be able to write again, and I'll try to do it more regularly. This post will be a bit different; it will be a personal and entirely subjective description of my journey so far in functional programming. The reason I'm writing this now is because I will soon start working at <a href="https://twitter.com/cvlad/status/1023957257841778688">Runtime Verification</a>, my first FP job.</p>
-<h2 id="background">Background</h2>
-<p>I've been doing C# web development for about 15 years. Although I did not really understand much of FP, I was an eager early adopter of all functional-style features C# added over the years (LINQ, anonymous functions/lambdas, etc). Every other year, I'd look up the latest Haskell books or tutorials and give it a go, but it never really worked out for me due to various reasons (no real purpose, no sense of achieving anything, not understanding the benefits of what I'm learning, etc). Ultimately, I was never able to get past toy functions in the interpreter. But I was very intrigued by Haskell's elegance.</p>
-<h2 id="the-fp-slack-community">The FP Slack Community</h2>
-<p>One of the best decisions I made was to look up FP-related communities. I stumbled upon the awesome <a href="https://fpchat-invite.herokuapp.com/">FP Slack</a> community. That's where I found a bunch of passionate, helpful and very knowledgeable people. They pointed me into the correct direction countless times and helped me dodge frustrating experiences. Following is a list of the pitfalls I ran into while learning Haskell, along with what I wish I knew at the time.</p>
-<h3 id="installing-haskell">Installing Haskell</h3>
-<p>In my experience, the best way to install Haskell is using <code>stack</code>. It's a cross-platform tool for developing Haskell projects, and it helps with managing dependencies as well as GHC (the Glasgow Haskell Compiler) versions for each of your projects. Please check their <a href="https://docs.haskellstack.org/en/stable/README/">documentation page</a> on how to install. If you already have it, make sure you upgrade it via <code>stack upgrade</code>.</p>
-<p>In order to start a new project, you can run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack new project</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd project</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack build</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack exec <span class="at">--</span> project-exe</span></code></pre></div>
-<p>You should now be able to edit either <code>app/Main.hs</code> or <code>src/Lib.hs</code> to change your program.</p>
-<h3 id="writing-haskell-programs">Writing Haskell Programs</h3>
-<p>I regret not listening to people's advice about this sooner and spending a lot of time looking for the best Haskell IDE / development tools. In the end, everybody else was right and unfortunately, the current state of the available tools is <em>not good enough</em>. The process that most people seem to use, and the one I also adopted is using my favorite text editor with syntax highlighting. I have a few separate console windows that run <code>ghcid</code> and <code>ghci</code>.</p>
-<p><code>ghcid</code> is a lightning fast way to get feedback about your code as you work on it. Once you are in your project's root, you can run <code>stack build ghcid</code> in order to build the appropriate <code>ghcid</code> version for the current project's <code>GHC</code>. Once you do that, you can run <code>ghcid</code> using <code>stack exec -- ghcid -c "stack ghci project"</code>. As soon as you edit (and save) any of the Haskell files in the project, it will recompile and let you know if anything is wrong.</p>
-<p>There are a few interesting tricks you can do with <code>ghcid</code>, out of which I'd like to point out two that I find most useful. The first is really a GHC feature, which really shines when used with <code>ghcid</code>. Whenever you're not sure what to do in a function, you can throw in an underscore and save the file. The compiler will figure out the type of what the underscore needs to be replaced with, and will suggest functions in scope that match that pattern. This feature is called typed holes, and if you want to read more about how it works, I suggest you read <a href="https://twitter.com/kritzcreek">Christoph Hegemann</a>'s excellent thesis, <a href="https://www.dropbox.com/s/vfkgafoo3mofvac/bachelor_arbeit_christoph_hegemann.pdf?dl=0">Implementing type directed search for PureScript</a>.</p>
-<p>The other trick with <code>ghcid</code> is, whenever you wish you had <em>hover-to-see-type</em>, you can add parenthesis around that expression and add a type annotation, e.g. <code>(whatTypeIsThis :: ())</code>. This basically asserts <code>whatTypeIsThis</code> has type <code>()</code>, or <code>Unit</code>. When you save, you will get an error saying that <code>()</code> cannot be unified with <em>actual type of the expression</em> (of course, unless the type actually is <code>()</code>).</p>
-<p>The interactive Haskell shell is great when you want to try things out, or do a quick test for a function you wrote. In order to launch it, you need to run <code>stack ghci project</code>. You can then type <code>:l Lib</code> to load the <code>Lib</code> module. Once you do that, you can execute any function defined in <code>Lib</code>. If you change the code in your source files, you'll have to reload using <code>:r</code>.</p>
-<h3 id="looking-up-stuff">Looking up stuff</h3>
-<p>Whenever I need to look something up, my go-to place is <a href="https://hoogle.haskell.org/">hoogle</a>. You can search for functions or types by name and by signature. This feature was very useful for me as a beginner, since once you get a hang of types, you'll sort of know what signature of a function you need but not know its name. As you look stuff up, I encourage you to look at the source code of the functions you look up.</p>
-<p>When looking for packages, start with <a href="https://www.stackage.org/">stackage</a>, mostly because it will only show packages that are compatible with a certain GHC version and among themselves. If you try to mix and match by yourself through <a href="https://hackage.haskell.org/packages/browse">hackage</a>, you might end up with frustrating problems.</p>
-<p>Once you find a package you'd like to add, you can edit the <code>package.yaml</code> file under <code>dependencies</code> and just add the package you want by name. You'll need to rebuild the project via <code>stack build</code>.</p>
-<h2 id="the-haskell-book">The Haskell Book</h2>
-<p>The most recommended book on the FP slack is <a href="http://haskellbook.com/">Haskell Programming from first principles</a>, and for good reason - it was absolutely key in my learning process. It's filled with exercises guiding you through the Haskell language, as well as excellent explanations and tips. There isn't much more I can say other than, if you want to learn Haskell, this is where you should start, and if you do, please work through the exercises.</p>
-<h2 id="blogs-and-other-resources">Blogs and other resources</h2>
-<p>There are a lot of awesome blogs and resources for Haskell out there, and I want to mention particularly <a href="http://www.parsonsmatt.org/">Matt Parson's blog</a> and <a href="http://dev.stephendiehl.com/hask/">Stephen Diehl's What I wish I knew when learning Haskell</a> as being excellent resources.</p>
-<p>My personal interest in CS led me to reading several books on topics such as Type Theory or Category Theory. They are in no way required or necessary in order to learn Haskell, but they helped me and I think they are interesting:</p>
-<ul>
-<li>Bartosz Mileski's <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">blogs</a> / <a href="https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_">videos</a></li>
-<li>David Spivak's <a href="https://www.youtube.com/watch?v=IBeceQHz2x8">videos</a> and books (<a href="https://github.com/mmai/Category-Theory-for-the-Sciences">one</a> and <a href="http://math.mit.edu/~dspivak/teaching/sp18/">two</a>)</li>
-<li><a href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">TAPL</a></li>
-<li><a href="https://www.amazon.com/Type-Theory-Formal-Proof-Introduction/dp/110703650X">Type Theory and Formal Proof</a></li>
-<li><a href="https://softwarefoundations.cis.upenn.edu/current/index.html">Software Foundations</a></li>
-</ul>
-<h2 id="show-and-tell">Show and tell</h2>
-<p>Soon after I started reading the Haskell Book, I started understanding the benefits of FP. During this time, we were having some issues at work with the quality of our TypeScript code base. The code was brittle and we were often afraid to change it. I proposed we spent some time learning FP and try out PureScript (which is very similar to Haskell, but generates JavaScript).</p>
-<p>For the next few months, I went through the Haskell Book and presented it bit by bit to my colleagues and did exercises together. This helped me immensely. Just preparing the chapters in order to present them to other people does wonders on your understanding; and actually presenting and trying to figure out answers to their questions was important for me.</p>
-<p>Once we went through most of the book, we turned to PureScript. This has proven to be a very good choice for me, since PureScript is a slightly more modern language, and being already comfortable with JavaScript helped a lot. I was able to build useful software, while building apps that were familiar, in an unfamiliar way.</p>
-<h2 id="writing-apps">Writing apps</h2>
-<p>Shortly after, we started prototyping applications in PureScript and integrating them with our codebase. We were comfortable enough with the language to convince our management and product owners to let us create a PoC using PureScript, and they agreed. The results were impressive; we were able to develop the application about as fast as we would in TypeScript, with less bugs and back and forth with QA. The next app was even faster and the benefits more clear.</p>
-<h2 id="applying-for-the-job">Applying for the job</h2>
-<p>I was not sure I was ready to switch to a full-time Haskell job when I found out about Runtime Verification and that they are hiring. In order to apply, I completed the <a href="http://www.kframework.org/index.php/K_Project_Needs_Professional_Developers">K Challenge</a>. This was ideal for me since I knew I could use as much time as I wanted for it. I ended up not needing too much time to get a decent implementation done, but the ease of mind that I could do it at my own pace mattered a lot for me.</p>
-<p>Moreover, I was personally interested in Formal Verification, and the RV approach seems very appealing to me. I'm really happy to be able to be part of the team working on the <a href="https://github.com/kframework/kore">Kore Language</a>.</p>
-<h2 id="closing-thoughts">Closing thoughts</h2>
-<p>Because this is about Haskell, I've left out a lot of details about PureScript. I believe PureScript, as well as its incredibly friendly community, were very important in my journey. They helped me a lot and I'll try my best to give back to this awesome community through code contributions and spreading the word.</p>
-<p>I became a strong believer in FP, in strong typing, and in compilers guiding me through programming. I strongly believe that any programmer can benefit from learning Haskell. Even though I am still relatively new in this journey, I consider myself a better programmer than I was when I started this journey and I'm looking forward to learn more about Haskell, Type Theory, Category Theory, and Formal Verification.</p>
-<p>Without trying to sound too stuck up in my newly discovered FP ivory tower, I'd like to point out that we, as programmers are extremely fortunate to get very good pay compared to the standard we are held against, most of the time. <a href="https://twitter.com/bitemyapp">Chris Allen</a>, one of the authors of the Haskell Book <a href="https://www.youtube.com/watch?v=2xyZeovFqCA">talks about this</a> at LambdaConf, but my takeaway from it is, there's no organization that takes away our programmer's badge if we write terrible code or make bad decisions, or if we fail to stay in touch with technology or practices. But we definitely should, we should challenge ourselves to continuously learn, read other people's code, contribute and, perhaps most importantly, work on projects outside of our comfort zone.</p>]]></content>
-  </entry>
   <entry>
       <title>Classical Logic in Haskell</title>
       <link href="https://eevie.roposts/2018-12-14-clasical-logic-in-haskell.html"/>
@@ -237,7 +180,7 @@
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="ot">    from ::</span> <span class="dt">ImpliesToOr</span> m <span class="ot">-&gt;</span> <span class="dt">Lem</span> m</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    from (<span class="dt">ImpliesToOr</span> im) <span class="ot">=</span> <span class="dt">Lem</span> <span class="op">$</span> im <span class="fu">pure</span></span></code></pre></div>
-<p>The full source code is available on <a href="https://github.com/vladciobanu/logic-in-haskell">my github</a>.</p>]]></content>
+<p>The full source code is available on <a href="https://github.com/eviefp/logic-in-haskell">my github</a>.</p>]]></content>
   </entry>
   <entry>
       <title>Curry-Howard Correspondence Example</title>
@@ -247,7 +190,7 @@
       <category term="haskell"/>
       <category term="theory"/>
       <summary>More Logic in PL</summary>
-      <content type="html"><![CDATA[<p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence. I recommend you also check out my <a href="https://cs.unibuc.ro/~ddiaconescu/">wife's</a> slides from her <a href="https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view">Curry-Howard-Lambek correspondence presentation</a>.</p>
+      <content type="html"><![CDATA[<p>I previously showed some fun <a href="/clasical-logic-in-haskell/">classical logic proofs in Haskell</a>, thanks to the Curry-Howard correspondence.</p>
 <p>This post will show how a simple proof works in Logic, Type Theory, and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B) ∧ C</code>.</p>
 <h2 id="logic">Logic</h2>
 <p>In logic, there are several systems that allows us to reason about propositions. One of them is the natural deduction system and is defined using introduction and elimination rules. For each connective, or operator, we will have at least one of each introduction and elimination rules.</p>
@@ -347,7 +290,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 </ul>
 <p>If we look back at the Haskell definition: <code>assoc a_bc = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
 <p>Which means we reached the same implementation/proof, again.</p>
-<p>Edit: Thank you to <a href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a href="https://github.com/glmxndr">GhiOm</a> for their <a href="https://github.com/vladciobanu/vladciobanu.github.io/issues/1">early feedback</a>.</p>]]></content>
+<p>Edit: Thank you to <a href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a href="https://github.com/glmxndr">GhiOm</a> for their <a href="https://github.com/eviefp/eviefp.github.io/issues/1">early feedback</a>.</p>]]></content>
   </entry>
   <entry>
       <title>Quantifiers in Agda</title>
@@ -631,7 +574,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ot">proof ::</span> <span class="dt">Int</span> <span class="op">:~:</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="op">:~:</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="op">:~:</span> <span class="dt">String</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>proof <span class="ot">=</span> <span class="fu">map</span></span></code></pre></div>
-<p>Code is available <a href="https://github.com/vladciobanu/functorof/blob/master/src/FunctorOf.hs">here</a>.</p>
+<p>Code is available <a href="https://github.com/eviefp/functorof/blob/master/src/FunctorOf.hs">here</a>.</p>
 <p>Another thing worth mentioning is the awesome upcoming <a href="https://gitlab.haskell.org/kcsongor/ghc/tree/unsaturated_type_families">GHC extension</a> (being worked on by <a href="https://twitter.com/Lowert">Csongor Kiss</a>) which allows type families to be partially applied. If you haven't <a href="https://www.microsoft.com/en-us/research/publication/higher-order-type-level-programming-in-haskell/">read the paper</a>, you should! Using this feature, one could do something like:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">Id</span> a <span class="kw">where</span> <span class="dt">Id</span> x <span class="ot">=</span> x</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -677,7 +620,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <h2 id="junior-developers">Junior Developers</h2>
 <p>What is a junior developer? For the purposes of this article, I will define a Haskell junior developer as somebody who's able to confidently use simple monads like <code>Maybe</code>, <code>Either e</code>, <code>IO</code>, and the list monad. Ideally, they would also have a crude understanding of monad transformers (but not necessarily <code>mtl</code> as well). They are able to compose functions, reason about ADTs, and, perhaps most importantly, are motivated to learn more about Haskell and FP.</p>
 <p>I currently work on two projects, both in Haskell. One of these projects has two junior Haskell developers, and the other has one. I will briefly go over the details of these projects as well as my mentoring experience in order to establish a baseline.</p>
-<p>I have not been working with Haskell for very long. I actually come from OOP-land (you can <a href="https://cvlad.info/haskell/">read my story here</a>), and I have a lot of experience as a team lead. I have hired, trained, and mentored a decent number of junior devs, most of them in my OOP days, but also three of them recently, at the place I currently work. For the past year and a half, I have been the main developer in charge of training and making sure the junior devs are productive.</p>
+<p>I have not been working with Haskell for very long. I actually come from OOP-land, and I have a lot of experience as a team lead. I have hired, trained, and mentored a decent number of junior devs, most of them in my OOP days, but also three of them recently, at the place I currently work. For the past year and a half, I have been the main developer in charge of training and making sure the junior devs are productive.</p>
 <p>Our codebases (you can <a href="https://github.com/kframework/kore">see one of them here</a>) are pretty complicated: besides the fact that they use notoriously complex Haskell libraries such as <code>lens</code>, <code>servant</code>, and <code>recursion-schemes</code>, the domain problem is pretty complicated as well: we're essentially building an automated prover for a rewrite-based executable semantic framework (the other project is a pretty standard servant app, so not too much to go over there, although it does use <code>lens</code>, <code>generic-lens</code>, <code>persistent</code>/<code>esqueleto</code> and obviously <code>servant</code>).</p>
 <p>This prelude was needed because I can't really speak about junior developers in general, but I can tell you about my experience with on-boarding junior Haskell developers on our projects. However, before that, I would like to add that the junior devs we hired were all either senior year at the local university, or fresh graduates. They were picked because they are all excited about FP, despite the fact that none of them had any previous professional experience related to FP or Haskell.</p>
 <p>I am proud to say that all three junior devs are doing great. I obviously can't take any significant part of the credit (they are all very smart and hard working), but I think that there are a few things that contributed to their success:</p>

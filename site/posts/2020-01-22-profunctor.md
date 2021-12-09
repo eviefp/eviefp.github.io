@@ -1,6 +1,6 @@
 ---
 title: "The Functor Family: Profunctor"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: Jan 22, 2020
 tags: [haskell, functor]
 description: "A look into profunctors"

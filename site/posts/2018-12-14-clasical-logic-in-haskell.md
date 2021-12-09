@@ -1,6 +1,6 @@
 ---
 title: "Classical Logic in Haskell"
-author: Vladimir Ciobanu
+author: `Evie Ciobanu
 date: Dec 14, 2018
 tags: [theory, logic, haskell]
 description: "Because why not"
@@ -256,4 +256,4 @@ instance Monad m => Iso (Lem m) (ImpliesToOr m) where
     from (ImpliesToOr im) = Lem $ im pure
 ```
 
-The full source code is available on [my github](https://github.com/vladciobanu/logic-in-haskell).
+The full source code is available on [my github](https://github.com/eviefp/logic-in-haskell).

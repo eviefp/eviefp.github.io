@@ -1,6 +1,6 @@
 ---
 title: "Quantifiers in Agda"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: Feb 17, 2019
 tags: [agda, dependent types]
 description: "Forall and Exists as Dependent Types"

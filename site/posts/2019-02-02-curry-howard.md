@@ -1,6 +1,6 @@
 ---
 title: "Curry-Howard Correspondence Example"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: Feb 02, 2019
 tags: [haskell, theory]
 description: "More Logic in PL"
@@ -8,9 +8,7 @@ description: "More Logic in PL"
 
 I previously showed some fun
 [classical logic proofs in Haskell](/clasical-logic-in-haskell/), thanks to the
-Curry-Howard correspondence. I recommend you also check out my
-[wife's](https://cs.unibuc.ro/~ddiaconescu/) slides from her
-[Curry-Howard-Lambek correspondence presentation](https://drive.google.com/file/d/1ghFPbIZ4r8-291f6weszNxLwMXu1U8kx/view).
+Curry-Howard correspondence.
 
 This post will show how a simple proof works in Logic, Type Theory, and Category
 Theory: given `A ∧ (B ∧ C)`, prove `(A ∧ B) ∧ C`.
@@ -243,4 +241,4 @@ Which means we reached the same implementation/proof, again.
 
 
 Edit: Thank you to [Bartosz Milewski](https://twitter.com/BartoszMilewski) and
-[GhiOm](https://github.com/glmxndr) for their [early feedback](https://github.com/vladciobanu/vladciobanu.github.io/issues/1).
+[GhiOm](https://github.com/glmxndr) for their [early feedback](https://github.com/eviefp/eviefp.github.io/issues/1).

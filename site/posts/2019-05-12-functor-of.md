@@ -1,6 +1,6 @@
 ---
 title: "Functor-Of"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: May 12, 2019
 tags: [haskell, functor]
 description: "Towards a more general Functor class"
@@ -231,7 +231,7 @@ proof :: Int :~: String -> Bool :~: Int -> Bool :~: String
 proof = map
 ```
 
-Code is available [here](https://github.com/vladciobanu/functorof/blob/master/src/FunctorOf.hs).
+Code is available [here](https://github.com/eviefp/functorof/blob/master/src/FunctorOf.hs).
 
 Another thing worth mentioning is the awesome upcoming
 [GHC extension](https://gitlab.haskell.org/kcsongor/ghc/tree/unsaturated_type_families)

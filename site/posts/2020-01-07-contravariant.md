@@ -1,6 +1,6 @@
 ---
 title: "The Functor Family: Contravariant"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: Jan 07, 2020
 tags: [haskell, functor]
 description: "A look into contravariant functors."

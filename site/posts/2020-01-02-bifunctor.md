@@ -1,6 +1,6 @@
 ---
 title: "The Functor Family: Bifunctor"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: Jan 02, 2020
 tags: [haskell, functor]
 description: "A look into bifunctors."

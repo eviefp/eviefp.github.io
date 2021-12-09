@@ -1,6 +1,6 @@
 ---
 title: "Hire and Train Haskell Junior Developers"
-author: Vladimir Ciobanu
+author: Evie Ciobanu
 date: Dec 30, 2019
 tags: [personal, fp, haskell]
 description: "A plea to senior developers and team leads"
@@ -76,8 +76,8 @@ junior Haskell developers, and the other has one. I will briefly go over the
 details of these projects as well as my mentoring experience in order to
 establish a baseline.
 
-I have not been working with Haskell for very long. I actually come from OOP-land
-(you can [read my story here](https://cvlad.info/haskell/)), and I have a lot of
+I have not been working with Haskell for very long. I actually come from OOP-land,
+and I have a lot of
 experience as a team lead. I have hired, trained, and mentored a decent number of
 junior devs, most of them in my OOP days, but also three of them recently, at
 the place I currently work. For the past year and a half, I have been the main

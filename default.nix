@@ -1,7 +1,6 @@
 let
   sources = import ./nix/sources.nix;
-  tooling = import sources.nix-tooling;
-  pkgs = tooling.pkgs;
+  pkgs = import sources.nixpkgs {};
   gis = import sources.gitignore { inherit (pkgs) lib; };
 in
-  pkgs.haskell.packages.ghc8102.callCabal2nix "cvlad-blog" (gis.gitignoreSource ./.) {}
+  pkgs.haskell.packages.ghc8107.callCabal2nix "eviefp-blog" (gis.gitignoreSource ./.) {}

@@ -1,7 +1,7 @@
 cradle:
   cabal:
     - path: "app/Main.hs"
-      component: "slick-template:exe:build-site"
+      component: "eviefp-blog:exe:build-site"
 
-    - path: "app/Paths_slick_template.hs"
-      component: "slick-template:exe:build-site"
+    - path: "app/Paths_eviefp_blog.hs"
+      component: "eviefp-blog:exe:build-site"

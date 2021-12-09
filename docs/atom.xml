@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Vladimir Ciobanu&#39;s Blog</title>
-    <link href="https://cvlad.info/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-11-24T19:33:SZ</updated>
+    <title>Evie&#39;s Blog</title>
+    <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
+  <updated>2021-12-09T12:30:SZ</updated>
   <author>
-      <name>Vladimir Ciobanu</name>
+      <name>Evie Ciobanu</name>
   </author>
-  <id>https://cvlad.info/</id>
+  <id>https://eevie.ro/</id>
 
   <entry>
       <title>My Haskell Journey</title>
-      <link href="https://cvlad.infoposts/2018-08-10-haskell.html"/>
-      <id>https://cvlad.infoposts/2018-08-10-haskell.html</id>
+      <link href="https://eevie.roposts/2018-08-10-haskell.html"/>
+      <id>https://eevie.roposts/2018-08-10-haskell.html</id>
       <updated>2018-08-10T00:00:SZ</updated>
       <category term="fp"/>
       <category term="personal"/>
@@ -24,10 +24,10 @@
 <h3 id="installing-haskell">Installing Haskell</h3>
 <p>In my experience, the best way to install Haskell is using <code>stack</code>. It's a cross-platform tool for developing Haskell projects, and it helps with managing dependencies as well as GHC (the Glasgow Haskell Compiler) versions for each of your projects. Please check their <a href="https://docs.haskellstack.org/en/stable/README/">documentation page</a> on how to install. If you already have it, make sure you upgrade it via <code>stack upgrade</code>.</p>
 <p>In order to start a new project, you can run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> new project</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> project</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> build</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> exec -- project-exe</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack new project</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd project</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack build</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack exec <span class="at">--</span> project-exe</span></code></pre></div>
 <p>You should now be able to edit either <code>app/Main.hs</code> or <code>src/Lib.hs</code> to change your program.</p>
 <h3 id="writing-haskell-programs">Writing Haskell Programs</h3>
 <p>I regret not listening to people's advice about this sooner and spending a lot of time looking for the best Haskell IDE / development tools. In the end, everybody else was right and unfortunately, the current state of the available tools is <em>not good enough</em>. The process that most people seem to use, and the one I also adopted is using my favorite text editor with syntax highlighting. I have a few separate console windows that run <code>ghcid</code> and <code>ghci</code>.</p>
@@ -67,8 +67,8 @@
   </entry>
   <entry>
       <title>Classical Logic in Haskell</title>
-      <link href="https://cvlad.infoposts/2018-12-14-clasical-logic-in-haskell.html"/>
-      <id>https://cvlad.infoposts/2018-12-14-clasical-logic-in-haskell.html</id>
+      <link href="https://eevie.roposts/2018-12-14-clasical-logic-in-haskell.html"/>
+      <id>https://eevie.roposts/2018-12-14-clasical-logic-in-haskell.html</id>
       <updated>2018-12-14T00:00:SZ</updated>
       <category term="theory"/>
       <category term="logic"/>
@@ -241,8 +241,8 @@
   </entry>
   <entry>
       <title>Curry-Howard Correspondence Example</title>
-      <link href="https://cvlad.infoposts/2019-02-02-curry-howard.html"/>
-      <id>https://cvlad.infoposts/2019-02-02-curry-howard.html</id>
+      <link href="https://eevie.roposts/2019-02-02-curry-howard.html"/>
+      <id>https://eevie.roposts/2019-02-02-curry-howard.html</id>
       <updated>2019-02-02T00:00:SZ</updated>
       <category term="haskell"/>
       <category term="theory"/>
@@ -351,8 +351,8 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>Quantifiers in Agda</title>
-      <link href="https://cvlad.infoposts/2019-02-17-quantifiers.html"/>
-      <id>https://cvlad.infoposts/2019-02-17-quantifiers.html</id>
+      <link href="https://eevie.roposts/2019-02-17-quantifiers.html"/>
+      <id>https://eevie.roposts/2019-02-17-quantifiers.html</id>
       <updated>2019-02-17T00:00:SZ</updated>
       <category term="agda"/>
       <category term="dependent types"/>
@@ -372,85 +372,85 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
 <p>In the next chapter, we will look at dependent sum and I will say it's the Curry-Howard correspondent of existential quantifiers. Most theorem provers that rely on this correspondence will use make use of <a href="https://www.cs.cmu.edu/~fp/courses/15317-f08/lectures/08-irrelevance.pdf">proof irrelevance</a> which essentially means that it should not matter whether one picks <code>11</code> or <code>12</code> in order to to prove <code>∃ x. x &gt; 10</code>: the proofs should be equivalent. We will not look into this, nor will we make use of proof irrelevance in this post.</p>
 <h2 id="dependent-sum">Dependent Sum</h2>
 <p>Dependent sums (Σ) are the type theoretic equivalent of existential quantifiers. In Agda, we can define the dependent sum type as:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> Σ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">P</span> <span class="op">:</span> <span class="dt">A</span> <span class="ot">→</span> <span class="dt">Set</span>) <span class="op">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    Σ_intro <span class="op">:</span> <span class="ot">∀</span> (a <span class="op">:</span> <span class="dt">A</span>) <span class="ot">→</span> <span class="dt">P</span> a <span class="ot">→</span> Σ <span class="dt">P</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> Σ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">P</span> <span class="op">:</span> <span class="dt">A</span> → <span class="dt">Set</span>) <span class="op">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    Σ_intro <span class="op">:</span> ∀ (a <span class="op">:</span> <span class="dt">A</span>) → <span class="dt">P</span> a → Σ <span class="dt">P</span></span></code></pre></div>
 <p>The ∑ type is a higher-kinded type which takes a higher-kinded type, <code>P : A → Set</code> -- <code>P</code> takes an <code>A</code> and gives us a new type (<code>Set</code>, in Agda). The nice part about this is that <code>P</code> holds information about both the type of the existential variable (<code>A</code>) as well as the type of the resulting type (<code>P A</code>).</p>
 <p>Constructing such a term requires a term of the existential type (<em>evidence</em> for <code>A</code>), and a term of the predicate type (<em>evidence</em> for <code>P A</code>). For example, the example above could be written as <code>∑_intro 11 (11 &gt; 10)</code>, assuming there exists a type <code>&gt;</code> which expresses the greater-than relationship.</p>
 <p>Please note that the above example is a simplification and going into the details of how an inductive type for <code>&gt;</code> works is beyond the scope of this post.</p>
 <h2 id="dependent-product">Dependent Product</h2>
 <p>Dependent products (∏) are the type theoretic equivalent of universal quantifiers. In Agda, we can define the dependent product type as:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> Π {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">P</span> <span class="op">:</span> <span class="dt">A</span> <span class="ot">→</span> <span class="dt">Set</span>) <span class="op">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    Π_intro <span class="op">:</span> (<span class="ot">∀</span> (a <span class="op">:</span> <span class="dt">A</span>) <span class="ot">→</span> <span class="dt">P</span> a) <span class="ot">→</span> Π <span class="dt">P</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> Π {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">P</span> <span class="op">:</span> <span class="dt">A</span> → <span class="dt">Set</span>) <span class="op">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    Π_intro <span class="op">:</span> (∀ (a <span class="op">:</span> <span class="dt">A</span>) → <span class="dt">P</span> a) → Π <span class="dt">P</span></span></code></pre></div>
 <p>The ∏ type is also a higher-kinded type. Note that this definition is almost identical to the Σ definition, except for the parantheses used in the constructor (<code>Π_intro</code>). This lines up with the intuition that <code>∀x. P(X)</code> can be described by a function <code>A -&gt; P(x)</code>, where <code>x : A</code>.</p>
 <p>Constructing a ∏ type takes a function from the quantified variable to the type described by the predicate.</p>
 <p>Constructing a term would, for example be <code>∏_intro (λn. n + 1 &gt; n)</code>.</p>
 <h2 id="tuples---special-case-of-dependent-sum">Tuples - Special Case of Dependent Sum</h2>
 <p>We will first need to define a <code>constT</code> function:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>constT <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">X</span> <span class="op">:</span> <span class="dt">Set</span>) (<span class="dt">Y</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Y</span> <span class="ot">→</span> <span class="dt">Set</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>constT <span class="op">:</span> ∀ (<span class="dt">X</span> <span class="op">:</span> <span class="dt">Set</span>) (<span class="dt">Y</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Y</span> → <span class="dt">Set</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>constT x _ _ <span class="ot">=</span> x</span></code></pre></div>
 <p>This takes two types, <code>X</code> and <code>Y</code>. It then takes a value of type <code>Y</code>, and ignores it, returning the type <code>X</code>.</p>
 <p>So, if we take <code>P</code> to <em>not</em> depend on the quantified item and define it using <code>constT</code>, then we can obtain tuples in the case of ∑ types:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>pair <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Set</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>pair <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>pair a b <span class="ot">=</span> Σ (constT b a)</span></code></pre></div>
 <p>Note that <code>Σ-pair</code> is a type-level function that takes two types and returns the type of pairs.</p>
 <p>We can then define a simple pair constructor using the constructor above:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>mkPair <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>}  {<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> <span class="dt">A</span> <span class="ot">→</span> <span class="dt">B</span> <span class="ot">→</span> Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>mkPair <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>}  {<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → <span class="dt">A</span> → <span class="dt">B</span> → Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>mkPair a b <span class="ot">=</span> Σ_intro a b</span></code></pre></div>
 <p>And we can have the two projections by simple pattern match, returning the appropriate value:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">fst</span> <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span> <span class="ot">→</span> <span class="dt">A</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">fst</span> <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">A</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">fst</span> (Σ_intro a _) <span class="ot">=</span> a</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">snd</span> <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span> <span class="ot">→</span> <span class="dt">B</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">snd</span> <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">B</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">snd</span> (Σ_intro _ b) <span class="ot">=</span> b</span></code></pre></div>
 <p>This works because Σ types are defined as <code>a -&gt; P a -&gt; Σ P</code>, so if we take a <code>P</code> such that <code>P a</code> always is <code>b</code>, then we get <code>a -&gt; b -&gt; Σ</code> which is essentially a tuple of <code>a</code> and <code>b</code>.</p>
 <p>We can now say <code>Σ_snd (Σ_mkPair 1 2)</code> and get the result <code>2</code>.</p>
 <h2 id="functions---special-case-of-dependent-product">Functions - Special Case of Dependent Product</h2>
 <p>Similarly, if we take <code>P</code> to be <code>const B A</code>, we can obtain functions out of ∏ types:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>function <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Set</span></span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>function <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>function a b <span class="ot">=</span> Π (constT b a)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>mkFunction <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> (<span class="dt">A</span> <span class="ot">→</span> <span class="dt">B</span>) <span class="ot">→</span> Π<span class="op">-</span>function <span class="dt">A</span> <span class="dt">B</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>mkFunction <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → (<span class="dt">A</span> → <span class="dt">B</span>) → Π<span class="op">-</span>function <span class="dt">A</span> <span class="dt">B</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>mkFunction f <span class="ot">=</span> Π_intro f</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>apply <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> Π<span class="op">-</span>function <span class="dt">A</span> <span class="dt">B</span> <span class="ot">→</span> <span class="dt">A</span> <span class="ot">→</span> <span class="dt">B</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>apply <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → Π<span class="op">-</span>function <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">A</span> → <span class="dt">B</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>apply (Π_intro f) a <span class="ot">=</span> f a</span></code></pre></div>
 <p>As with sum types, this works because Π types are defined as <code>(a -&gt; P a) -&gt; Π P</code>, so if we take <code>P</code> such that <code>P a</code> always is <code>b</code>, then we get <code>(a -&gt; b) -&gt; Π</code>, which is essentially a function from <code>a</code> to <code>b</code>.</p>
 <p>We can now write <code>Π-apply (Π-mkFunction (λx. x + 1)) 1</code> and get the result <code>2</code>.</p>
 <h2 id="what-about-sum-types">What About Sum Types?</h2>
 <p>We can obtain sum types from ∑ types by using <code>Bool</code> as the variable type, and the predicate <em>returning</em> type <code>A</code> for <code>true</code>, and type <code>B</code> for <code>false</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bool <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Bool</span> <span class="ot">→</span> <span class="dt">Set</span></span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bool <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Bool</span> → <span class="dt">Set</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bool a _ true  <span class="ot">=</span> a</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>bool _ b false <span class="ot">=</span> b</span></code></pre></div>
 <p>Note that <code>a</code> and <code>b</code> are types! We can now write:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">sum</span> <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Set</span> </span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">sum</span> <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">sum</span> a b <span class="ot">=</span> Σ (bool a b)</span></code></pre></div>
 <p>Now, in order to construct such a type (via <em>left</em> or <em>right</em>), we just need to pass the appropriate boolean value along with an item of the correct type:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_left <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">A</span> <span class="ot">→</span> Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_left <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">A</span> → Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_left _ a <span class="ot">=</span> Σ_intro true a</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_right <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">B</span> <span class="ot">→</span> Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_right <span class="op">:</span> ∀ {<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">B</span> → Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_right _ b <span class="ot">=</span> Σ_intro false b</span></code></pre></div>
 <p>Eliminating is just a matter of pattern matching on the boolean value and applying the correct function:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> (<span class="dt">A</span> <span class="ot">→</span> <span class="dt">R</span>) <span class="ot">→</span> (<span class="dt">B</span> <span class="ot">→</span> <span class="dt">R</span>) <span class="ot">→</span> Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span> <span class="ot">→</span> <span class="dt">R</span></span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>} → (<span class="dt">A</span> → <span class="dt">R</span>) → (<span class="dt">B</span> → <span class="dt">R</span>) → Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">R</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim f _ (Σ_intro true  a) <span class="ot">=</span> f a</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim _ g (Σ_intro false b) <span class="ot">=</span> g b</span></code></pre></div>
 <p>As an example, <code>Σ-sum_elim (const "left") (const "right") (Σ-sum_left Bool 1)</code>, and get the result <code>"left"</code>.</p>
 <p>Interestingly, we can also obtain sum types from ∏ types: the idea is to encode the eliminator right into our type! For that we will need the following predicate:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>prodPredicate <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Set</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>prodPredicate a b r <span class="ot">=</span> (a <span class="ot">→</span> r) <span class="ot">→</span> (b <span class="ot">→</span> r) <span class="ot">→</span> r</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>prodPredicate <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>prodPredicate a b r <span class="ot">=</span> (a → r) → (b → r) → r</span></code></pre></div>
 <p>This means that given two types <code>A</code> and <code>B</code>, we get a type-level function from <code>R</code> to <code>(A -&gt; R) -&gt; (B -&gt; R) -&gt; R</code>, which is exactly the eliminator type. Don't worry about <code>Set₁</code> or <code>Π'</code> for now:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span> <span class="op">:</span> <span class="ot">∀</span> (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">Set</span>₁</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span> a b <span class="ot">=</span> Π<span class="ch">&#39; (prodPredicate a b)</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span> <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span>₁</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span> a b <span class="ot">=</span> Π&#39; (prodPredicate a b)</span></code></pre></div>
 <p>This means that in order to build a sum type, we need to pass a type <code>R</code> and a function <code>(A -&gt; R) -&gt; (B -&gt; R) -&gt; R</code>. So, the constructors will look like:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>left <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">A</span> <span class="ot">→</span> Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>left _ a <span class="ot">=</span> Π<span class="ch">&#39;_intro (\_ f _ → f a)</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>left <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">A</span> → Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>left _ a <span class="ot">=</span> Π&#39;_intro (\_ f _ → f a)</span></code></pre></div>
 <p>The lambda is the only interesting bit: we construct a function that given a type <code>R</code> (first <code>_</code>) and a function <code>A -&gt; R</code> (named <code>f</code>), we can return an <code>R</code> by calling <code>f a</code> (the third <code>_</code> parameter is for the function <code>g : B -&gt; R</code>, which is not required for the <em>left</em> constructor).</p>
 <p>Similarly, we can write a constructor for <em>right</em>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>right <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) <span class="ot">→</span> <span class="dt">B</span> <span class="ot">→</span> Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>right _ b <span class="ot">=</span> Π<span class="ch">&#39;_intro (\_ _ g → g b)</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>right <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">B</span> → Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>right _ b <span class="ot">=</span> Π&#39;_intro (\_ _ g → g b)</span></code></pre></div>
 <p>As for the eliminator, we simply require the two functions <code>A -&gt; R</code> and <code>B -&gt; R</code> in order to pass to our dependent product and get an <code>R</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>elim <span class="op">:</span> <span class="ot">∀</span> {<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>} <span class="ot">→</span> (<span class="dt">A</span> <span class="ot">→</span> <span class="dt">R</span>) <span class="ot">→</span> (<span class="dt">B</span> <span class="ot">→</span> <span class="dt">R</span>) <span class="ot">→</span> Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span> <span class="ot">→</span> <span class="dt">R</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>elim f g (Π<span class="ch">&#39;_intro elim) = elim _ f g</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>elim <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>} → (<span class="dt">A</span> → <span class="dt">R</span>) → (<span class="dt">B</span> → <span class="dt">R</span>) → Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">R</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>elim f g (Π&#39;_intro elim) <span class="ot">=</span> elim _ f g</span></code></pre></div>
 <h2 id="conclusions">Conclusions</h2>
 <p>We've used three type-level functions to generate a few interesting types:</p>
 <table>
@@ -484,14 +484,14 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>Functor-Of</title>
-      <link href="https://cvlad.infoposts/2019-05-12-functor-of.html"/>
-      <id>https://cvlad.infoposts/2019-05-12-functor-of.html</id>
+      <link href="https://eevie.roposts/2019-05-12-functor-of.html"/>
+      <id>https://eevie.roposts/2019-05-12-functor-of.html</id>
       <updated>2019-05-12T00:00:SZ</updated>
       <category term="haskell"/>
       <category term="functor"/>
       <summary>Towards a more general Functor class</summary>
       <content type="html"><![CDATA[<p>Due to kind restrictions, the Haskell <em>Functor</em> cannot represent a lot of valid functors: functors of higher kinded types (higher than <code>* -&gt; *</code>), contravariant functors, invariant functors, etc.</p>
-<p>This post will show an alternate <code>Functor</code> that can handle all of the above. I got this idea from the awesome <a href="https://twitter.com/am_i_tom">Tom Harding</a>, and he apparently got it from <a href="https://twitter.com/Iceland_jack">@Iceland_jack</a>.</p>
+<p>This post will show an alternate <code>Functor</code> that can handle all of the above. I got this idea from the awesome <a href="https://twitter.com/am_i_tom">Tom Harding</a>, and he apparently got it from [@Iceland_jack](<a href="https://twitter.com/Iceland_jack" class="uri">https://twitter.com/Iceland_jack</a>).</p>
 <p>Although this is not new, I could not find any blog post or paper covering it.</p>
 <h2 id="the-actual-problem">The actual problem</h2>
 <p>The problem is quite straight-forward. Let's say we want to define a functor instance for <code>(a, b)</code> which changes the <code>a</code>, to <code>c</code> using an <code>a -&gt; c</code> function. This should be possible, but there is no way to write it using <code>Functor</code> and <code>fmap</code>.</p>
@@ -645,8 +645,8 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>Hire and Train Haskell Junior Developers</title>
-      <link href="https://cvlad.infoposts/2019-12-30-junior-developers.html"/>
-      <id>https://cvlad.infoposts/2019-12-30-junior-developers.html</id>
+      <link href="https://eevie.roposts/2019-12-30-junior-developers.html"/>
+      <id>https://eevie.roposts/2019-12-30-junior-developers.html</id>
       <updated>2019-12-30T00:00:SZ</updated>
       <category term="personal"/>
       <category term="fp"/>
@@ -713,8 +713,8 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>The Functor Family: Bifunctor</title>
-      <link href="https://cvlad.infoposts/2020-01-02-bifunctor.html"/>
-      <id>https://cvlad.infoposts/2020-01-02-bifunctor.html</id>
+      <link href="https://eevie.roposts/2020-01-02-bifunctor.html"/>
+      <id>https://eevie.roposts/2020-01-02-bifunctor.html</id>
       <updated>2020-01-02T00:00:SZ</updated>
       <category term="haskell"/>
       <category term="functor"/>
@@ -778,8 +778,8 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>The Functor Family: Contravariant</title>
-      <link href="https://cvlad.infoposts/2020-01-07-contravariant.html"/>
-      <id>https://cvlad.infoposts/2020-01-07-contravariant.html</id>
+      <link href="https://eevie.roposts/2020-01-07-contravariant.html"/>
+      <id>https://eevie.roposts/2020-01-07-contravariant.html</id>
       <updated>2020-01-07T00:00:SZ</updated>
       <category term="haskell"/>
       <category term="functor"/>
@@ -846,8 +846,8 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>The Functor Family: Profunctor</title>
-      <link href="https://cvlad.infoposts/2020-01-22-profunctor.html"/>
-      <id>https://cvlad.infoposts/2020-01-22-profunctor.html</id>
+      <link href="https://eevie.roposts/2020-01-22-profunctor.html"/>
+      <id>https://eevie.roposts/2020-01-22-profunctor.html</id>
       <updated>2020-01-22T00:00:SZ</updated>
       <category term="haskell"/>
       <category term="functor"/>

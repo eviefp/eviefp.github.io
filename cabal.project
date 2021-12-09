@@ -1,0 +1,12 @@
+packages: eviefp-blog.cabal
+
+source-repository-package
+  type: git
+  location: https://github.com/eviefp/mustache.git
+  tag: 333c4460895555d7c447d88260078b8dc0e9860d
+
+source-repository-package
+  type: git
+  location: https://github.com/eviefp/slick.git
+  tag: 1ac9670b4d7d964bd633af2a432f3342438360b7
+

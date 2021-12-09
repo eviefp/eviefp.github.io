@@ -2,12 +2,12 @@
 <html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
     <meta charset="UTF-8">
-    <meta name="description" content="Vladimir Ciobanu&#39;s Blog">
+    <meta name="description" content="Evie&#39;s Blog">
     <meta name="author" content="Vladimir Ciobanu">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@cvlad">
-<meta name="twitter:creator" content="@cvlad">
+    <meta name="twitter:site" content="@evie_fp">
+<meta name="twitter:creator" content="@evie_fp">
 <meta name="twitter:title" content="My Haskell Journey">
     <meta name="twitter:description" content="How I learned Haskell">
         <title>My Haskell Journey</title>
@@ -23,19 +23,15 @@
         </nav>
     
         <div class="right-sidebar">
-            <a class="ext-link" href="https://twitch.tv/cvladfp">
+            <a class="ext-link" href="https://twitch.tv/eviefp">
             <img src="/images/twitch-logo.png" alt="Twitch Channel"/>
         </a>
 
-            <a class="ext-link" href="https://youtube.com/channel/UCDvH0v4GelMrYleTKyFBbvQ">
-            <img src="/images/youtube-logo.png" alt="Youtube Channel"/>
-        </a>
-
-            <a class="ext-link" href="https://github.com/vladciobanu">
+            <a class="ext-link" href="https://github.com/eviefp">
             <img src="/images/github-logo.png" alt="Github Profile"/>
         </a>
 
-            <a class="ext-link" href="https://twitter.com/cvlad">
+            <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
     <div id="theme-button">DAY</div>
@@ -72,10 +68,10 @@
 <h3 id="installing-haskell">Installing Haskell</h3>
 <p>In my experience, the best way to install Haskell is using <code>stack</code>. It's a cross-platform tool for developing Haskell projects, and it helps with managing dependencies as well as GHC (the Glasgow Haskell Compiler) versions for each of your projects. Please check their <a href="https://docs.haskellstack.org/en/stable/README/">documentation page</a> on how to install. If you already have it, make sure you upgrade it via <code>stack upgrade</code>.</p>
 <p>In order to start a new project, you can run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> new project</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> project</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> build</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">stack</span> exec -- project-exe</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack new project</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd project</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack build</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack exec <span class="at">--</span> project-exe</span></code></pre></div>
 <p>You should now be able to edit either <code>app/Main.hs</code> or <code>src/Lib.hs</code> to change your program.</p>
 <h3 id="writing-haskell-programs">Writing Haskell Programs</h3>
 <p>I regret not listening to people's advice about this sooner and spending a lot of time looking for the best Haskell IDE / development tools. In the end, everybody else was right and unfortunately, the current state of the available tools is <em>not good enough</em>. The process that most people seem to use, and the one I also adopted is using my favorite text editor with syntax highlighting. I have a few separate console windows that run <code>ghcid</code> and <code>ghci</code>.</p>
@@ -117,15 +113,15 @@
         <br>
 
         <div class="comments">
-            Questions? Comments? <a href="https://twitter.com/cvlad">Tweet</a> them at me or post an issue on this <a href="https://github.com/vladciobanu/vladciobanu.github.io/issues">blog's github repo</a>.
+            Questions? Comments? <a href="https://twitter.com/evief_p">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
         </div>
 
         <!--Share buttons-->
         <div class="social-buttons">
             <a href="https://twitter.com/share" class="twitter-share-button"
-                                                data-url="https://cvlad.info" data-text="Check out: My Haskell Journey - " data-via="cvlad">Tweet</a>
+                                                data-url="https://eevie.ro" data-text="Check out: My Haskell Journey - " data-via="evie_fp">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <a href="https://twitter.com/cvlad" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @cvlad</a>
+            <a href="https://twitter.com/evie_fp" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @evie_fp</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
             <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
         </div>

@@ -1,42 +1,41 @@
-{-# LANGUAGE DeriveAnyClass        #-}
-{-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NamedFieldPuns        #-}
-{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Main where
 
-import           Control.Lens
-import           Control.Monad
-import           Data.Aeson                 as A
-import           Data.Aeson.Lens
-import           Data.Function              (on)
-import           Data.List                  (sortBy)
-import qualified Data.Map                   as M
-import qualified Data.Set                   as S
-import           Data.Time
-import           Development.Shake
-import           Development.Shake.Classes
-import           Development.Shake.FilePath
-import           Development.Shake.Forward
-import           GHC.Generics               (Generic)
-import           Slick
-
-import qualified Data.HashMap.Lazy          as HML
-import qualified Data.Text                  as T
+import Control.Lens
+import Control.Monad
+import Data.Aeson as A
+import qualified Data.Aeson.KeyMap as KM
+import Data.Aeson.Lens
+import Data.Function (on)
+import Data.List (sortBy)
+import qualified Data.Map as M
+import qualified Data.Set as S
+import qualified Data.Text as T
+import Data.Time
+import Development.Shake
+import Development.Shake.Classes
+import Development.Shake.FilePath
+import Development.Shake.Forward
+import GHC.Generics (Generic)
+import Slick
 
 ---Config-----------------------------------------------------------------------
 
 siteMeta :: SiteMeta
 siteMeta =
-    SiteMeta { siteAuthor = "Vladimir Ciobanu"
-             , baseUrl = "https://cvlad.info"
-             , siteTitle = "Vladimir Ciobanu's Blog"
-             , twitterHandle = Just "cvlad"
-             , githubUser = Just "vladciobanu"
-             , twitchUser = Just "cvladfp"
-             , youtubeUser = Just "UCDvH0v4GelMrYleTKyFBbvQ"
-             }
+  SiteMeta
+    { siteAuthor = "Evie Ciobanu",
+      baseUrl = "https://eevie.ro",
+      siteTitle = "Evie's Blog",
+      twitterHandle = Just "evie_fp",
+      githubUser = Just "eviefp",
+      twitchUser = Just "eviefp"
+    }
 
 outputFolder :: FilePath
 outputFolder = "docs/"
@@ -44,72 +43,74 @@ outputFolder = "docs/"
 --Data models-------------------------------------------------------------------
 
 withSiteMeta :: Value -> Value
-withSiteMeta (Object obj) = Object $ HML.union obj siteMetaObj
+withSiteMeta (Object obj) = Object $ KM.union obj siteMetaObj
   where
     Object siteMetaObj = toJSON siteMeta
 withSiteMeta _ = error "only add site meta to objects"
 
-data SiteMeta =
-    SiteMeta { siteAuthor    :: String
-             , baseUrl       :: String -- e.g. https://example.ca
-             , siteTitle     :: String
-             , twitterHandle :: Maybe String -- Without @
-             , githubUser    :: Maybe String
-             , twitchUser    :: Maybe String
-             , youtubeUser   :: Maybe String
-             }
-    deriving (Generic, Eq, Ord, Show, ToJSON)
+data SiteMeta = SiteMeta
+  { siteAuthor :: String,
+    baseUrl :: String, -- e.g. https://example.ca
+    siteTitle :: String,
+    twitterHandle :: Maybe String, -- Without @
+    githubUser :: Maybe String,
+    twitchUser :: Maybe String
+  }
+  deriving (Generic, Eq, Ord, Show, ToJSON)
 
 -- | Data for the index page
-newtype IndexInfo =
-  IndexInfo
-    { posts :: [Post]
-    } deriving (Generic, Show, FromJSON, ToJSON)
+newtype IndexInfo = IndexInfo
+  { posts :: [Post]
+  }
+  deriving (Generic, Show, FromJSON, ToJSON)
 
 data Tag = Tag
-    { tag   :: String
-    , posts :: [Post]
-    , url   :: String
-    } deriving (Generic, Show, ToJSON)
+  { tag :: String,
+    posts :: [Post],
+    url :: String
+  }
+  deriving (Generic, Show, ToJSON)
 
 -- | Data for a blog post
-data Post =
-    Post { title       :: String
-         , author      :: String
-         , content     :: String
-         , url         :: String
-         , date        :: String
-         , tags        :: [String]
-         , description :: String
-         , image       :: Maybe String
-         }
-    deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
+data Post = Post
+  { title :: String,
+    author :: String,
+    content :: String,
+    url :: String,
+    date :: String,
+    tags :: [String],
+    description :: String,
+    image :: Maybe String
+  }
+  deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
 
-data AtomData =
-  AtomData { title       :: String
-           , domain      :: String
-           , author      :: String
-           , posts       :: [Post]
-           , currentTime :: String
-           , atomUrl     :: String } deriving (Generic, ToJSON, Eq, Ord, Show)
+data AtomData = AtomData
+  { title :: String,
+    domain :: String,
+    author :: String,
+    posts :: [Post],
+    currentTime :: String,
+    atomUrl :: String
+  }
+  deriving (Generic, ToJSON, Eq, Ord, Show)
 
 buildTags :: [Tag] -> Action ()
 buildTags t = void $ forP t writeTag
 
 writeTag :: Tag -> Action ()
-writeTag t@Tag{url} = do
-    tagTempl <- compileTemplate' "site/templates/tag.html"
-    writeFile' (outputFolder <> url -<.> "html") . T.unpack $ substitute tagTempl (toJSON t)
+writeTag t@Tag {url} = do
+  tagTempl <- compileTemplate' "site/templates/tag.html"
+  writeFile' (outputFolder <> url -<.> "html") . T.unpack $ substitute tagTempl (toJSON t)
 
 getTags :: [Post] -> Action [Tag]
 getTags posts = do
-   let tagToPostsSet = M.unionsWith mappend (toMap <$> posts)
-       tagToPostsList = fmap S.toList tagToPostsSet
-       tagObjects =
-         M.foldMapWithKey
-           (\tag ps -> [Tag {tag, posts = reverse $ sortByDate ps, url = "/tag/" <> tag}])
-           tagToPostsList
-   return tagObjects
+  let tagToPostsSet = M.unionsWith mappend (toMap <$> posts)
+      tagToPostsList = fmap S.toList tagToPostsSet
+      tagObjects =
+        M.foldMapWithKey
+          (\tag ps -> [Tag {tag, posts = reverse $ sortByDate ps, url = "/tag/" <> tag}])
+          tagToPostsList
+  return tagObjects
   where
     toMap :: Post -> M.Map String (S.Set Post)
     toMap p@Post {tags} = M.unionsWith mappend (embed p <$> tags)
@@ -155,9 +156,10 @@ buildPost srcPath = cacheAction ("build" :: T.Text, srcPath) $ do
 -- | Copy all static files from the listed folders to their destination
 copyStaticFiles :: Action ()
 copyStaticFiles = do
-    filepaths <- getDirectoryFiles "./site/" ["images//*", "css//*", "js//*", "content//*"]
-    void $ forP filepaths $ \filepath ->
-        copyFileChanged ("site" </> filepath) (outputFolder </> filepath)
+  filepaths <- getDirectoryFiles "./site/" ["images//*", "css//*", "js//*", "content//*"]
+  void $
+    forP filepaths $ \filepath ->
+      copyFileChanged ("site" </> filepath) (outputFolder </> filepath)
 
 formatDate :: String -> String
 formatDate humanDate = toIsoDate parsedTime
@@ -176,18 +178,18 @@ buildFeed posts = do
   now <- liftIO getCurrentTime
   let atomData =
         AtomData
-          { title = siteTitle siteMeta
-          , domain = baseUrl siteMeta
-          , author = siteAuthor siteMeta
-          , posts = mkAtomPost <$> posts
-          , currentTime = toIsoDate now
-          , atomUrl = "/atom.xml"
+          { title = siteTitle siteMeta,
+            domain = baseUrl siteMeta,
+            author = siteAuthor siteMeta,
+            posts = mkAtomPost <$> posts,
+            currentTime = toIsoDate now,
+            atomUrl = "/atom.xml"
           }
   atomTempl <- compileTemplate' "site/templates/atom.xml"
   writeFile' (outputFolder </> "atom.xml") . T.unpack $ substitute atomTempl (toJSON atomData)
-    where
-      mkAtomPost :: Post -> Post
-      mkAtomPost p = p { date = formatDate $ date p }
+  where
+    mkAtomPost :: Post -> Post
+    mkAtomPost p = p {date = formatDate $ date p}
 
 -- | Specific build rules for the Shake system
 --   defines workflow to build the website
@@ -202,5 +204,5 @@ buildRules = do
 
 main :: IO ()
 main = do
-  let shOpts = shakeOptions { shakeVerbosity = Chatty, shakeLintInside = ["\\"]}
+  let shOpts = shakeOptions {shakeVerbosity = Chatty, shakeLintInside = ["\\"]}
   shakeArgsForward shOpts buildRules

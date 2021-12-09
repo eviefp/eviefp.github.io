@@ -1,19 +1,19 @@
-name:                slick-template
+name:                eviefp-blog
 version:             0.1.0.0
-github:              "Me/my-site"
+github:              "eviefp/eviefp.github.io"
 license:             BSD3
-author:              "Me"
-maintainer:          "example@example.com"
-copyright:           "20XX Me"
+author:              "Evie Ciobanu"
+maintainer:          "blog@eevie.ro"
+copyright:           "2022 Evie Ciobanu"
 
 extra-source-files:
 - README.md
 - ChangeLog.md
 
-synopsis:            My site built with slick!
+synopsis:            Blog built with slick!
 category:            Slick-Site
 
-description: My slick Site
+description: Evie's technical blog
 
 executables:
   build-site:

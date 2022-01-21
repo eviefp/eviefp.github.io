@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie&#39;s Blog</title>
     <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2021-12-09T13:38:SZ</updated>
+  <updated>2022-01-21T20:46:SZ</updated>
   <author>
       <name>Evie Ciobanu</name>
   </author>
@@ -10,7 +10,7 @@
 
   <entry>
       <title>Classical Logic in Haskell</title>
-      <link href="https://eevie.roposts/2018-12-14-clasical-logic-in-haskell.html"/>
+      <link href="https://eevie.ro/posts/2018-12-14-clasical-logic-in-haskell.html"/>
       <id>https://eevie.roposts/2018-12-14-clasical-logic-in-haskell.html</id>
       <updated>2018-12-14T00:00:SZ</updated>
       <category term="theory"/>
@@ -184,7 +184,7 @@
   </entry>
   <entry>
       <title>Curry-Howard Correspondence Example</title>
-      <link href="https://eevie.roposts/2019-02-02-curry-howard.html"/>
+      <link href="https://eevie.ro/posts/2019-02-02-curry-howard.html"/>
       <id>https://eevie.roposts/2019-02-02-curry-howard.html</id>
       <updated>2019-02-02T00:00:SZ</updated>
       <category term="haskell"/>
@@ -294,7 +294,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>Quantifiers in Agda</title>
-      <link href="https://eevie.roposts/2019-02-17-quantifiers.html"/>
+      <link href="https://eevie.ro/posts/2019-02-17-quantifiers.html"/>
       <id>https://eevie.roposts/2019-02-17-quantifiers.html</id>
       <updated>2019-02-17T00:00:SZ</updated>
       <category term="agda"/>
@@ -427,7 +427,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>Functor-Of</title>
-      <link href="https://eevie.roposts/2019-05-12-functor-of.html"/>
+      <link href="https://eevie.ro/posts/2019-05-12-functor-of.html"/>
       <id>https://eevie.roposts/2019-05-12-functor-of.html</id>
       <updated>2019-05-12T00:00:SZ</updated>
       <category term="haskell"/>
@@ -588,7 +588,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>Hire and Train Haskell Junior Developers</title>
-      <link href="https://eevie.roposts/2019-12-30-junior-developers.html"/>
+      <link href="https://eevie.ro/posts/2019-12-30-junior-developers.html"/>
       <id>https://eevie.roposts/2019-12-30-junior-developers.html</id>
       <updated>2019-12-30T00:00:SZ</updated>
       <category term="personal"/>
@@ -656,7 +656,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>The Functor Family: Bifunctor</title>
-      <link href="https://eevie.roposts/2020-01-02-bifunctor.html"/>
+      <link href="https://eevie.ro/posts/2020-01-02-bifunctor.html"/>
       <id>https://eevie.roposts/2020-01-02-bifunctor.html</id>
       <updated>2020-01-02T00:00:SZ</updated>
       <category term="haskell"/>
@@ -721,7 +721,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>The Functor Family: Contravariant</title>
-      <link href="https://eevie.roposts/2020-01-07-contravariant.html"/>
+      <link href="https://eevie.ro/posts/2020-01-07-contravariant.html"/>
       <id>https://eevie.roposts/2020-01-07-contravariant.html</id>
       <updated>2020-01-07T00:00:SZ</updated>
       <category term="haskell"/>
@@ -789,7 +789,7 @@ assoc&#39; h = ((fst h, fst (snd h)), snd (snd h))</code></pre>
   </entry>
   <entry>
       <title>The Functor Family: Profunctor</title>
-      <link href="https://eevie.roposts/2020-01-22-profunctor.html"/>
+      <link href="https://eevie.ro/posts/2020-01-22-profunctor.html"/>
       <id>https://eevie.roposts/2020-01-22-profunctor.html</id>
       <updated>2020-01-22T00:00:SZ</updated>
       <category term="haskell"/>

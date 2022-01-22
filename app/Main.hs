@@ -12,11 +12,12 @@ import Data.Aeson as A
 import qualified Data.Aeson.KeyMap as KM
 import Data.Aeson.Lens
 import Data.Function (on)
-import Data.List (sortBy)
+import Data.List (isPrefixOf, sortBy)
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Text as T
 import Data.Time
+import qualified Debug.Trace as D
 import Development.Shake
 import Development.Shake.Classes
 import Development.Shake.FilePath
@@ -135,7 +136,9 @@ buildIndex posts' = do
 buildPosts :: Action [Post]
 buildPosts = do
   pPaths <- getDirectoryFiles "." ["site/posts//*.md"]
-  forP pPaths buildPost
+  let exceptInProgress = filter (not . isPrefixOf "site/posts/_") pPaths
+  D.traceShowM exceptInProgress
+  forP exceptInProgress buildPost
 
 -- | Load a post, process metadata, write it to output, then return the post object
 -- Detects changes to either post content or template

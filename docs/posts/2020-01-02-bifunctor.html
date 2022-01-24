@@ -54,16 +54,24 @@
             <div class="metadata">
             </div>
             <div class="tags">
-              <a class="tag" href="/tag/haskell">haskell</a>
-              <a class="tag" href="/tag/functor">functor</a>
+              <a class="tag" href="/tag/haskell.html">haskell</a>
+              <a class="tag" href="/tag/functor.html">functor</a>
             </div>
         </div>
     </div>
     <article class="post">
-        <p>This post assumes prior knowledge of - the <code>Functor</code> class / concept - the functor instance for <code>Either a</code>, <code>(,) a</code> - basic kind knowledge, e.g. the difference between <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
+        <p>This post assumes prior knowledge of - the <code>Functor</code> class
+/ concept - the functor instance for <code>Either a</code>, <code>(,)
+a</code> - basic kind knowledge, e.g. the difference between <code>*
+-&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
 <h2 id="why">Why</h2>
-<p>In Haskell, functors can only be defined for types of kind <code>* -&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>. Their instances allow us to use <code>fmap</code> (or <code>&lt;$&gt;</code>) to go from <code>Maybe a</code> to <code>Maybe b</code> using some <code>a -&gt; b</code>, like:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></span>
+<p>In Haskell, functors can only be defined for types of kind <code>*
+-&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>. Their
+instances allow us to use <code>fmap</code> (or <code>&lt;$&gt;</code>)
+to go from <code>Maybe a</code> to <code>Maybe b</code> using some
+<code>a -&gt; b</code>, like:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Just</span> <span class="st">&quot;1&quot;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Nothing</span></span>
@@ -74,54 +82,105 @@
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> []</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>[]</span></code></pre></div>
-<p>We can even define functor instances for higher kinded types, as long as we fix type arguments until we get to <code>* -&gt; *</code>. For example, <code>Either</code> has kind <code>* -&gt; * -&gt; *</code>, but <code>Either e</code> has kind <code>* -&gt; *</code>. So that means that we can have a functor instance for <code>Either e</code>, given some type <code>e</code>. This might sound confusing at first, but all it means is that the <code>e</code> cannot vary, so we can go from <code>Either e a</code> to <code>Either e b</code> using some <code>a -&gt; b</code>, but we cannot go from <code>Either e1 a</code> to <code>Either e2 a</code> or <code>Either e2 b</code> even if we had both <code>a -&gt; b</code> and <code>e1 -&gt; e2</code>. How would we even pass two functions to <code>fmap</code>?</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Right</span> <span class="dv">1</span></span>
+<p>We can even define functor instances for higher kinded types, as long
+as we fix type arguments until we get to <code>* -&gt; *</code>. For
+example, <code>Either</code> has kind <code>* -&gt; * -&gt; *</code>,
+but <code>Either e</code> has kind <code>* -&gt; *</code>. So that means
+that we can have a functor instance for <code>Either e</code>, given
+some type <code>e</code>. This might sound confusing at first, but all
+it means is that the <code>e</code> cannot vary, so we can go from
+<code>Either e a</code> to <code>Either e b</code> using some <code>a
+-&gt; b</code>, but we cannot go from <code>Either e1 a</code> to
+<code>Either e2 a</code> or <code>Either e2 b</code> even if we had both
+<code>a -&gt; b</code> and <code>e1 -&gt; e2</code>. How would we even
+pass two functions to <code>fmap</code>?</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Right</span> <span class="dv">1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Right</span> <span class="st">&quot;1&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Left</span> <span class="dt">True</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Left</span> <span class="dt">True</span></span></code></pre></div>
-<p>In the first example, we go from <code>Either a Int</code> to <code>Either a String</code> using <code>show :: Int -&gt; String</code>. In the second example, we go from <code>Either Bool a</code> to <code>Either Bool String</code>, where <code>a</code> needs to have a <code>Show</code> instance.</p>
-<p>But what if we want to go from <code>Either a x</code> to <code>Either b x</code>, given some <code>a -&gt; b</code>?</p>
+<p>In the first example, we go from <code>Either a Int</code> to
+<code>Either a String</code> using <code>show :: Int -&gt;
+String</code>. In the second example, we go from <code>Either Bool
+a</code> to <code>Either Bool String</code>, where <code>a</code> needs
+to have a <code>Show</code> instance.</p>
+<p>But what if we want to go from <code>Either a x</code> to
+<code>Either b x</code>, given some <code>a -&gt; b</code>?</p>
 <p>Let's see how we could implement it ourselves:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapLeft ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Either</span> a x <span class="ot">-&gt;</span> <span class="dt">Either</span> b x</span>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapLeft ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Either</span> a x <span class="ot">-&gt;</span> <span class="dt">Either</span> b x</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mapLeft f (<span class="dt">Left</span> a) <span class="ot">=</span> <span class="dt">Left</span> (f a)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mapLeft _ r        <span class="ot">=</span> r</span></code></pre></div>
-<p>Since we are trying to map the <code>Left</code>, the interesting bit is for that constructor: we apply <code>f</code> under <code>Left</code>. Otherwise, we just leave the value as-is; a <code>Right</code> value of type <code>x</code> (we could have written <code>mapLeft _ (Right x) = Right x</code> and it would work the same).</p>
-<p>Here's a few warm-up exercises. The first uses typed holes to guide you and clarify what's meant by "using <code>either</code>". The last exercise can be a bit tricky. Look up what <code>Const</code> is and use typed holes.</p>
-<p><em>Exercise 1</em>: re-implement <code>mapLeft'</code> using <code>either</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapLeft&#39; ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Either</span> a x <span class="ot">-&gt;</span> <span class="dt">Either</span> b x</span>
+<p>Since we are trying to map the <code>Left</code>, the interesting bit
+is for that constructor: we apply <code>f</code> under
+<code>Left</code>. Otherwise, we just leave the value as-is; a
+<code>Right</code> value of type <code>x</code> (we could have written
+<code>mapLeft _ (Right x) = Right x</code> and it would work the
+same).</p>
+<p>Here's a few warm-up exercises. The first uses typed holes to guide
+you and clarify what's meant by "using <code>either</code>". The last
+exercise can be a bit tricky. Look up what <code>Const</code> is and use
+typed holes.</p>
+<p><em>Exercise 1</em>: re-implement <code>mapLeft'</code> using
+<code>either</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapLeft&#39; ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Either</span> a x <span class="ot">-&gt;</span> <span class="dt">Either</span> b x</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mapLeft&#39; f e <span class="ot">=</span> <span class="fu">either</span> _leftCase _rightCase e</span></code></pre></div>
 <p><em>Exercise 2</em>: implement <code>mapFirst</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapFirst ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> (a, x) <span class="ot">-&gt;</span> (b, x)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapFirst ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> (a, x) <span class="ot">-&gt;</span> (b, x)</span></code></pre></div>
 <p><em>Exercise 3</em>: implement <code>remapConst</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Functor.Const</span> (<span class="dt">Const</span>(..))</span>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Functor.Const</span> (<span class="dt">Const</span>(..))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ot">remapConst ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Const</span> a x <span class="ot">-&gt;</span> <span class="dt">Const</span> b x</span></code></pre></div>
 <h2 id="how">How</h2>
-<p>While we can implement <code>mapLeft</code>, <code>mapFirst</code>, and <code>remapConst</code> manually, there is a pattern: some types of kind <code>* -&gt; * -&gt; *</code> allow both their type arguments to be mapped like a <code>Functor</code>, so we can define a new class:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Bifunctor</span> p <span class="kw">where</span></span>
+<p>While we can implement <code>mapLeft</code>, <code>mapFirst</code>,
+and <code>remapConst</code> manually, there is a pattern: some types of
+kind <code>* -&gt; * -&gt; *</code> allow both their type arguments to
+be mapped like a <code>Functor</code>, so we can define a new class:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Bifunctor</span> p <span class="kw">where</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">{-# MINIMAL bimap | first, second #-}</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ot">  bimap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> (c <span class="ot">-&gt;</span> d) <span class="ot">-&gt;</span> p a c <span class="ot">-&gt;</span> p b d</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ot">  first ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> p a c <span class="ot">-&gt;</span> p b c</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ot">  second ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> p a b <span class="ot">-&gt;</span> p a c</span></code></pre></div>
-<p><code>bimap</code> takes two functions and is able to map both arguments in a type of kind <code>* -&gt; * -&gt; *</code>. <code>first</code> is a lot like the functions we just defined manually. <code>second</code> is always the same thing as <code>fmap</code>. This class exists in <code>base</code>, under <code>Data.Bifunctor</code>.</p>
-<p><em>Exercise 4</em>: implement <code>bimap</code> in terms of <code>first</code> and <code>second</code>.</p>
-<p><em>Exercise 5</em>: implement <code>first</code> and <code>second</code> in terms of <code>bimap</code>.</p>
-<p><em>Exercise 6</em>: implement the <code>Bifunctor</code> instance for <code>Either</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Bifunctor</span> <span class="dt">Either</span> <span class="kw">where</span></span>
+<p><code>bimap</code> takes two functions and is able to map both
+arguments in a type of kind <code>* -&gt; * -&gt; *</code>.
+<code>first</code> is a lot like the functions we just defined manually.
+<code>second</code> is always the same thing as <code>fmap</code>. This
+class exists in <code>base</code>, under
+<code>Data.Bifunctor</code>.</p>
+<p><em>Exercise 4</em>: implement <code>bimap</code> in terms of
+<code>first</code> and <code>second</code>.</p>
+<p><em>Exercise 5</em>: implement <code>first</code> and
+<code>second</code> in terms of <code>bimap</code>.</p>
+<p><em>Exercise 6</em>: implement the <code>Bifunctor</code> instance
+for <code>Either</code>:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Bifunctor</span> <span class="dt">Either</span> <span class="kw">where</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  bimap f _ (<span class="dt">Left</span> a)  <span class="ot">=</span> _leftCase</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  bimap _ g (<span class="dt">Right</span> b) <span class="ot">=</span> _rightCase</span></code></pre></div>
-<p><em>Exercise 7</em>: Implement the <code>Bifunctor</code> instance for tuples <code>(a, b)</code>.</p>
-<p><em>Exercise 8</em>: Implement the <code>Bifunctor</code> instance for <code>Const</code>.</p>
-<p><em>Exercise 9</em>: Implement the <code>Bifunctor</code> instance for <code>(a, b, c)</code>.</p>
-<p><em>Exercise 10</em>: Find an example of a type with kind <code>* -&gt; * -&gt; *</code> that cannot have a <code>Bifunctor</code> instance.</p>
-<p><em>Exercise 11</em>: Find an example of a type with kind <code>* -&gt; * -&gt; *</code> which has a <code>Functor</code> instance when you fix one type argument, but can't have a <code>Bifunctor</code> instance.</p>
+<p><em>Exercise 7</em>: Implement the <code>Bifunctor</code> instance
+for tuples <code>(a, b)</code>.</p>
+<p><em>Exercise 8</em>: Implement the <code>Bifunctor</code> instance
+for <code>Const</code>.</p>
+<p><em>Exercise 9</em>: Implement the <code>Bifunctor</code> instance
+for <code>(a, b, c)</code>.</p>
+<p><em>Exercise 10</em>: Find an example of a type with kind <code>*
+-&gt; * -&gt; *</code> that cannot have a <code>Bifunctor</code>
+instance.</p>
+<p><em>Exercise 11</em>: Find an example of a type with kind <code>*
+-&gt; * -&gt; *</code> which has a <code>Functor</code> instance when
+you fix one type argument, but can't have a <code>Bifunctor</code>
+instance.</p>
 
         <br>
         <br>
 
         <div class="comments">
-            Questions? Comments? <a href="https://twitter.com/evief_p">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
+            Questions? Comments? <a href="https://twitter.com/evie_fp">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
         </div>
 
         <!--Share buttons-->

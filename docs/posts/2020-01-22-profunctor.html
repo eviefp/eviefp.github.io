@@ -54,16 +54,29 @@
             <div class="metadata">
             </div>
             <div class="tags">
-              <a class="tag" href="/tag/haskell">haskell</a>
-              <a class="tag" href="/tag/functor">functor</a>
+              <a class="tag" href="/tag/haskell.html">haskell</a>
+              <a class="tag" href="/tag/functor.html">functor</a>
             </div>
         </div>
     </div>
     <article class="post">
-        <p>This post assumes prior knowledge of - <a href="/contravariant">Contravariant</a> - <a href="/bifunctor">Bifunctor</a></p>
+        <p>This post assumes prior knowledge of - <a
+href="/contravariant">Contravariant</a> - <a
+href="/bifunctor">Bifunctor</a></p>
 <h2 id="why">Why</h2>
-<p>We've seen how types of kind <code>* -&gt; *</code> can have instances for <code>Functor</code> or <code>Contravariant</code>, depending on the position of the type argument. We have also seen that types of kind <code>* -&gt; * -&gt; *</code> can have <code>Bifunctor</code> instances. These types are morally <code>Functor</code> in both type arguments. We're left with one very common type which we can't map both arguments of: <code>a -&gt; b</code>. It does have a <code>Functor</code> instance for <code>b</code>, but the <code>a</code> is morally <code>Contravariant</code> (so it can't have a <code>Bifunctor</code> instance). This is where <code>Profunctor</code>s come in.</p>
-<p>Here's a list of a few common types with the instances they allow:</p>
+<p>We've seen how types of kind <code>* -&gt; *</code> can have
+instances for <code>Functor</code> or <code>Contravariant</code>,
+depending on the position of the type argument. We have also seen that
+types of kind <code>* -&gt; * -&gt; *</code> can have
+<code>Bifunctor</code> instances. These types are morally
+<code>Functor</code> in both type arguments. We're left with one very
+common type which we can't map both arguments of: <code>a -&gt;
+b</code>. It does have a <code>Functor</code> instance for
+<code>b</code>, but the <code>a</code> is morally
+<code>Contravariant</code> (so it can't have a <code>Bifunctor</code>
+instance). This is where <code>Profunctor</code>s come in.</p>
+<p>Here's a list of a few common types with the instances they
+allow:</p>
 <table>
 <thead>
 <tr class="header">
@@ -126,43 +139,81 @@
 </tr>
 </tbody>
 </table>
-<p>Although there are some exceptions, you will usually see <code>Contravariant</code> or <code>Profunctor</code> instances over function types. <code>Predicate</code> itself is a newtype over <code>a -&gt; Bool</code>, and so are most types with these instances.</p>
-<p>Let's take a closer look at <code>a -&gt; b</code>. We can easily map over the <code>b</code>, but what about the <code>a</code>? For example, given <code>showInt :: Int -&gt; String</code>, what do we need to convert this function to <code>showBool :: Bool -&gt; String</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">showInt</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<p>Although there are some exceptions, you will usually see
+<code>Contravariant</code> or <code>Profunctor</code> instances over
+function types. <code>Predicate</code> itself is a newtype over <code>a
+-&gt; Bool</code>, and so are most types with these instances.</p>
+<p>Let's take a closer look at <code>a -&gt; b</code>. We can easily map
+over the <code>b</code>, but what about the <code>a</code>? For example,
+given <code>showInt :: Int -&gt; String</code>, what do we need to
+convert this function to <code>showBool :: Bool -&gt; String</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">showInt</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showInt</span> <span class="ot">=</span> <span class="fu">show</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ot">showBool ::</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>showBool b <span class="ot">=</span> _help</span></code></pre></div>
-<p>We would have access to: - <code>showInt :: Int -&gt; String</code> - <code>b :: Bool</code> and we want to use <code>showInt</code>, so we would need a way to pass <code>b</code> to it, which means we'd need a function <code>f :: Bool -&gt; Int</code> and then <code>_help</code> would become <code>showInt (f b)</code>.</p>
-<p>But if we take a step back, in order to go from <code>Int -&gt; String</code> to <code>Bool -&gt; String</code>, we need <code>Bool -&gt; Int</code>, which is exactly the <code>Contravariant</code> way of mapping types.</p>
-<p><em>Exercise 1</em>: Implement a <code>mapInput</code> function like:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapInput ::</span> (input <span class="ot">-&gt;</span> out) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> input) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> out)</span></code></pre></div>
-<p>Extra credit: try a pointfree implementation as <code>mapInput = _</code>.</p>
-<p><em>Exercise 2</em>: Try to guess how the <code>Profunctor</code> class looks like. Look at <code>Functor</code>, <code>Contravariant</code>, and <code>Bifunctor</code> for inspiration.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Profunctor</span> p <span class="kw">where</span></span></code></pre></div>
-<p><em>Exercise 3</em>: Implement an instance for <code>-&gt;</code> for your <code>Profunctor</code> class.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Profunctor</span> (<span class="ot">-&gt;</span>) <span class="kw">where</span></span></code></pre></div>
+<p>We would have access to: - <code>showInt :: Int -&gt; String</code> -
+<code>b :: Bool</code> and we want to use <code>showInt</code>, so we
+would need a way to pass <code>b</code> to it, which means we'd need a
+function <code>f :: Bool -&gt; Int</code> and then <code>_help</code>
+would become <code>showInt (f b)</code>.</p>
+<p>But if we take a step back, in order to go from <code>Int -&gt;
+String</code> to <code>Bool -&gt; String</code>, we need <code>Bool
+-&gt; Int</code>, which is exactly the <code>Contravariant</code> way of
+mapping types.</p>
+<p><em>Exercise 1</em>: Implement a <code>mapInput</code> function
+like:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapInput ::</span> (input <span class="ot">-&gt;</span> out) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> input) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> out)</span></code></pre></div>
+<p>Extra credit: try a pointfree implementation as <code>mapInput =
+_</code>.</p>
+<p><em>Exercise 2</em>: Try to guess how the <code>Profunctor</code>
+class looks like. Look at <code>Functor</code>,
+<code>Contravariant</code>, and <code>Bifunctor</code> for
+inspiration.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Profunctor</span> p <span class="kw">where</span></span></code></pre></div>
+<p><em>Exercise 3</em>: Implement an instance for <code>-&gt;</code> for
+your <code>Profunctor</code> class.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Profunctor</span> (<span class="ot">-&gt;</span>) <span class="kw">where</span></span></code></pre></div>
 <h2 id="how">How</h2>
-<p>Unlike <code>Functor</code>, <code>Contravariant</code>, and <code>Bifunctor</code>, the <code>Profunctor</code> class is not in <code>base</code>/<code>Prelude</code>. You will need to bring in a package like <code>profunctors</code> to access it.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Profunctor</span> p <span class="kw">where</span></span>
+<p>Unlike <code>Functor</code>, <code>Contravariant</code>, and
+<code>Bifunctor</code>, the <code>Profunctor</code> class is not in
+<code>base</code>/<code>Prelude</code>. You will need to bring in a
+package like <code>profunctors</code> to access it.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Profunctor</span> p <span class="kw">where</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">{-# MINIMAL dimap | lmap, rmap #-}</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ot">  dimap ::</span> (c <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> (b <span class="ot">-&gt;</span> d) <span class="ot">-&gt;</span> p a b <span class="ot">-&gt;</span> p c d</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ot">  lmap ::</span> (c <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> p a b <span class="ot">-&gt;</span> p c b</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ot">  rmap ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> p a b <span class="ot">-&gt;</span> p a c</span></code></pre></div>
-<p><code>dimap</code> takes two functions and is able to map both arguments in a type of kind <code>* -&gt; * -&gt; *</code>. <code>lmap</code> is like <code>mapInput</code>. <code>second</code> is always the same thing as <code>fmap</code>.</p>
-<p><em>Exercise 4</em>: implement <code>dimap</code> in terms of <code>lmap</code> and <code>rmap</code>.</p>
-<p><em>Exercise 5</em>: implement <code>lmap</code> and <code>rmap</code> in terms of <code>dimap</code>.</p>
-<p><em>Exercise 6</em>: implement the <code>Profunctor</code> instance for <code>-&gt;</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Profunctor</span> (<span class="ot">-&gt;</span>) <span class="kw">where</span></span>
+<p><code>dimap</code> takes two functions and is able to map both
+arguments in a type of kind <code>* -&gt; * -&gt; *</code>.
+<code>lmap</code> is like <code>mapInput</code>. <code>second</code> is
+always the same thing as <code>fmap</code>.</p>
+<p><em>Exercise 4</em>: implement <code>dimap</code> in terms of
+<code>lmap</code> and <code>rmap</code>.</p>
+<p><em>Exercise 5</em>: implement <code>lmap</code> and
+<code>rmap</code> in terms of <code>dimap</code>.</p>
+<p><em>Exercise 6</em>: implement the <code>Profunctor</code> instance
+for <code>-&gt;</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Profunctor</span> (<span class="ot">-&gt;</span>) <span class="kw">where</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- your pick: dimap or lmap and rmap</span></span></code></pre></div>
-<p><em>Exercise 7</em>: (hard) implement the <code>Profunctor</code> instance for:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Sum</span> f g a b</span>
+<p><em>Exercise 7</em>: (hard) implement the <code>Profunctor</code>
+instance for:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Sum</span> f g a b</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="dt">L</span> (f a b)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">R</span> (g a b)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> (<span class="dt">Profunctor</span> f, <span class="dt">Profunctor</span> g) <span class="ot">=&gt;</span> <span class="dt">Profunctor</span> (<span class="dt">Sum</span> f g) <span class="kw">where</span></span></code></pre></div>
-<p><em>Exercise 8</em>: (hard) implement the <code>Profunctor</code> instance for:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Product</span> f g a b <span class="ot">=</span> <span class="dt">Product</span> (f a b, g a b)</span>
+<p><em>Exercise 8</em>: (hard) implement the <code>Profunctor</code>
+instance for:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Product</span> f g a b <span class="ot">=</span> <span class="dt">Product</span> (f a b, g a b)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> (<span class="dt">Profunctor</span> f, <span class="dt">Profunctor</span> g) <span class="ot">=&gt;</span> <span class="dt">Profunctor</span> (<span class="dt">Product</span> f g) <span class="kw">where</span></span></code></pre></div>
 
@@ -170,7 +221,7 @@
         <br>
 
         <div class="comments">
-            Questions? Comments? <a href="https://twitter.com/evief_p">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
+            Questions? Comments? <a href="https://twitter.com/evie_fp">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
         </div>
 
         <!--Share buttons-->

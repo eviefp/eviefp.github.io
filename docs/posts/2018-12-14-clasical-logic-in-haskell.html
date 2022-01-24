@@ -54,26 +54,55 @@
             <div class="metadata">
             </div>
             <div class="tags">
-              <a class="tag" href="/tag/theory">theory</a>
-              <a class="tag" href="/tag/logic">logic</a>
-              <a class="tag" href="/tag/haskell">haskell</a>
+              <a class="tag" href="/tag/theory.html">theory</a>
+              <a class="tag" href="/tag/logic.html">logic</a>
+              <a class="tag" href="/tag/haskell.html">haskell</a>
             </div>
         </div>
     </div>
     <article class="post">
-        <p>During a very pleasant conversation at a recent <a href="http://bucharestfp.ro">Bucharest FP</a> meetup, <a href="https://twitter.com/igstan">somebody</a> mentioned that <code>Cont</code> is, almost exactly, <a href="https://en.wikipedia.org/wiki/Peirce%27s_law"><em>Peirce's law</em></a>. I remembered seeing a <a href="https://twitter.com/paf31/status/1040304689932165120">tweet</a> from Phil Freeman which proves that they are indeed equivalent. I thought it would be a fun exercise to prove other equivalences from classical logic.</p>
-<p>This post assumes you are familar with: - the <a href="https://www.youtube.com/watch?v=aeRVdYN6fE8">Curry-Howard correspondence</a>, - classical and intuitionistic logic (for example, see it explained using Coq in <a href="https://softwarefoundations.cis.upenn.edu/current/lf-current/Logic.html">Software Foundations</a>), and - one of Haskell, Agda, Idris or Coq.</p>
-<h1 id="monadcont-and-the-law-of-excluded-middle">MonadCont and the Law of Excluded Middle</h1>
-<p>Haskell and PureScript define <code>MonadCont</code>, which represent monads that support the <em>call-with-current-continuation</em> (<code>callCC</code>) operation:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">MonadCont</span> m <span class="kw">where</span></span>
+        <p>During a very pleasant conversation at a recent <a
+href="http://bucharestfp.ro">Bucharest FP</a> meetup, <a
+href="https://twitter.com/igstan">somebody</a> mentioned that
+<code>Cont</code> is, almost exactly, <a
+href="https://en.wikipedia.org/wiki/Peirce%27s_law"><em>Peirce's
+law</em></a>. I remembered seeing a <a
+href="https://twitter.com/paf31/status/1040304689932165120">tweet</a>
+from Phil Freeman which proves that they are indeed equivalent. I
+thought it would be a fun exercise to prove other equivalences from
+classical logic.</p>
+<p>This post assumes you are familar with: - the <a
+href="https://www.youtube.com/watch?v=aeRVdYN6fE8">Curry-Howard
+correspondence</a>, - classical and intuitionistic logic (for example,
+see it explained using Coq in <a
+href="https://softwarefoundations.cis.upenn.edu/current/lf-current/Logic.html">Software
+Foundations</a>), and - one of Haskell, Agda, Idris or Coq.</p>
+<h1 id="monadcont-and-the-law-of-excluded-middle">MonadCont and the Law
+of Excluded Middle</h1>
+<p>Haskell and PureScript define <code>MonadCont</code>, which represent
+monads that support the <em>call-with-current-continuation</em>
+(<code>callCC</code>) operation:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">MonadCont</span> m <span class="kw">where</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    callCC ::</span> ((a <span class="ot">-&gt;</span> m b) <span class="ot">-&gt;</span> m a) <span class="ot">-&gt;</span> m a </span></code></pre></div>
-<p><code>callCC</code> generally calls the function it receives, passing it the current continuation (the <code>a -&gt; m b</code>). This acts like an <code>abort</code> method, or an early exit.</p>
-<p>The interesting part is that this monad looks very similar to <em>Peirce's law</em>:</p>
+<p><code>callCC</code> generally calls the function it receives, passing
+it the current continuation (the <code>a -&gt; m b</code>). This acts
+like an <code>abort</code> method, or an early exit.</p>
+<p>The interesting part is that this monad looks very similar to
+<em>Peirce's law</em>:</p>
 <p>$ ((P \to Q) \to P) \to P $</p>
-<p>If we replace <code>P</code> with <code>a</code> (or <code>m a</code>) and <code>Q</code> with <code>m b</code>, we get the exact same thing. Since we are dealing with monads, we need to use Kleisli arrows, so all implications from logic must be lifted as such (so <code>P -&gt; Q</code> becomes <code>a -&gt; m b</code>).</p>
+<p>If we replace <code>P</code> with <code>a</code> (or <code>m
+a</code>) and <code>Q</code> with <code>m b</code>, we get the exact
+same thing. Since we are dealing with monads, we need to use Kleisli
+arrows, so all implications from logic must be lifted as such (so
+<code>P -&gt; Q</code> becomes <code>a -&gt; m b</code>).</p>
 <h2 id="proving-equivalences">Proving equivalences</h2>
-<p>In order to keep things clean, I decided to wrap each equivalent law in its own newtype and write an instance of <code>Iso</code> (which translates to iff) between each of the laws and the <em>law of excluded middle</em>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE InstanceSigs          #-}</span></span>
+<p>In order to keep things clean, I decided to wrap each equivalent law
+in its own newtype and write an instance of <code>Iso</code> (which
+translates to iff) between each of the laws and the <em>law of excluded
+middle</em>.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE InstanceSigs          #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE MultiParamTypeClasses #-}</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE RankNTypes            #-}</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE ScopedTypeVariables   #-}</span></span>
@@ -87,37 +116,50 @@
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Iso</span> a b <span class="kw">where</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ot">    to ::</span> a <span class="ot">-&gt;</span> b</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ot">    from ::</span> b <span class="ot">-&gt;</span> a</span></code></pre></div>
-<p>This is just a neat way of having to prove both implications in an iff, packed as <code>to</code> and <code>from</code>. Moving on, we can declare the following types:</p>
+<p>This is just a neat way of having to prove both implications in an
+iff, packed as <code>to</code> and <code>from</code>. Moving on, we can
+declare the following types:</p>
 <h3 id="peirces-law">Peirce's law</h3>
-<p>Starting with the formula from logic, we can easily write out the Haskell type by just keeping in mind we have to transform all implications to Kleisli arrows:</p>
+<p>Starting with the formula from logic, we can easily write out the
+Haskell type by just keeping in mind we have to transform all
+implications to Kleisli arrows:</p>
 <p>$ \forall P, Q. ((P \to Q) \to P) \to P $</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Peirce</span> m <span class="ot">=</span></span>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Peirce</span> m <span class="ot">=</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Peirce</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        (  <span class="kw">forall</span> a b</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  ((a <span class="ot">-&gt;</span> m b) <span class="ot">-&gt;</span> m a)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="ot">-&gt;</span> m a</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h3 id="law-of-excluded-middle">Law of Excluded Middle</h3>
-<p>The key part to remember here is that negation in classical logic translates to <code>-&gt; Void</code> in intuitionistic logic (and <code>-&gt; m Void</code> in our case, since we are using Kleisli arrows):</p>
+<p>The key part to remember here is that negation in classical logic
+translates to <code>-&gt; Void</code> in intuitionistic logic (and
+<code>-&gt; m Void</code> in our case, since we are using Kleisli
+arrows):</p>
 <p>$ \forall P. P \lor \neg P $</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Lem</span> m <span class="ot">=</span></span>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Lem</span> m <span class="ot">=</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Lem</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        (  <span class="kw">forall</span> a</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  m (<span class="dt">Either</span> a (a <span class="ot">-&gt;</span> m <span class="dt">Void</span>))</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h3 id="double-negation">Double Negation</h3>
-<p>Nothing new here, just rewriting negation as <code>-&gt; m Void</code>:</p>
+<p>Nothing new here, just rewriting negation as <code>-&gt; m
+Void</code>:</p>
 <p>$ \forall P. \neg \neg P \to P $</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">DoubleNegation</span> m <span class="ot">=</span></span>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">DoubleNegation</span> m <span class="ot">=</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">DoubleNegation</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        (  <span class="kw">forall</span> a</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  ((a <span class="ot">-&gt;</span> m <span class="dt">Void</span>) <span class="ot">-&gt;</span> m <span class="dt">Void</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="ot">-&gt;</span> m a</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h3 id="de-morgans-law">De Morgan's Law</h3>
-<p>The only new thing here is that we translate <code>and</code> to tuples, and <code>or</code> to Either:</p>
+<p>The only new thing here is that we translate <code>and</code> to
+tuples, and <code>or</code> to Either:</p>
 <p>$ \forall P, Q. \neg (\neg P \land \neg Q) \to P \lor Q $</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">DeMorgan</span> m <span class="ot">=</span></span>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">DeMorgan</span> m <span class="ot">=</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">DeMorgan</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        (  <span class="kw">forall</span> a b</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  ((a <span class="ot">-&gt;</span> m <span class="dt">Void</span>, b <span class="ot">-&gt;</span> m <span class="dt">Void</span>) <span class="ot">-&gt;</span> m <span class="dt">Void</span>)</span>
@@ -125,16 +167,22 @@
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h3 id="implication-to-disjunction">Implication to Disjunction</h3>
 <p>$ \forall P, Q. (P \to Q) \to Q \lor \neg P $</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">ImpliesToOr</span> m <span class="ot">=</span></span>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">ImpliesToOr</span> m <span class="ot">=</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ImpliesToOr</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        (  <span class="kw">forall</span> a b</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  (a <span class="ot">-&gt;</span> m b)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="ot">-&gt;</span> m (<span class="dt">Either</span> b (a <span class="ot">-&gt;</span> m <span class="dt">Void</span>))</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h2 id="proofs">Proofs</h2>
-<p>If this is interesting to you, this would be a good place to look away and try for yourself. If you do, keep in mind that typed holes are a very useful tool in this process (see <a href="https://wiki.haskell.org/GHC/Typed_holes">this</a> for an example).</p>
+<p>If this is interesting to you, this would be a good place to look
+away and try for yourself. If you do, keep in mind that typed holes are
+a very useful tool in this process (see <a
+href="https://wiki.haskell.org/GHC/Typed_holes">this</a> for an
+example).</p>
 <h3 id="lem-and-peirce">Lem and Peirce</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">Peirce</span> m) <span class="kw">where</span></span>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">Peirce</span> m) <span class="kw">where</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    to ::</span> <span class="dt">Lem</span> m <span class="ot">-&gt;</span> <span class="dt">Peirce</span> m</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    to (<span class="dt">Lem</span> lem) <span class="ot">=</span> <span class="dt">Peirce</span> proof</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -159,7 +207,8 @@
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>            <span class="ot">-&gt;</span> m (<span class="dt">Either</span> a (a <span class="ot">-&gt;</span> m <span class="dt">Void</span>))</span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        go not_lem <span class="ot">=</span> <span class="fu">pure</span> <span class="op">.</span> <span class="dt">Right</span> <span class="op">$</span> not_lem <span class="op">.</span> <span class="dt">Left</span></span></code></pre></div>
 <h3 id="lem-and-doublenegation">Lem and DoubleNegation</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">DoubleNegation</span> m) <span class="kw">where</span></span>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">DoubleNegation</span> m) <span class="kw">where</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    to ::</span> <span class="dt">Lem</span> m <span class="ot">-&gt;</span> <span class="dt">DoubleNegation</span> m</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    to (<span class="dt">Lem</span> lem) <span class="ot">=</span> <span class="dt">DoubleNegation</span> proof</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -178,7 +227,8 @@
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="ot">    from ::</span> <span class="dt">DoubleNegation</span> m <span class="ot">-&gt;</span> <span class="dt">Lem</span> m</span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    from (<span class="dt">DoubleNegation</span> dne) <span class="ot">=</span> <span class="dt">Lem</span> <span class="op">$</span> dne not_exists_dist</span></code></pre></div>
 <h3 id="lem-and-demorgan">Lem and DeMorgan</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">DeMorgan</span> m) <span class="kw">where</span></span>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">DeMorgan</span> m) <span class="kw">where</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    to ::</span> <span class="dt">Lem</span> m <span class="ot">-&gt;</span> <span class="dt">DeMorgan</span> m</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    to (<span class="dt">Lem</span> lem) <span class="ot">=</span> <span class="dt">DeMorgan</span> proof</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -206,7 +256,8 @@
 <span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            <span class="ot">-&gt;</span> m <span class="dt">Void</span></span>
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        go (notA, notNotA) <span class="ot">=</span> notNotA notA</span></code></pre></div>
 <h3 id="lem-and-impliestoor">Lem and ImpliesToOr</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">ImpliesToOr</span> m) <span class="kw">where</span></span>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Iso</span> (<span class="dt">Lem</span> m) (<span class="dt">ImpliesToOr</span> m) <span class="kw">where</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    to ::</span> <span class="dt">Lem</span> m <span class="ot">-&gt;</span> <span class="dt">ImpliesToOr</span> m</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    to (<span class="dt">Lem</span> lem) <span class="ot">=</span> <span class="dt">ImpliesToOr</span> proof</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -224,13 +275,14 @@
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="ot">    from ::</span> <span class="dt">ImpliesToOr</span> m <span class="ot">-&gt;</span> <span class="dt">Lem</span> m</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    from (<span class="dt">ImpliesToOr</span> im) <span class="ot">=</span> <span class="dt">Lem</span> <span class="op">$</span> im <span class="fu">pure</span></span></code></pre></div>
-<p>The full source code is available on <a href="https://github.com/eviefp/logic-in-haskell">my github</a>.</p>
+<p>The full source code is available on <a
+href="https://github.com/eviefp/logic-in-haskell">my github</a>.</p>
 
         <br>
         <br>
 
         <div class="comments">
-            Questions? Comments? <a href="https://twitter.com/evief_p">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
+            Questions? Comments? <a href="https://twitter.com/evie_fp">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
         </div>
 
         <!--Share buttons-->

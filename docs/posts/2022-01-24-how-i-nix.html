@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Evie&#39;s Blog">
+    <meta name="author" content="Evie Ciobanu">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@evie_fp">
+<meta name="twitter:creator" content="@evie_fp">
+<meta name="twitter:title" content="How I Nix">
+    <meta name="twitter:description" content="My system configuration and dotfiles">
+        <title>How I Nix</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://twitch.tv/eviefp">
+            <img src="/images/twitch-logo.png" alt="Twitch Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://github.com/eviefp">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/evie_fp">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                How I Nix
+            </span>
+            <br>
+
+            <br>
+            <span class="byline">by Evie Ciobanu</span>
+            <br>
+            <span class="date">Jan 24, 2022</span>
+            <br>
+            <div class="metadata">
+            </div>
+            <div class="tags">
+              <a class="tag" href="/tag/nix.html">nix</a>
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <p>The earliest <a
+href="https://github.com/eviefp/dotfiles/commit/4879a6e3f9d915e1498f38412fab472f562b3a08">commit</a>
+I could find in my dotfiles repository of me using NixOS is 5th of
+February, 2020. So I have been running/using NixOS for about that long,
+which is not a lot. I definitely do not consider myself an expert. That
+being said, I put in a lot of hours into my NixOS setup. I enjoy
+everything being neat and tidy.</p>
+<p>I will try to explain how this works from the perspective of someone
+who is familiar with running Linux, but has little to no Nix/NixOS
+experience. If you're already familiar with NixOS and home-manager and
+just want to see my setup, the <a
+href="https://github.com/eviefp/dotfiles#readme">dotfiles repository
+README</a> might be enough.</p>
+<h2 id="what-is-nix">What is Nix?</h2>
+<p><code>Nix</code> is a functional programming language mainly used to
+power <code>nix</code>, the package manager.</p>
+<p><code>NixOS</code> uses the <code>nix</code> package manager, as well
+as <code>nix</code> the programming language to define and manage an
+entire Linux distribution, system settings, packages, etc.</p>
+<h2 id="why-nixos">Why NixOS</h2>
+<p>The most important thing for me is being able to find the exact
+versions of everything on my system with reasonable certainty, as well
+as the ability to update them. Of course, some of it might involve some
+digging, but I don't mind that.</p>
+<p>Secondly, I can easily reproduce any of my systems, entirely. My
+systems run the same version of everything. I've had to reinstall. I
+accidentally <code>rm -rf</code>ed parts of my system. I could trivially
+get everything system or configuration-related back.</p>
+<p>It also makes it easy to have different versions of various software
+installed (and even eaiser through the use of <code>nix-shell</code> and
+<code>direnv</code> / <code>lorri</code>).</p>
+<p>Another big plus for me is the ease of system configuration. I am not
+an expert in running Linux systems, and having the most common system
+options browsable through <a
+href="https://search.nixos.org/options">nixopts</a> makes it a lot
+easier.</p>
+<p>It also makes trying out new things very easy (as long as it's
+already packaged by somebody else), including trying out new system
+settings. You can also trivially revert your system to a previous
+configuration.</p>
+<p>However, with all the good, there's also downsides. The main problem
+is that it's definitley not mainstream so if you don't use relatively
+popular hardware, software, etc., you might end up having to dig quite a
+bit.</p>
+<p>Another downside is that since <code>NixOS</code> doesn't install
+anything globally, you will not be able to run pretty much any binary
+without nixifying it first, which at a minimum means patching its
+dynamic library paths. The good news is that there's already tools to do
+that. But it will still not work out of the box.</p>
+<p>You can read a bit more about how <code>nix</code> and
+<code>NixOS</code> work over on the official <a
+href="https://nixos.org/guides/how-nix-works.html">NixOS how it works
+page</a>.</p>
+<h2 id="trying-it-out">Trying it out</h2>
+<p>When I tried <code>nix</code> out, I wanted to get a good feel for
+it, so I jumped straight in by buying an extra disk and installed NixOS
+on it. It was fairly painless to set everything up, so a few months
+later I concluded the experiment was successful and migrated it to my
+main disk.</p>
+<p>That being said, you can take it slower by installing
+<code>nix</code> the <a
+href="https://nixos.org/download.html#download-nix">package
+manager</a>.</p>
+<p>Another option is installing a <a
+href="https://nixos.org/download.html#nixos-virtualbox">NixOS virtual
+machine</a>.</p>
+<p>This post details the first option (although you can easily use the
+same ideas in a NixOS VM).</p>
+<h2 id="installing-nixos">Installing NixOS</h2>
+<p>The <a
+href="https://nixos.org/manual/nixos/stable/#sec-installation">NixOS
+installation guide</a> is quite good and should get you up and
+running.</p>
+<p>Make sure you read the <a
+href="https://nixos.org/manual/nixos/stable/index.html#sec-x11">X Window
+System</a> section of the configuration and setup a minimal X server
+unless you are 100% comfortable using the console after the first
+reboot.</p>
+<p>I highly recommend you add a few of the things you need to your
+initial list of programs in your install
+<code>configuration.nix</code>:</p>
+<pre class="nix"><code># Uncomment this if needed (you&#39;ll know).
+# nixpkgs.config.allowUnfree = true;
+
+environment.systemPackages = [
+  # or &#39;emacs&#39; or &#39;vscode&#39; or whichever editor you prefer
+  # just make sure you have one
+  pkgs.vim
+
+  # or &#39;chromium&#39; or &#39;google-chrome&#39; or whatever
+  pkgs.firefox
+];</code></pre>
+<p>You can lookup more programs that you might need over on the <a
+href="https://search.nixos.org/packages">NixOS package search</a>.</p>
+<p>Note: if a package is named <code>haskellPackages.ghcid</code>, then
+you'll need to add <code>pkgs.haskellPackages.ghcid</code>.</p>
+<h2 id="nix-channels-nix-env-and-why-i-avoid-them">Nix Channels,
+nix-env, and why I avoid them</h2>
+<p>Nix channels are a way to manage your system and globally installed
+programs (via <code>nix-env</code>). How this works is essentially, you
+subscribe to a channel (say, <code>nixos-21.11</code>) and then you can
+update to the latest released patch by doing <code>nix-channel
+--update</code>. The problem with that is that it's not easily
+reversible. Also, <code>nix-env</code> isn't a very pleasant package
+management experience.</p>
+<p>The package search I mentioned earlier shows install instructions
+using <code>nix-env</code>. I strongly recommend against that.</p>
+<p>Luckily, there's a pretty good alternative: we can use <a
+href="https://github.com/nmattia/niv">niv</a> to point to specific
+commits in the nixpkgs repository. Those are essentially the same as
+channels, but we get it written down in a file we control.</p>
+<p>We can also have multiple versions pinned for specific software if we
+need to.</p>
+<h2 id="pinning-your-nixos-configuration-and-system-packages">Pinning
+your NixOS configuration and system packages</h2>
+<p>There's a few things we need to do:</p>
+<ol>
+<li>Setup a pin for <code>nixpkgs</code></li>
+<li>Create a <code>shell.nix</code> file to make use of said pin</li>
+<li>Create a <code>configuration.nix</code> file</li>
+<li>Set everything up</li>
+</ol>
+<h3 id="pinning-nixpkgs">Pinning nixpkgs</h3>
+<p>Create a new directory, grab niv and init the repository.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> nixfiles</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> nixfiles</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span> <span class="at">-p</span> niv</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> init</span></code></pre></div>
+<p>You should now have a <code>nix</code> directory with two files:
+<code>sources.nix</code> and <code>sources.json</code>. The former
+contains basic nix code to load everything in the json file, while the
+latter contains the repository data including the commit SHA each
+dependency is currently pinned. If you put this file under version
+control, you can easily revert to a previously known working
+configuration.</p>
+<p>And now run <code>niv show</code>. You should see two dependencies:
+<code>niv</code> itself and <code>nixpkgs</code>. If
+<code>nixpkgs</code> is pinned to <code>NixOS/nixpkgs-channels</code>,
+it means you have an older version of <code>niv</code> and you need to
+update this dependency by running</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> drop nixpkgs</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> add nixos/nixpkgs <span class="at">--branch</span> nixos-21.11</span></code></pre></div>
+<p>Note: you should probably use the latest released version available
+on the <a href="https://github.com/NixOS/nixpkgs">nixpkgs repository</a>
+instead of <code>nixos-21.11</code>.</p>
+<h3 id="creating-a-shellnix-file">Creating a shell.nix file</h3>
+<p>Next, we need to create a <code>shell.nix</code> file:</p>
+<pre class="nix"><code>let
+  # Import pinned repositories
+  sources = import ./nix/sources.nix;
+  # Grab nixpkgs from there
+  nixpkgs = import sources.nixpkgs { config.allowUnfree = true; };
+in
+# Create a shell
+nixpkgs.mkShell {
+  nativeBuildInputs = [
+    nixpkgs.niv # grab the latest version of niv
+  ];
+  # Force this nixpkgs to be available for commands such as
+  # nix-shell -p &lt;package&gt;
+  NIX_PATH =
+    &quot;nixpkgs=${sources.nixpkgs}:nixos-config=/etc/nixos/configuration.nix&quot;;
+}</code></pre>
+<p>We can now launch a shell by running <code>nix-shell</code>. You can
+check that it's working by checking your <code>NIX_PATH</code>
+value:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$NIX_PATH</span></span></code></pre></div>
+<p>And you should see something like
+<code>nixpkgs=/nix/store/ynv2jfdrw7arx3q4xjir7mn0j2w97pcy-source:nixos-config=/etc/nixos/configuration.nix</code>.</p>
+<h3 id="system-configuration-file">System configuration file</h3>
+<p>The easiest way to get started is to copy the nixfiles that you used
+during the install phase over. They should be a good place to start:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/nixos/<span class="pp">*</span>.nix .</span></code></pre></div>
+<p>Without any additional changes, we can now rebuild everything using
+the new pin.</p>
+<h3 id="setting-everything-up">Setting everything up</h3>
+<p>In order for all this to work, we'll need to remove the files from
+<code>/etc/nixos</code> and symlink to their copies:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> rm /etc/nixos/<span class="pp">*</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> <span class="va">$PWD</span>/configuration.nix /etc/nixos/</span></code></pre></div>
+<p>And now you are ready to switch to this config using the freshly
+created pin:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">--preserve-env</span> nixos-rebuild switch</span></code></pre></div>
+<p>You don't need to re-enter the <code>nix-shell</code> if you have not
+left the one we entered when verifying the <code>NIX_PATH</code>.</p>
+<p>That's it! You can now update to the latest commit of the current
+branch by running <code>niv update</code>. You can also switch branches
+to a different NixOS release. Note that you should also update your
+<code>configuration.nix</code>'s <code>system.stateVersion</code>
+accordingly.</p>
+<h2 id="setting-up-home-manager">Setting up home-manager</h2>
+<p>The above is great for setting up your system, but it's not ideal for
+config files and user programs. For this, <a
+href="https://github.com/nix-community/home-manager">home-manager</a> is
+the better choice.</p>
+<p>First off, it does not need root (<code>sudo</code>) rights to change
+the settings. Secondly, it has a few more options for some programs, and
+some helpers around things like user services, emails, etc.</p>
+<p>In order to get started, we'll:</p>
+<ol>
+<li>Add <code>home-manager</code> to our pins</li>
+<li>Update our <code>shell.nix</code> accordingly</li>
+<li>Create a basic <code>home.nix</code> file to start us off</li>
+</ol>
+<h3 id="pin-home-manager">Pin home-manager</h3>
+<p>We'll start in the same directory where we created the
+<code>shell.nix</code> file previously, and add a pin for
+<code>home-manager</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> add home-manager <span class="at">--branch</span> release-21.11</span></code></pre></div>
+<p>Make sure the branch release matches your NixOS version!</p>
+<h3 id="update-shell-file">Update shell file</h3>
+<p>Next, we need to reference this in our <code>shell.nix</code>:</p>
+<pre class="nix"><code>let
+  # Import pinned repositories
+  sources = import ./nix/sources.nix;
+  # Grab nixpkgs from there
+  nixpkgs = import sources.nixpkgs { config.allowUnfree = true; };
+  # Grab home-manager as well
+  home-manager = import sources.home-manager { };
+in
+# Create a shell
+nixpkgs.mkShell {
+  nativeBuildInputs = [
+    nixpkgs.niv # grab the latest version of niv
+  ];
+  NIX_PATH =
+    &quot;nixpkgs=${sources.nixpkgs}:home-manager=${sources.home-manager}:nixos-config=/etc/nixos/configuration.nix&quot;;
+}</code></pre>
+<p>Note that we added <code>home-manager</code> to our
+<code>NIX_PATH</code>. That's all we need to do for now.</p>
+<h3 id="create-our-first-home-nix-file">Create our first home nix
+file</h3>
+<p>Let's create a new <code>home.nix</code> file. I added some ideas of
+things you might want. Feel free to remove anything you don't care
+about:</p>
+<pre class="nix"><code>{
+  home.packages = [
+    pkgs.killall
+    pkgs.ripgrep
+    pkgs.wget
+    pkgs.unzip
+    pkgs.zip
+  ];
+
+  home.file = {
+    # If you keep these, you&#39;ll have to move the files here first.
+    &quot;.config/nvim/init.vim&quot;.source = ./init.vim;
+    &quot;.config/nvim/coc-settings.json&quot;.source = ./coc-settings.json;
+  };
+
+  programs = {
+    # Better &#39;cat&#39;
+    bat = {
+      enable = true;
+      config = {
+        theme = &quot;TwoDark&quot;;
+        pager = &quot;less -FR&quot;;
+      };
+    };
+
+    # Really useful for auto-running &#39;shell.nix&#39;, see also: lorri
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+    };
+
+    # Better &#39;ls&#39;
+    exa = {
+      enable = true;
+      enableAliases = true;
+    };
+
+    # My favorite shell
+    fish = {
+      enable = true;
+      package = pkgs.fish;
+      interactiveShellInit = &#39;&#39;
+        set fish_color_normal &quot;#a4c337&quot;
+        set fish_color_command &quot;#77c337&quot;
+        set fish_color_quote &quot;#37c393&quot;
+        set fish_color_redirection &quot;#37b5c3&quot;
+        set fish_color_end &quot;#3776c3&quot;
+        set fish_color_error &quot;#c33759&quot;
+      &#39;&#39;;
+      shellAliases = {
+        # exa
+        ls = &quot;${pkgs.exa}/bin/exa&quot;;
+        ll = &quot;${pkgs.exa}/bin/exa -l&quot;;
+        la = &quot;${pkgs.exa}/bin/exa -a&quot;;
+        lt = &quot;${pkgs.exa}/bin/exa --tree&quot;;
+        lla = &quot;${pkgs.exa}/bin/exa -la&quot;;
+
+        # git
+        gs = &quot;${pkgs.git}/bin/git status&quot;;
+
+        # bat
+        cat = &quot;${pkgs.bat}/bin/bat&quot;;
+      };
+    };
+
+    fzf = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+    };
+
+    git = {
+      enable = true;
+      delta.enable = true;
+      aliases = {
+        lol = &quot;log --graph --decorate --oneline --abbrev-commit&quot;;
+        lola = &quot;log --graph --decorate --oneline --abbrev-commit --all&quot;;
+        hist =
+          &quot;log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short&quot;;
+        work = &quot;log --pretty=format:&#39;%h%x09%an%x09%ad%x09%s&#39;&quot;;
+      };
+      extraConfig = {
+        init.defaultBranch = &quot;main&quot;;
+        pull.ff = &quot;only&quot;;
+        merge.conflictstyle = &quot;diff3&quot;;
+      };
+      ignores = [];
+      userEmail = &quot;your email here&quot;;
+      userName = &quot;your name here&quot;;
+    };
+
+    # Should probably keep this
+    home-manager = {
+      enable = true;
+    };
+
+    # This makes it so that if you type the name of a program that
+    # isn&#39;t installed, it will tell you which package contains it.
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
+      enableBashIntegration = true;
+    };
+  };
+}</code></pre>
+<p>You can find all <a
+href="https://nix-community.github.io/home-manager/options.html">settings
+for home-manager on their wiki page</a>.</p>
+<p>Next, you'll have to symlink this file:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="va">$PWD</span>/shell.nix <span class="va">$HOME</span>/.config/nixpkgs/home.nix</span></code></pre></div>
+<h3 id="installing-home-manager">Installing home-manager</h3>
+<p>The first time you install <code>home-manager</code>, you'll have to
+run:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span> <span class="st">&#39;&lt;home-manager&gt;&#39;</span> <span class="at">-A</span> install</span></code></pre></div>
+<p>The same command needs to be executed if you update the pin for
+it.</p>
+<p>However, if you just update your configuration file, you can simply
+run</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">home-manager</span> switch</span></code></pre></div>
+<h2 id="have-fun">Have fun!</h2>
+<p>And that's pretty much it! You can find more inspiration in my <a
+href="https://github.com/eviefp/dotfiles">config files</a>.</p>
+<p>Please note I use modules a lot which I have not covered here. I do
+plan to write a blog post about it later.</p>
+
+        <br>
+        <br>
+
+        <div class="comments">
+            Questions? Comments? <a href="https://twitter.com/evie_fp">Tweet</a> them at me or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
+        </div>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://eevie.ro" data-text="Check out: How I Nix - " data-via="evie_fp">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/evie_fp" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @evie_fp</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️  || <a href="/atom.xml">feed</a>
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

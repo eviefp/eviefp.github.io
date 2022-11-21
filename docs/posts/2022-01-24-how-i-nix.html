@@ -34,7 +34,11 @@
             <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
-    <div id="theme-button">DAY</div>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
         </div>
     </header>
 
@@ -140,17 +144,18 @@ reboot.</p>
 <p>I highly recommend you add a few of the things you need to your
 initial list of programs in your install
 <code>configuration.nix</code>:</p>
-<pre class="nix"><code># Uncomment this if needed (you&#39;ll know).
-# nixpkgs.config.allowUnfree = true;
-
-environment.systemPackages = [
-  # or &#39;emacs&#39; or &#39;vscode&#39; or whichever editor you prefer
-  # just make sure you have one
-  pkgs.vim
-
-  # or &#39;chromium&#39; or &#39;google-chrome&#39; or whatever
-  pkgs.firefox
-];</code></pre>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment this if needed (you&#39;ll know).</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># nixpkgs.config.allowUnfree = true;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>environment.systemPackages = <span class="op">[</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or &#39;emacs&#39; or &#39;vscode&#39; or whichever editor you prefer</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># just make sure you have one</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  pkgs.vim</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or &#39;chromium&#39; or &#39;google-chrome&#39; or whatever</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  pkgs.firefox</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">]</span>;</span></code></pre></div>
 <p>You can lookup more programs that you might need over on the <a
 href="https://search.nixos.org/packages">NixOS package search</a>.</p>
 <p>Note: if a package is named <code>haskellPackages.ghcid</code>, then
@@ -160,10 +165,10 @@ nix-env, and why I avoid them</h2>
 <p>Nix channels are a way to manage your system and globally installed
 programs (via <code>nix-env</code>). How this works is essentially, you
 subscribe to a channel (say, <code>nixos-21.11</code>) and then you can
-update to the latest released patch by doing <code>nix-channel
---update</code>. The problem with that is that it's not easily
-reversible. Also, <code>nix-env</code> isn't a very pleasant package
-management experience.</p>
+update to the latest released patch by doing
+<code>nix-channel --update</code>. The problem with that is that it's
+not easily reversible. Also, <code>nix-env</code> isn't a very pleasant
+package management experience.</p>
 <p>The package search I mentioned earlier shows install instructions
 using <code>nix-env</code>. I strongly recommend against that.</p>
 <p>Luckily, there's a pretty good alternative: we can use <a
@@ -206,22 +211,23 @@ on the <a href="https://github.com/NixOS/nixpkgs">nixpkgs repository</a>
 instead of <code>nixos-21.11</code>.</p>
 <h3 id="creating-a-shellnix-file">Creating a shell.nix file</h3>
 <p>Next, we need to create a <code>shell.nix</code> file:</p>
-<pre class="nix"><code>let
-  # Import pinned repositories
-  sources = import ./nix/sources.nix;
-  # Grab nixpkgs from there
-  nixpkgs = import sources.nixpkgs { config.allowUnfree = true; };
-in
-# Create a shell
-nixpkgs.mkShell {
-  nativeBuildInputs = [
-    nixpkgs.niv # grab the latest version of niv
-  ];
-  # Force this nixpkgs to be available for commands such as
-  # nix-shell -p &lt;package&gt;
-  NIX_PATH =
-    &quot;nixpkgs=${sources.nixpkgs}:nixos-config=/etc/nixos/configuration.nix&quot;;
-}</code></pre>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Import pinned repositories</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">sources</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./nix/sources.nix</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab nixpkgs from there</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span> <span class="op">=</span> <span class="bu">import</span> sources.nixpkgs <span class="op">{</span> <span class="va">config</span>.<span class="va">allowUnfree</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a shell</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>nixpkgs.mkShell <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">nativeBuildInputs</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    nixpkgs.niv <span class="co"># grab the latest version of niv</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Force this nixpkgs to be available for commands such as</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># nix-shell -p &lt;package&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">NIX_PATH</span> <span class="op">=</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nixpkgs=</span><span class="sc">${</span>sources.nixpkgs<span class="sc">}</span><span class="st">:nixos-config=/etc/nixos/configuration.nix&quot;</span><span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>We can now launch a shell by running <code>nix-shell</code>. You can
 check that it's working by checking your <code>NIX_PATH</code>
 value:</p>
@@ -273,22 +279,23 @@ some helpers around things like user services, emails, etc.</p>
 <p>Make sure the branch release matches your NixOS version!</p>
 <h3 id="update-shell-file">Update shell file</h3>
 <p>Next, we need to reference this in our <code>shell.nix</code>:</p>
-<pre class="nix"><code>let
-  # Import pinned repositories
-  sources = import ./nix/sources.nix;
-  # Grab nixpkgs from there
-  nixpkgs = import sources.nixpkgs { config.allowUnfree = true; };
-  # Grab home-manager as well
-  home-manager = import sources.home-manager { };
-in
-# Create a shell
-nixpkgs.mkShell {
-  nativeBuildInputs = [
-    nixpkgs.niv # grab the latest version of niv
-  ];
-  NIX_PATH =
-    &quot;nixpkgs=${sources.nixpkgs}:home-manager=${sources.home-manager}:nixos-config=/etc/nixos/configuration.nix&quot;;
-}</code></pre>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Import pinned repositories</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">sources</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./nix/sources.nix</span><span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab nixpkgs from there</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span> <span class="op">=</span> <span class="bu">import</span> sources.nixpkgs <span class="op">{</span> <span class="va">config</span>.<span class="va">allowUnfree</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab home-manager as well</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">home-manager</span> <span class="op">=</span> <span class="bu">import</span> sources.home<span class="op">-</span>manager <span class="op">{</span> <span class="op">};</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a shell</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>nixpkgs.mkShell <span class="op">{</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="va">nativeBuildInputs</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    nixpkgs.niv <span class="co"># grab the latest version of niv</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">NIX_PATH</span> <span class="op">=</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nixpkgs=</span><span class="sc">${</span>sources.nixpkgs<span class="sc">}</span><span class="st">:home-manager=</span><span class="sc">${</span>sources.home<span class="op">-</span>manager<span class="sc">}</span><span class="st">:nixos-config=/etc/nixos/configuration.nix&quot;</span><span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Note that we added <code>home-manager</code> to our
 <code>NIX_PATH</code>. That's all we need to do for now.</p>
 <h3 id="create-our-first-home-nix-file">Create our first home nix
@@ -296,112 +303,113 @@ file</h3>
 <p>Let's create a new <code>home.nix</code> file. I added some ideas of
 things you might want. Feel free to remove anything you don't care
 about:</p>
-<pre class="nix"><code>{
-  home.packages = [
-    pkgs.killall
-    pkgs.ripgrep
-    pkgs.wget
-    pkgs.unzip
-    pkgs.zip
-  ];
-
-  home.file = {
-    # If you keep these, you&#39;ll have to move the files here first.
-    &quot;.config/nvim/init.vim&quot;.source = ./init.vim;
-    &quot;.config/nvim/coc-settings.json&quot;.source = ./coc-settings.json;
-  };
-
-  programs = {
-    # Better &#39;cat&#39;
-    bat = {
-      enable = true;
-      config = {
-        theme = &quot;TwoDark&quot;;
-        pager = &quot;less -FR&quot;;
-      };
-    };
-
-    # Really useful for auto-running &#39;shell.nix&#39;, see also: lorri
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-    };
-
-    # Better &#39;ls&#39;
-    exa = {
-      enable = true;
-      enableAliases = true;
-    };
-
-    # My favorite shell
-    fish = {
-      enable = true;
-      package = pkgs.fish;
-      interactiveShellInit = &#39;&#39;
-        set fish_color_normal &quot;#a4c337&quot;
-        set fish_color_command &quot;#77c337&quot;
-        set fish_color_quote &quot;#37c393&quot;
-        set fish_color_redirection &quot;#37b5c3&quot;
-        set fish_color_end &quot;#3776c3&quot;
-        set fish_color_error &quot;#c33759&quot;
-      &#39;&#39;;
-      shellAliases = {
-        # exa
-        ls = &quot;${pkgs.exa}/bin/exa&quot;;
-        ll = &quot;${pkgs.exa}/bin/exa -l&quot;;
-        la = &quot;${pkgs.exa}/bin/exa -a&quot;;
-        lt = &quot;${pkgs.exa}/bin/exa --tree&quot;;
-        lla = &quot;${pkgs.exa}/bin/exa -la&quot;;
-
-        # git
-        gs = &quot;${pkgs.git}/bin/git status&quot;;
-
-        # bat
-        cat = &quot;${pkgs.bat}/bin/bat&quot;;
-      };
-    };
-
-    fzf = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-    };
-
-    git = {
-      enable = true;
-      delta.enable = true;
-      aliases = {
-        lol = &quot;log --graph --decorate --oneline --abbrev-commit&quot;;
-        lola = &quot;log --graph --decorate --oneline --abbrev-commit --all&quot;;
-        hist =
-          &quot;log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short&quot;;
-        work = &quot;log --pretty=format:&#39;%h%x09%an%x09%ad%x09%s&#39;&quot;;
-      };
-      extraConfig = {
-        init.defaultBranch = &quot;main&quot;;
-        pull.ff = &quot;only&quot;;
-        merge.conflictstyle = &quot;diff3&quot;;
-      };
-      ignores = [];
-      userEmail = &quot;your email here&quot;;
-      userName = &quot;your name here&quot;;
-    };
-
-    # Should probably keep this
-    home-manager = {
-      enable = true;
-    };
-
-    # This makes it so that if you type the name of a program that
-    # isn&#39;t installed, it will tell you which package contains it.
-    nix-index = {
-      enable = true;
-      enableFishIntegration = true;
-      enableBashIntegration = true;
-    };
-  };
-}</code></pre>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">home</span>.<span class="va">packages</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    pkgs.killall</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    pkgs.ripgrep</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    pkgs.wget</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    pkgs.unzip</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    pkgs.zip</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">home</span>.<span class="va">file</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If you keep these, you&#39;ll have to move the files here first.</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;</span>.config/nvim/init.vim<span class="st">&quot;</span>.<span class="va">source</span> <span class="op">=</span> <span class="ss">./init.vim</span><span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;.config/nvim/coc-settings.json&quot;</span>.<span class="va">source</span> <span class="op">=</span> <span class="ss">./coc-settings.json</span><span class="op">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="va">programs</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Better &#39;cat&#39;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">bat</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>      <span class="va">config</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">theme</span> <span class="op">=</span> <span class="st">&quot;TwoDark&quot;</span><span class="op">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">pager</span> <span class="op">=</span> <span class="st">&quot;less -FR&quot;</span><span class="op">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Really useful for auto-running &#39;shell.nix&#39;, see also: lorri</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">direnv</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Better &#39;ls&#39;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="va">exa</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableAliases</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># My favorite shell</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="va">fish</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>      <span class="va">package</span> <span class="op">=</span> pkgs.fish<span class="op">;</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>      <span class="va">interactiveShellInit</span> <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_normal &quot;#a4c337&quot;</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_command &quot;#77c337&quot;</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_quote &quot;#37c393&quot;</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_redirection &quot;#37b5c3&quot;</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_end &quot;#3776c3&quot;</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_error &quot;#c33759&quot;</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="st">      &#39;&#39;</span><span class="op">;</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>      <span class="va">shellAliases</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># exa</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>        <span class="va">ls</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa&quot;</span><span class="op">;</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>        <span class="va">ll</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa -l&quot;</span><span class="op">;</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>        <span class="va">la</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa -a&quot;</span><span class="op">;</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>        <span class="va">lt</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa --tree&quot;</span><span class="op">;</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>        <span class="va">lla</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa -la&quot;</span><span class="op">;</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># git</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>        <span class="va">gs</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.git<span class="sc">}</span><span class="st">/bin/git status&quot;</span><span class="op">;</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>        <span class="co"># bat</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>        <span class="va">cat</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.bat<span class="sc">}</span><span class="st">/bin/bat&quot;</span><span class="op">;</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>    <span class="va">fzf</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="va">git</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>      <span class="va">delta</span>.<span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>      <span class="va">aliases</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>        <span class="va">lol</span> <span class="op">=</span> <span class="st">&quot;log --graph --decorate --oneline --abbrev-commit&quot;</span><span class="op">;</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>        <span class="va">lola</span> <span class="op">=</span> <span class="st">&quot;log --graph --decorate --oneline --abbrev-commit --all&quot;</span><span class="op">;</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>        <span class="va">hist</span> <span class="op">=</span></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short&quot;</span><span class="op">;</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>        <span class="va">work</span> <span class="op">=</span> <span class="st">&quot;log --pretty=format:&#39;%h%x09%an%x09%ad%x09%s&#39;&quot;</span><span class="op">;</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>      <span class="va">extraConfig</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>        <span class="va">init</span>.<span class="va">defaultBranch</span> <span class="op">=</span> <span class="st">&quot;main&quot;</span><span class="op">;</span></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>        <span class="va">pull</span>.<span class="va">ff</span> <span class="op">=</span> <span class="st">&quot;only&quot;</span><span class="op">;</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>        <span class="va">merge</span>.<span class="va">conflictstyle</span> <span class="op">=</span> <span class="st">&quot;diff3&quot;</span><span class="op">;</span></span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>      <span class="va">ignores</span> <span class="op">=</span> <span class="op">[];</span></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>      <span class="va">userEmail</span> <span class="op">=</span> <span class="st">&quot;your email here&quot;</span><span class="op">;</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>      <span class="va">userName</span> <span class="op">=</span> <span class="st">&quot;your name here&quot;</span><span class="op">;</span></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Should probably keep this</span></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>    <span class="va">home-manager</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This makes it so that if you type the name of a program that</span></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># isn&#39;t installed, it will tell you which package contains it.</span></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>    <span class="va">nix-index</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>You can find all <a
 href="https://nix-community.github.io/home-manager/options.html">settings
 for home-manager on their wiki page</a>.</p>

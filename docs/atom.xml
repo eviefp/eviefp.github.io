@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie&#39;s Blog</title>
     <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-01-24T08:47:SZ</updated>
+  <updated>2022-11-21T08:49:SZ</updated>
   <author>
       <name>Evie Ciobanu</name>
   </author>
@@ -47,11 +47,11 @@ like an <code>abort</code> method, or an early exit.</p>
 <p>The interesting part is that this monad looks very similar to
 <em>Peirce's law</em>:</p>
 <p>$ ((P \to Q) \to P) \to P $</p>
-<p>If we replace <code>P</code> with <code>a</code> (or <code>m
-a</code>) and <code>Q</code> with <code>m b</code>, we get the exact
-same thing. Since we are dealing with monads, we need to use Kleisli
-arrows, so all implications from logic must be lifted as such (so
-<code>P -&gt; Q</code> becomes <code>a -&gt; m b</code>).</p>
+<p>If we replace <code>P</code> with <code>a</code> (or
+<code>m a</code>) and <code>Q</code> with <code>m b</code>, we get the
+exact same thing. Since we are dealing with monads, we need to use
+Kleisli arrows, so all implications from logic must be lifted as such
+(so <code>P -&gt; Q</code> becomes <code>a -&gt; m b</code>).</p>
 <h2 id="proving-equivalences">Proving equivalences</h2>
 <p>In order to keep things clean, I decided to wrap each equivalent law
 in its own newtype and write an instance of <code>Iso</code> (which
@@ -100,8 +100,8 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a 
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  m (<span class="dt">Either</span> a (a <span class="ot">-&gt;</span> m <span class="dt">Void</span>))</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h3 id="double-negation">Double Negation</h3>
-<p>Nothing new here, just rewriting negation as <code>-&gt; m
-Void</code>:</p>
+<p>Nothing new here, just rewriting negation as
+<code>-&gt; m Void</code>:</p>
 <p>$ \forall P. \neg \neg P \to P $</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">DoubleNegation</span> m <span class="ot">=</span></span>
@@ -246,8 +246,8 @@ href="https://github.com/eviefp/logic-in-haskell">my github</a>.</p>]]></content
 href="/clasical-logic-in-haskell/">classical logic proofs in
 Haskell</a>, thanks to the Curry-Howard correspondence.</p>
 <p>This post will show how a simple proof works in Logic, Type Theory,
-and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B)
-∧ C</code>.</p>
+and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove
+<code>(A ∧ B) ∧ C</code>.</p>
 <h2 id="logic">Logic</h2>
 <p>In logic, there are several systems that allows us to reason about
 propositions. One of them is the natural deduction system and is defined
@@ -274,9 +274,10 @@ from the hypothesis <code>A ∧ (B ∧ C)</code>, we would have to: 1.
 obtain an <code>A</code> by using <code>∧e1</code> on the hypothesis 2.
 obtain a <code>B ∧ C</code> by using <code>∧e2</code> on the hypothesis
 3. obtain a <code>B</code> by using <code>∧e1</code> on (2) 4. obtain a
-<code>C</code> by using <code>∧e2</code> on (2) 5. obtain a <code>A ∧
-B</code> by using <code>∧i</code> on (1) and (3) 6. reach the conclusion
-<code>(A ∧ B) ∧ C</code> by using <code>∧i</code> on (5) and (4)</p>
+<code>C</code> by using <code>∧e2</code> on (2) 5. obtain a
+<code>A ∧ B</code> by using <code>∧i</code> on (1) and (3) 6. reach the
+conclusion <code>(A ∧ B) ∧ C</code> by using <code>∧i</code> on (5) and
+(4)</p>
 <p>In natural deduction, it looks like this:</p>
 <pre><code>A ∧ (B ∧ C)          A ∧ (B ∧ C)
 ----------- (∧e1)   ------------- (∧e2)
@@ -311,9 +312,9 @@ tuple.</p>
 <pre><code>  (a, b) : (A, B)                  (a, b) : (A, B)
 ------------------- ((,)e1)      ------------------- ((,)e2)
        a : A                            b : B</code></pre>
-<p>which means, given a tuple <code>(a, b)</code> of type <code>(A,
-B)</code> we can obtain a term <code>a</code> or <code>b</code> of type
-<code>A</code> or <code>B</code>.</p>
+<p>which means, given a tuple <code>(a, b)</code> of type
+<code>(A, B)</code> we can obtain a term <code>a</code> or
+<code>b</code> of type <code>A</code> or <code>B</code>.</p>
 <p>If we translate the proposition above, then we have to prove
 <code>((A, B), C)</code> from <code>(A, (B, C))</code>.</p>
 <pre><code>(a, (b, c) : (A, (B, C))          (a, (b, c)) : (A, (B, C))
@@ -337,17 +338,17 @@ pattern matching.</p>
 <p>Given the proof above, it's easy to noice that <code>(,)i</code> is
 exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code>
 and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at
-the proof above, we could say, given hypothesis <code>h = (a, (b, c)) :
-(A, (B, C))</code>, we can obtain:</p>
+the proof above, we could say, given hypothesis
+<code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain:</p>
 <ol>
 <li><code>a : A</code> from <code>fst h</code></li>
 <li><code>(b, c) : (B, C)</code> from <code>snd h</code></li>
 <li><code>b : B</code> from <code>fst (snd h)</code></li>
 <li><code>c : C</code> from <code>snd (snd h)</code></li>
-<li><code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd
-h))</code></li>
-<li><code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd
-h)), snd (snd h))</code></li>
+<li><code>(a, b) : (A, B)</code> from
+<code>(fst h, fst (snd h))</code></li>
+<li><code>((a, b), c) : ((A, B), C)</code> from
+<code>((fst h, fst (snd h)), snd (snd h))</code></li>
 </ol>
 <p>So, in Haskell:</p>
 <pre><code>assoc&#39; :: (a, (b, c)) -&gt; ((a, b), c)
@@ -371,47 +372,49 @@ term <code>a : A</code> from <code>() : ()</code>".</p>
 <p>Armed with this, we can now express the same problem in CT terms: -
 given an arrow <code>h : T → (A × (B × C))</code> - obtain an arrow
 <code>p : T → ((A × B) × C))</code></p>
-<p>Before we begin, let's review what a product is: - given <code>A ×
-B</code>, we know there are two arrows <code>p : A × B → A</code> and
-<code>q : A × B → B</code>, which we will write as <code>&lt;p,
-q&gt;</code> - given <code>A × B</code> is the product of <code>A</code>
-and <code>B</code>, and <code>C</code> is an object with two arrows
-<code>p' : C → A</code> and <code>q' : C → B</code>, there exists an
-unique arrow <code>m : C → A × B</code> such that <code>p ∘ m =
-p'</code> and <code>q ∘ m = q'</code></p>
-<p>Also, remember that we can compose any two arrows <code>f : A →
-B</code> and <code>g : B → C</code> via <code>g ∘ f</code>.</p>
+<p>Before we begin, let's review what a product is: - given
+<code>A × B</code>, we know there are two arrows
+<code>p : A × B → A</code> and <code>q : A × B → B</code>, which we will
+write as <code>&lt;p, q&gt;</code> - given <code>A × B</code> is the
+product of <code>A</code> and <code>B</code>, and <code>C</code> is an
+object with two arrows <code>p' : C → A</code> and
+<code>q' : C → B</code>, there exists an unique arrow
+<code>m : C → A × B</code> such that <code>p ∘ m = p'</code> and
+<code>q ∘ m = q'</code></p>
+<p>Also, remember that we can compose any two arrows
+<code>f : A → B</code> and <code>g : B → C</code> via
+<code>g ∘ f</code>.</p>
 <p>Now we are ready for the proof:</p>
-<p><code>T</code> is the terminal object, and <code>t : T → A × (B ×
-C)</code> is what we start with. We need to be able to obtain an arrow
-<code>t' : T → (A × B) × C)</code>.</p>
+<p><code>T</code> is the terminal object, and
+<code>t : T → A × (B × C)</code> is what we start with. We need to be
+able to obtain an arrow <code>t' : T → (A × B) × C)</code>.</p>
 <p><img src="/images/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
 <p>By <strong>product</strong> <code>A × (B × C)</code>, we know there
-exists <code>p : A × (B × C) → A</code> and <code>q : A × (B × C) → B ×
-C</code>.</p>
-<p>By <strong>composition</strong>, we can obtain the arrows <code>p ∘ t
-: T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
+exists <code>p : A × (B × C) → A</code> and
+<code>q : A × (B × C) → B × C</code>.</p>
+<p>By <strong>composition</strong>, we can obtain the arrows
+<code>p ∘ t : T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
 <p>By <strong>product</strong> <code>B × C</code>, we know there exists
 <code>p' : B × C → B</code> and <code>q' : B × C → C</code>.</p>
-<p>By <strong>composition</strong>, we can obtain the arrow <code>p' ∘ q
-∘ t : T → B</code>.</p>
+<p>By <strong>composition</strong>, we can obtain the arrow
+<code>p' ∘ q ∘ t : T → B</code>.</p>
 <p>So now, we have the following arrows: - <code>p ∘ t : T → A</code> -
 <code>p' ∘ q ∘ t : T → B</code></p>
 <p><img src="/images/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
-<p>By definition of <strong>product</strong>, since we know <code>A ×
-B</code> is the product of <code>A</code> and <code>B</code>, and since
-we have the arrows <code>T → A</code> and <code>T → B</code>, then we
-know there must be an unique arrow which we'll name <code>l : T → A ×
-B</code>.</p>
-<p>By <strong>composition</strong> we can obtain the arrow <code>q' ∘ q
-∘ t : T → C</code>.</p>
+<p>By definition of <strong>product</strong>, since we know
+<code>A × B</code> is the product of <code>A</code> and <code>B</code>,
+and since we have the arrows <code>T → A</code> and <code>T → B</code>,
+then we know there must be an unique arrow which we'll name
+<code>l : T → A × B</code>.</p>
+<p>By <strong>composition</strong> we can obtain the arrow
+<code>q' ∘ q ∘ t : T → C</code>.</p>
 <p><img src="/images/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
 <p>Similarly to the step before, by definition of
 <strong>product</strong>, since we know <code>(A × B) × C</code> is a
 product of <code>A × B</code> and <code>C</code>, and since we have the
 arrows <code>l : T → A × B</code> and <code>q' ∘ q ∘ t : T → C</code>,
-then there must exist an unique arrow <code>t' : T → (A × B) ×
-C</code>.</p>
+then there must exist an unique arrow
+<code>t' : T → (A × B) × C</code>.</p>
 <p>Note: there are, in fact, as many arrows <code>T → (A × B) × C</code>
 as are elements in <code>(A × B) × C</code>, but <code>t'</code> is the
 unique one derived from the initial arrow, <code>t</code>.</p>
@@ -421,32 +424,32 @@ href="https://twitter.com/BartoszMilewski/status/1093565646036643841">twitter
 thread for a whiteboard proof of sum associativity</a>.</p>
 <h2 id="back-to-haskell">Back to Haskell</h2>
 <p>If we follow the CT arrows as we followed the logic proof: - we could
-rewrite the <code>l : T → A × B</code> arrow as <code>&lt;i,j&gt; : T →
-A × B</code>, where <code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q
-∘ t : T → B</code>. - we already have <code>k = q' ∘ q ∘ t : T →
-C</code></p>
+rewrite the <code>l : T → A × B</code> arrow as
+<code>&lt;i,j&gt; : T → A × B</code>, where
+<code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q ∘ t : T → B</code>.
+- we already have <code>k = q' ∘ q ∘ t : T → C</code></p>
 <p>So, if instead of <code>t</code> we write <code>a_bc</code> to denote
 our hypothesis, or inputs, let's look closer at what <code>i</code>,
-<code>j</code> and <code>k</code> are: - <code>i</code> is <code>p ∘
-t</code>, which is the left projection of the premise, or <code>fst
-a_bc</code></p>
-<p>You may ask: Why?!? Well, <code>p ∘ t</code> means <code>p after
-t</code>. In our case, <code>t</code> represents the input, so it's
-equivalent to <code>a_bc</code>, and <code>p</code> is the left
-projection, which is equivalent to <code>fst</code>. Keep in mind that
-<code>a ∘ b ∘ c</code> means <code>c first, then b, then a</code> when
-reading the following.</p>
+<code>j</code> and <code>k</code> are: - <code>i</code> is
+<code>p ∘ t</code>, which is the left projection of the premise, or
+<code>fst a_bc</code></p>
+<p>You may ask: Why?!? Well, <code>p ∘ t</code> means
+<code>p after t</code>. In our case, <code>t</code> represents the
+input, so it's equivalent to <code>a_bc</code>, and <code>p</code> is
+the left projection, which is equivalent to <code>fst</code>. Keep in
+mind that <code>a ∘ b ∘ c</code> means
+<code>c first, then b, then a</code> when reading the following.</p>
 <ul>
-<li><code>j</code> is <code>p' ∘ q ∘ t</code>, which is <code>fst (snd
-a_bc)</code></li>
-<li><code>l = &lt;i,j&gt;</code>, so <code>l = (fst a_bc, fst (snd
-a_bc))</code></li>
+<li><code>j</code> is <code>p' ∘ q ∘ t</code>, which is
+<code>fst (snd a_bc)</code></li>
+<li><code>l = &lt;i,j&gt;</code>, so
+<code>l = (fst a_bc, fst (snd a_bc))</code></li>
 <li><code>k</code> is <code>snd (snd a_bc)</code></li>
-<li>the result, <code>T → (A × B) × C</code> is <code>&lt; &lt;i,j&gt;,
-k &gt; = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></li>
+<li>the result, <code>T → (A × B) × C</code> is
+<code>&lt; &lt;i,j&gt;, k &gt; = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></li>
 </ul>
-<p>If we look back at the Haskell definition: <code>assoc a_bc = ((fst
-a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
+<p>If we look back at the Haskell definition:
+<code>assoc a_bc = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
 <p>Which means we reached the same implementation/proof, again.</p>
 <p>Edit: Thank you to <a
 href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a
@@ -535,12 +538,12 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a 
 <p>The ∏ type is also a higher-kinded type. Note that this definition is
 almost identical to the Σ definition, except for the parantheses used in
 the constructor (<code>Π_intro</code>). This lines up with the intuition
-that <code>∀x. P(X)</code> can be described by a function <code>A -&gt;
-P(x)</code>, where <code>x : A</code>.</p>
+that <code>∀x. P(X)</code> can be described by a function
+<code>A -&gt; P(x)</code>, where <code>x : A</code>.</p>
 <p>Constructing a ∏ type takes a function from the quantified variable
 to the type described by the predicate.</p>
-<p>Constructing a term would, for example be <code>∏_intro (λn. n + 1
-&gt; n)</code>.</p>
+<p>Constructing a term would, for example be
+<code>∏_intro (λn. n + 1 &gt; n)</code>.</p>
 <h2 id="tuples---special-case-of-dependent-sum">Tuples - Special Case of
 Dependent Sum</h2>
 <p>We will first need to define a <code>constT</code> function:</p>
@@ -571,10 +574,11 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">snd</span> <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → Σ<span class="op">-</span>pair <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">B</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span><span class="fu">snd</span> (Σ_intro _ b) <span class="ot">=</span> b</span></code></pre></div>
-<p>This works because Σ types are defined as <code>a -&gt; P a -&gt; Σ
-P</code>, so if we take a <code>P</code> such that <code>P a</code>
-always is <code>b</code>, then we get <code>a -&gt; b -&gt; Σ</code>
-which is essentially a tuple of <code>a</code> and <code>b</code>.</p>
+<p>This works because Σ types are defined as
+<code>a -&gt; P a -&gt; Σ P</code>, so if we take a <code>P</code> such
+that <code>P a</code> always is <code>b</code>, then we get
+<code>a -&gt; b -&gt; Σ</code> which is essentially a tuple of
+<code>a</code> and <code>b</code>.</p>
 <p>We can now say <code>Σ_snd (Σ_mkPair 1 2)</code> and get the result
 <code>2</code>.</p>
 <h2 id="functions---special-case-of-dependent-product">Functions -
@@ -590,11 +594,11 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>apply <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>} → Π<span class="op">-</span>function <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">A</span> → <span class="dt">B</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span>apply (Π_intro f) a <span class="ot">=</span> f a</span></code></pre></div>
-<p>As with sum types, this works because Π types are defined as <code>(a
--&gt; P a) -&gt; Π P</code>, so if we take <code>P</code> such that
-<code>P a</code> always is <code>b</code>, then we get <code>(a -&gt; b)
--&gt; Π</code>, which is essentially a function from <code>a</code> to
-<code>b</code>.</p>
+<p>As with sum types, this works because Π types are defined as
+<code>(a -&gt; P a) -&gt; Π P</code>, so if we take <code>P</code> such
+that <code>P a</code> always is <code>b</code>, then we get
+<code>(a -&gt; b) -&gt; Π</code>, which is essentially a function from
+<code>a</code> to <code>b</code>.</p>
 <p>We can now write <code>Π-apply (Π-mkFunction (λx. x + 1)) 1</code>
 and get the result <code>2</code>.</p>
 <h2 id="what-about-sum-types">What About Sum Types?</h2>
@@ -626,8 +630,9 @@ and applying the correct function:</p>
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>} → (<span class="dt">A</span> → <span class="dt">R</span>) → (<span class="dt">B</span> → <span class="dt">R</span>) → Σ<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">R</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim f _ (Σ_intro true  a) <span class="ot">=</span> f a</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Σ<span class="op">-</span>sum_elim _ g (Σ_intro false b) <span class="ot">=</span> g b</span></code></pre></div>
-<p>As an example, <code>Σ-sum_elim (const "left") (const "right")
-(Σ-sum_left Bool 1)</code>, and get the result <code>"left"</code>.</p>
+<p>As an example,
+<code>Σ-sum_elim (const "left") (const "right") (Σ-sum_left Bool 1)</code>,
+and get the result <code>"left"</code>.</p>
 <p>Interestingly, we can also obtain sum types from ∏ types: the idea is
 to encode the eliminator right into our type! For that we will need the
 following predicate:</p>
@@ -635,15 +640,17 @@ following predicate:</p>
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>prodPredicate <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>prodPredicate a b r <span class="ot">=</span> (a → r) → (b → r) → r</span></code></pre></div>
 <p>This means that given two types <code>A</code> and <code>B</code>, we
-get a type-level function from <code>R</code> to <code>(A -&gt; R) -&gt;
-(B -&gt; R) -&gt; R</code>, which is exactly the eliminator type. Don't
-worry about <code>Set₁</code> or <code>Π'</code> for now:</p>
+get a type-level function from <code>R</code> to
+<code>(A -&gt; R) -&gt; (B -&gt; R) -&gt; R</code>, which is exactly the
+eliminator type. Don't worry about <code>Set₁</code> or <code>Π'</code>
+for now:</p>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span> <span class="op">:</span> ∀ (<span class="dt">A</span> <span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">Set</span>₁</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span> a b <span class="ot">=</span> Π&#39; (prodPredicate a b)</span></code></pre></div>
 <p>This means that in order to build a sum type, we need to pass a type
-<code>R</code> and a function <code>(A -&gt; R) -&gt; (B -&gt; R) -&gt;
-R</code>. So, the constructors will look like:</p>
+<code>R</code> and a function
+<code>(A -&gt; R) -&gt; (B -&gt; R) -&gt; R</code>. So, the constructors
+will look like:</p>
 <div class="sourceCode" id="cb18"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>left <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">A</span> → Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>left _ a <span class="ot">=</span> Π&#39;_intro (\_ f _ → f a)</span></code></pre></div>
@@ -657,9 +664,9 @@ required for the <em>left</em> constructor).</p>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>right <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="op">:</span> <span class="dt">Set</span>} (<span class="dt">B</span> <span class="op">:</span> <span class="dt">Set</span>) → <span class="dt">B</span> → Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>right _ b <span class="ot">=</span> Π&#39;_intro (\_ _ g → g b)</span></code></pre></div>
-<p>As for the eliminator, we simply require the two functions <code>A
--&gt; R</code> and <code>B -&gt; R</code> in order to pass to our
-dependent product and get an <code>R</code>:</p>
+<p>As for the eliminator, we simply require the two functions
+<code>A -&gt; R</code> and <code>B -&gt; R</code> in order to pass to
+our dependent product and get an <code>R</code>:</p>
 <div class="sourceCode" id="cb20"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>elim <span class="op">:</span> ∀ {<span class="dt">A</span> <span class="dt">B</span> <span class="dt">R</span> <span class="op">:</span> <span class="dt">Set</span>} → (<span class="dt">A</span> → <span class="dt">R</span>) → (<span class="dt">B</span> → <span class="dt">R</span>) → Π<span class="op">-</span><span class="fu">sum</span> <span class="dt">A</span> <span class="dt">B</span> → <span class="dt">R</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Π<span class="op">-</span><span class="fu">sum</span><span class="op">-</span>elim f g (Π&#39;_intro elim) <span class="ot">=</span> elim _ f g</span></code></pre></div>
@@ -1156,15 +1163,15 @@ teach junior developers how to use them.</p>]]></content>
       <category term="functor"/>
       <summary>A look into bifunctors.</summary>
       <content type="html"><![CDATA[<p>This post assumes prior knowledge of - the <code>Functor</code> class
-/ concept - the functor instance for <code>Either a</code>, <code>(,)
-a</code> - basic kind knowledge, e.g. the difference between <code>*
--&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
+/ concept - the functor instance for <code>Either a</code>,
+<code>(,) a</code> - basic kind knowledge, e.g. the difference between
+<code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
 <h2 id="why">Why</h2>
-<p>In Haskell, functors can only be defined for types of kind <code>*
--&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>. Their
-instances allow us to use <code>fmap</code> (or <code>&lt;$&gt;</code>)
-to go from <code>Maybe a</code> to <code>Maybe b</code> using some
-<code>a -&gt; b</code>, like:</p>
+<p>In Haskell, functors can only be defined for types of kind
+<code>* -&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>.
+Their instances allow us to use <code>fmap</code> (or
+<code>&lt;$&gt;</code>) to go from <code>Maybe a</code> to
+<code>Maybe b</code> using some <code>a -&gt; b</code>, like:</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Just</span> <span class="st">&quot;1&quot;</span></span>
@@ -1184,11 +1191,11 @@ but <code>Either e</code> has kind <code>* -&gt; *</code>. So that means
 that we can have a functor instance for <code>Either e</code>, given
 some type <code>e</code>. This might sound confusing at first, but all
 it means is that the <code>e</code> cannot vary, so we can go from
-<code>Either e a</code> to <code>Either e b</code> using some <code>a
--&gt; b</code>, but we cannot go from <code>Either e1 a</code> to
-<code>Either e2 a</code> or <code>Either e2 b</code> even if we had both
-<code>a -&gt; b</code> and <code>e1 -&gt; e2</code>. How would we even
-pass two functions to <code>fmap</code>?</p>
+<code>Either e a</code> to <code>Either e b</code> using some
+<code>a -&gt; b</code>, but we cannot go from <code>Either e1 a</code>
+to <code>Either e2 a</code> or <code>Either e2 b</code> even if we had
+both <code>a -&gt; b</code> and <code>e1 -&gt; e2</code>. How would we
+even pass two functions to <code>fmap</code>?</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Right</span> <span class="dv">1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Right</span> <span class="st">&quot;1&quot;</span></span>
@@ -1196,10 +1203,10 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a 
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Left</span> <span class="dt">True</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Left</span> <span class="dt">True</span></span></code></pre></div>
 <p>In the first example, we go from <code>Either a Int</code> to
-<code>Either a String</code> using <code>show :: Int -&gt;
-String</code>. In the second example, we go from <code>Either Bool
-a</code> to <code>Either Bool String</code>, where <code>a</code> needs
-to have a <code>Show</code> instance.</p>
+<code>Either a String</code> using
+<code>show :: Int -&gt; String</code>. In the second example, we go from
+<code>Either Bool a</code> to <code>Either Bool String</code>, where
+<code>a</code> needs to have a <code>Show</code> instance.</p>
 <p>But what if we want to go from <code>Either a x</code> to
 <code>Either b x</code>, given some <code>a -&gt; b</code>?</p>
 <p>Let's see how we could implement it ourselves:</p>
@@ -1263,12 +1270,12 @@ for tuples <code>(a, b)</code>.</p>
 for <code>Const</code>.</p>
 <p><em>Exercise 9</em>: Implement the <code>Bifunctor</code> instance
 for <code>(a, b, c)</code>.</p>
-<p><em>Exercise 10</em>: Find an example of a type with kind <code>*
--&gt; * -&gt; *</code> that cannot have a <code>Bifunctor</code>
+<p><em>Exercise 10</em>: Find an example of a type with kind
+<code>* -&gt; * -&gt; *</code> that cannot have a <code>Bifunctor</code>
 instance.</p>
-<p><em>Exercise 11</em>: Find an example of a type with kind <code>*
--&gt; * -&gt; *</code> which has a <code>Functor</code> instance when
-you fix one type argument, but can't have a <code>Bifunctor</code>
+<p><em>Exercise 11</em>: Find an example of a type with kind
+<code>* -&gt; * -&gt; *</code> which has a <code>Functor</code> instance
+when you fix one type argument, but can't have a <code>Bifunctor</code>
 instance.</p>]]></content>
   </entry>
   <entry>
@@ -1308,25 +1315,27 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a 
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Predicate</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span> \b <span class="ot">-&gt;</span> _welp</span></code></pre></div>
 <p>As the type hole above would suggest, we need to return a
-<code>Bool</code> value, and we have: - <code>b :: b</code> - <code>f ::
-a -&gt; b</code> - <code>g :: a -&gt; Bool</code></p>
+<code>Bool</code> value, and we have: - <code>b :: b</code> -
+<code>f :: a -&gt; b</code> - <code>g :: a -&gt; Bool</code></p>
 <p>There is no way we can combine these terms at all, let alone in such
 a way as to obtain a <code>Bool</code> value. The only way we would be
 able to obtain a <code>Bool</code> value is by calling <code>g</code>,
 but for that, we need an <code>a</code> -- but all we have is a
 <code>b</code>.</p>
-<p>What if <code>f</code> was reversed, though? If we had <code>f' :: b
--&gt; a</code>, then we could apply <code>b</code> to it <code>f' b ::
-a</code> and then pass it to <code>g</code> to get a <code>Bool</code>.
-Let's write this function outside of the <code>Functor</code> class:</p>
+<p>What if <code>f</code> was reversed, though? If we had
+<code>f' :: b -&gt; a</code>, then we could apply <code>b</code> to it
+<code>f' b :: a</code> and then pass it to <code>g</code> to get a
+<code>Bool</code>. Let's write this function outside of the
+<code>Functor</code> class:</p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapPredicate ::</span> (b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> <span class="dt">Predicate</span> a <span class="ot">-&gt;</span> <span class="dt">Predicate</span> b</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mapPredicate f (<span class="dt">Predicate</span> g) <span class="ot">=</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Predicate</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span> \b <span class="ot">-&gt;</span> g (f b)</span></code></pre></div>
 <p>This looks very weird, compared to <code>Functor</code>s, right? If
-you want to go from <code>Predicate a</code> to <code>Predicate
-b</code>, you need a <code>b -&gt; a</code> function?</p>
+you want to go from <code>Predicate a</code> to
+<code>Predicate b</code>, you need a <code>b -&gt; a</code>
+function?</p>
 <p><em>Exercise 1</em>: fill in the typed hole <code>_e1</code>:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">greaterThan10 ::</span> <span class="dt">Predicate</span> <span class="dt">Int</span></span>
@@ -1428,8 +1437,8 @@ depending on the position of the type argument. We have also seen that
 types of kind <code>* -&gt; * -&gt; *</code> can have
 <code>Bifunctor</code> instances. These types are morally
 <code>Functor</code> in both type arguments. We're left with one very
-common type which we can't map both arguments of: <code>a -&gt;
-b</code>. It does have a <code>Functor</code> instance for
+common type which we can't map both arguments of:
+<code>a -&gt; b</code>. It does have a <code>Functor</code> instance for
 <code>b</code>, but the <code>a</code> is morally
 <code>Contravariant</code> (so it can't have a <code>Bifunctor</code>
 instance). This is where <code>Profunctor</code>s come in.</p>
@@ -1499,8 +1508,9 @@ allow:</p>
 </table>
 <p>Although there are some exceptions, you will usually see
 <code>Contravariant</code> or <code>Profunctor</code> instances over
-function types. <code>Predicate</code> itself is a newtype over <code>a
--&gt; Bool</code>, and so are most types with these instances.</p>
+function types. <code>Predicate</code> itself is a newtype over
+<code>a -&gt; Bool</code>, and so are most types with these
+instances.</p>
 <p>Let's take a closer look at <code>a -&gt; b</code>. We can easily map
 over the <code>b</code>, but what about the <code>a</code>? For example,
 given <code>showInt :: Int -&gt; String</code>, what do we need to
@@ -1516,16 +1526,16 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a 
 would need a way to pass <code>b</code> to it, which means we'd need a
 function <code>f :: Bool -&gt; Int</code> and then <code>_help</code>
 would become <code>showInt (f b)</code>.</p>
-<p>But if we take a step back, in order to go from <code>Int -&gt;
-String</code> to <code>Bool -&gt; String</code>, we need <code>Bool
--&gt; Int</code>, which is exactly the <code>Contravariant</code> way of
-mapping types.</p>
+<p>But if we take a step back, in order to go from
+<code>Int -&gt; String</code> to <code>Bool -&gt; String</code>, we need
+<code>Bool -&gt; Int</code>, which is exactly the
+<code>Contravariant</code> way of mapping types.</p>
 <p><em>Exercise 1</em>: Implement a <code>mapInput</code> function
 like:</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapInput ::</span> (input <span class="ot">-&gt;</span> out) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> input) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> out)</span></code></pre></div>
-<p>Extra credit: try a pointfree implementation as <code>mapInput =
-_</code>.</p>
+<p>Extra credit: try a pointfree implementation as
+<code>mapInput = _</code>.</p>
 <p><em>Exercise 2</em>: Try to guess how the <code>Profunctor</code>
 class looks like. Look at <code>Functor</code>,
 <code>Contravariant</code>, and <code>Bifunctor</code> for
@@ -1881,17 +1891,18 @@ reboot.</p>
 <p>I highly recommend you add a few of the things you need to your
 initial list of programs in your install
 <code>configuration.nix</code>:</p>
-<pre class="nix"><code># Uncomment this if needed (you&#39;ll know).
-# nixpkgs.config.allowUnfree = true;
-
-environment.systemPackages = [
-  # or &#39;emacs&#39; or &#39;vscode&#39; or whichever editor you prefer
-  # just make sure you have one
-  pkgs.vim
-
-  # or &#39;chromium&#39; or &#39;google-chrome&#39; or whatever
-  pkgs.firefox
-];</code></pre>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment this if needed (you&#39;ll know).</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># nixpkgs.config.allowUnfree = true;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>environment.systemPackages = <span class="op">[</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or &#39;emacs&#39; or &#39;vscode&#39; or whichever editor you prefer</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># just make sure you have one</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  pkgs.vim</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or &#39;chromium&#39; or &#39;google-chrome&#39; or whatever</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  pkgs.firefox</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">]</span>;</span></code></pre></div>
 <p>You can lookup more programs that you might need over on the <a
 href="https://search.nixos.org/packages">NixOS package search</a>.</p>
 <p>Note: if a package is named <code>haskellPackages.ghcid</code>, then
@@ -1901,10 +1912,10 @@ nix-env, and why I avoid them</h2>
 <p>Nix channels are a way to manage your system and globally installed
 programs (via <code>nix-env</code>). How this works is essentially, you
 subscribe to a channel (say, <code>nixos-21.11</code>) and then you can
-update to the latest released patch by doing <code>nix-channel
---update</code>. The problem with that is that it's not easily
-reversible. Also, <code>nix-env</code> isn't a very pleasant package
-management experience.</p>
+update to the latest released patch by doing
+<code>nix-channel --update</code>. The problem with that is that it's
+not easily reversible. Also, <code>nix-env</code> isn't a very pleasant
+package management experience.</p>
 <p>The package search I mentioned earlier shows install instructions
 using <code>nix-env</code>. I strongly recommend against that.</p>
 <p>Luckily, there's a pretty good alternative: we can use <a
@@ -1947,22 +1958,23 @@ on the <a href="https://github.com/NixOS/nixpkgs">nixpkgs repository</a>
 instead of <code>nixos-21.11</code>.</p>
 <h3 id="creating-a-shellnix-file">Creating a shell.nix file</h3>
 <p>Next, we need to create a <code>shell.nix</code> file:</p>
-<pre class="nix"><code>let
-  # Import pinned repositories
-  sources = import ./nix/sources.nix;
-  # Grab nixpkgs from there
-  nixpkgs = import sources.nixpkgs { config.allowUnfree = true; };
-in
-# Create a shell
-nixpkgs.mkShell {
-  nativeBuildInputs = [
-    nixpkgs.niv # grab the latest version of niv
-  ];
-  # Force this nixpkgs to be available for commands such as
-  # nix-shell -p &lt;package&gt;
-  NIX_PATH =
-    &quot;nixpkgs=${sources.nixpkgs}:nixos-config=/etc/nixos/configuration.nix&quot;;
-}</code></pre>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Import pinned repositories</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">sources</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./nix/sources.nix</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab nixpkgs from there</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span> <span class="op">=</span> <span class="bu">import</span> sources.nixpkgs <span class="op">{</span> <span class="va">config</span>.<span class="va">allowUnfree</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a shell</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>nixpkgs.mkShell <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">nativeBuildInputs</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    nixpkgs.niv <span class="co"># grab the latest version of niv</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Force this nixpkgs to be available for commands such as</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># nix-shell -p &lt;package&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">NIX_PATH</span> <span class="op">=</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nixpkgs=</span><span class="sc">${</span>sources.nixpkgs<span class="sc">}</span><span class="st">:nixos-config=/etc/nixos/configuration.nix&quot;</span><span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>We can now launch a shell by running <code>nix-shell</code>. You can
 check that it's working by checking your <code>NIX_PATH</code>
 value:</p>
@@ -2014,22 +2026,23 @@ some helpers around things like user services, emails, etc.</p>
 <p>Make sure the branch release matches your NixOS version!</p>
 <h3 id="update-shell-file">Update shell file</h3>
 <p>Next, we need to reference this in our <code>shell.nix</code>:</p>
-<pre class="nix"><code>let
-  # Import pinned repositories
-  sources = import ./nix/sources.nix;
-  # Grab nixpkgs from there
-  nixpkgs = import sources.nixpkgs { config.allowUnfree = true; };
-  # Grab home-manager as well
-  home-manager = import sources.home-manager { };
-in
-# Create a shell
-nixpkgs.mkShell {
-  nativeBuildInputs = [
-    nixpkgs.niv # grab the latest version of niv
-  ];
-  NIX_PATH =
-    &quot;nixpkgs=${sources.nixpkgs}:home-manager=${sources.home-manager}:nixos-config=/etc/nixos/configuration.nix&quot;;
-}</code></pre>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Import pinned repositories</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">sources</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./nix/sources.nix</span><span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab nixpkgs from there</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span> <span class="op">=</span> <span class="bu">import</span> sources.nixpkgs <span class="op">{</span> <span class="va">config</span>.<span class="va">allowUnfree</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab home-manager as well</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">home-manager</span> <span class="op">=</span> <span class="bu">import</span> sources.home<span class="op">-</span>manager <span class="op">{</span> <span class="op">};</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a shell</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>nixpkgs.mkShell <span class="op">{</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="va">nativeBuildInputs</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    nixpkgs.niv <span class="co"># grab the latest version of niv</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">NIX_PATH</span> <span class="op">=</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nixpkgs=</span><span class="sc">${</span>sources.nixpkgs<span class="sc">}</span><span class="st">:home-manager=</span><span class="sc">${</span>sources.home<span class="op">-</span>manager<span class="sc">}</span><span class="st">:nixos-config=/etc/nixos/configuration.nix&quot;</span><span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Note that we added <code>home-manager</code> to our
 <code>NIX_PATH</code>. That's all we need to do for now.</p>
 <h3 id="create-our-first-home-nix-file">Create our first home nix
@@ -2037,112 +2050,113 @@ file</h3>
 <p>Let's create a new <code>home.nix</code> file. I added some ideas of
 things you might want. Feel free to remove anything you don't care
 about:</p>
-<pre class="nix"><code>{
-  home.packages = [
-    pkgs.killall
-    pkgs.ripgrep
-    pkgs.wget
-    pkgs.unzip
-    pkgs.zip
-  ];
-
-  home.file = {
-    # If you keep these, you&#39;ll have to move the files here first.
-    &quot;.config/nvim/init.vim&quot;.source = ./init.vim;
-    &quot;.config/nvim/coc-settings.json&quot;.source = ./coc-settings.json;
-  };
-
-  programs = {
-    # Better &#39;cat&#39;
-    bat = {
-      enable = true;
-      config = {
-        theme = &quot;TwoDark&quot;;
-        pager = &quot;less -FR&quot;;
-      };
-    };
-
-    # Really useful for auto-running &#39;shell.nix&#39;, see also: lorri
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-    };
-
-    # Better &#39;ls&#39;
-    exa = {
-      enable = true;
-      enableAliases = true;
-    };
-
-    # My favorite shell
-    fish = {
-      enable = true;
-      package = pkgs.fish;
-      interactiveShellInit = &#39;&#39;
-        set fish_color_normal &quot;#a4c337&quot;
-        set fish_color_command &quot;#77c337&quot;
-        set fish_color_quote &quot;#37c393&quot;
-        set fish_color_redirection &quot;#37b5c3&quot;
-        set fish_color_end &quot;#3776c3&quot;
-        set fish_color_error &quot;#c33759&quot;
-      &#39;&#39;;
-      shellAliases = {
-        # exa
-        ls = &quot;${pkgs.exa}/bin/exa&quot;;
-        ll = &quot;${pkgs.exa}/bin/exa -l&quot;;
-        la = &quot;${pkgs.exa}/bin/exa -a&quot;;
-        lt = &quot;${pkgs.exa}/bin/exa --tree&quot;;
-        lla = &quot;${pkgs.exa}/bin/exa -la&quot;;
-
-        # git
-        gs = &quot;${pkgs.git}/bin/git status&quot;;
-
-        # bat
-        cat = &quot;${pkgs.bat}/bin/bat&quot;;
-      };
-    };
-
-    fzf = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-    };
-
-    git = {
-      enable = true;
-      delta.enable = true;
-      aliases = {
-        lol = &quot;log --graph --decorate --oneline --abbrev-commit&quot;;
-        lola = &quot;log --graph --decorate --oneline --abbrev-commit --all&quot;;
-        hist =
-          &quot;log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short&quot;;
-        work = &quot;log --pretty=format:&#39;%h%x09%an%x09%ad%x09%s&#39;&quot;;
-      };
-      extraConfig = {
-        init.defaultBranch = &quot;main&quot;;
-        pull.ff = &quot;only&quot;;
-        merge.conflictstyle = &quot;diff3&quot;;
-      };
-      ignores = [];
-      userEmail = &quot;your email here&quot;;
-      userName = &quot;your name here&quot;;
-    };
-
-    # Should probably keep this
-    home-manager = {
-      enable = true;
-    };
-
-    # This makes it so that if you type the name of a program that
-    # isn&#39;t installed, it will tell you which package contains it.
-    nix-index = {
-      enable = true;
-      enableFishIntegration = true;
-      enableBashIntegration = true;
-    };
-  };
-}</code></pre>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">home</span>.<span class="va">packages</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    pkgs.killall</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    pkgs.ripgrep</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    pkgs.wget</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    pkgs.unzip</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    pkgs.zip</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">home</span>.<span class="va">file</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If you keep these, you&#39;ll have to move the files here first.</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;</span>.config/nvim/init.vim<span class="st">&quot;</span>.<span class="va">source</span> <span class="op">=</span> <span class="ss">./init.vim</span><span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;.config/nvim/coc-settings.json&quot;</span>.<span class="va">source</span> <span class="op">=</span> <span class="ss">./coc-settings.json</span><span class="op">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="va">programs</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Better &#39;cat&#39;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">bat</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>      <span class="va">config</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">theme</span> <span class="op">=</span> <span class="st">&quot;TwoDark&quot;</span><span class="op">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">pager</span> <span class="op">=</span> <span class="st">&quot;less -FR&quot;</span><span class="op">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Really useful for auto-running &#39;shell.nix&#39;, see also: lorri</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">direnv</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Better &#39;ls&#39;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="va">exa</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableAliases</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># My favorite shell</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="va">fish</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>      <span class="va">package</span> <span class="op">=</span> pkgs.fish<span class="op">;</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>      <span class="va">interactiveShellInit</span> <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_normal &quot;#a4c337&quot;</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_command &quot;#77c337&quot;</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_quote &quot;#37c393&quot;</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_redirection &quot;#37b5c3&quot;</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_end &quot;#3776c3&quot;</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_error &quot;#c33759&quot;</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="st">      &#39;&#39;</span><span class="op">;</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>      <span class="va">shellAliases</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># exa</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>        <span class="va">ls</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa&quot;</span><span class="op">;</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>        <span class="va">ll</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa -l&quot;</span><span class="op">;</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>        <span class="va">la</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa -a&quot;</span><span class="op">;</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>        <span class="va">lt</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa --tree&quot;</span><span class="op">;</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>        <span class="va">lla</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.exa<span class="sc">}</span><span class="st">/bin/exa -la&quot;</span><span class="op">;</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># git</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>        <span class="va">gs</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.git<span class="sc">}</span><span class="st">/bin/git status&quot;</span><span class="op">;</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>        <span class="co"># bat</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>        <span class="va">cat</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs.bat<span class="sc">}</span><span class="st">/bin/bat&quot;</span><span class="op">;</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>    <span class="va">fzf</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="va">git</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>      <span class="va">delta</span>.<span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>      <span class="va">aliases</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>        <span class="va">lol</span> <span class="op">=</span> <span class="st">&quot;log --graph --decorate --oneline --abbrev-commit&quot;</span><span class="op">;</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>        <span class="va">lola</span> <span class="op">=</span> <span class="st">&quot;log --graph --decorate --oneline --abbrev-commit --all&quot;</span><span class="op">;</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>        <span class="va">hist</span> <span class="op">=</span></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short&quot;</span><span class="op">;</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>        <span class="va">work</span> <span class="op">=</span> <span class="st">&quot;log --pretty=format:&#39;%h%x09%an%x09%ad%x09%s&#39;&quot;</span><span class="op">;</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>      <span class="va">extraConfig</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>        <span class="va">init</span>.<span class="va">defaultBranch</span> <span class="op">=</span> <span class="st">&quot;main&quot;</span><span class="op">;</span></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>        <span class="va">pull</span>.<span class="va">ff</span> <span class="op">=</span> <span class="st">&quot;only&quot;</span><span class="op">;</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>        <span class="va">merge</span>.<span class="va">conflictstyle</span> <span class="op">=</span> <span class="st">&quot;diff3&quot;</span><span class="op">;</span></span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>      <span class="va">ignores</span> <span class="op">=</span> <span class="op">[];</span></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>      <span class="va">userEmail</span> <span class="op">=</span> <span class="st">&quot;your email here&quot;</span><span class="op">;</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>      <span class="va">userName</span> <span class="op">=</span> <span class="st">&quot;your name here&quot;</span><span class="op">;</span></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Should probably keep this</span></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>    <span class="va">home-manager</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This makes it so that if you type the name of a program that</span></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># isn&#39;t installed, it will tell you which package contains it.</span></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>    <span class="va">nix-index</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>You can find all <a
 href="https://nix-community.github.io/home-manager/options.html">settings
 for home-manager on their wiki page</a>.</p>

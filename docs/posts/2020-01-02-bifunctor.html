@@ -34,7 +34,11 @@
             <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
-    <div id="theme-button">DAY</div>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
         </div>
     </header>
 
@@ -61,15 +65,15 @@
     </div>
     <article class="post">
         <p>This post assumes prior knowledge of - the <code>Functor</code> class
-/ concept - the functor instance for <code>Either a</code>, <code>(,)
-a</code> - basic kind knowledge, e.g. the difference between <code>*
--&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
+/ concept - the functor instance for <code>Either a</code>,
+<code>(,) a</code> - basic kind knowledge, e.g. the difference between
+<code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code></p>
 <h2 id="why">Why</h2>
-<p>In Haskell, functors can only be defined for types of kind <code>*
--&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>. Their
-instances allow us to use <code>fmap</code> (or <code>&lt;$&gt;</code>)
-to go from <code>Maybe a</code> to <code>Maybe b</code> using some
-<code>a -&gt; b</code>, like:</p>
+<p>In Haskell, functors can only be defined for types of kind
+<code>* -&gt; *</code> like <code>Maybe a</code> or <code>[a]</code>.
+Their instances allow us to use <code>fmap</code> (or
+<code>&lt;$&gt;</code>) to go from <code>Maybe a</code> to
+<code>Maybe b</code> using some <code>a -&gt; b</code>, like:</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Just</span> <span class="st">&quot;1&quot;</span></span>
@@ -89,11 +93,11 @@ but <code>Either e</code> has kind <code>* -&gt; *</code>. So that means
 that we can have a functor instance for <code>Either e</code>, given
 some type <code>e</code>. This might sound confusing at first, but all
 it means is that the <code>e</code> cannot vary, so we can go from
-<code>Either e a</code> to <code>Either e b</code> using some <code>a
--&gt; b</code>, but we cannot go from <code>Either e1 a</code> to
-<code>Either e2 a</code> or <code>Either e2 b</code> even if we had both
-<code>a -&gt; b</code> and <code>e1 -&gt; e2</code>. How would we even
-pass two functions to <code>fmap</code>?</p>
+<code>Either e a</code> to <code>Either e b</code> using some
+<code>a -&gt; b</code>, but we cannot go from <code>Either e1 a</code>
+to <code>Either e2 a</code> or <code>Either e2 b</code> even if we had
+both <code>a -&gt; b</code> and <code>e1 -&gt; e2</code>. How would we
+even pass two functions to <code>fmap</code>?</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Right</span> <span class="dv">1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Right</span> <span class="st">&quot;1&quot;</span></span>
@@ -101,10 +105,10 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a 
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>λ<span class="op">&gt;</span> <span class="fu">show</span> <span class="op">&lt;$&gt;</span> <span class="dt">Left</span> <span class="dt">True</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Left</span> <span class="dt">True</span></span></code></pre></div>
 <p>In the first example, we go from <code>Either a Int</code> to
-<code>Either a String</code> using <code>show :: Int -&gt;
-String</code>. In the second example, we go from <code>Either Bool
-a</code> to <code>Either Bool String</code>, where <code>a</code> needs
-to have a <code>Show</code> instance.</p>
+<code>Either a String</code> using
+<code>show :: Int -&gt; String</code>. In the second example, we go from
+<code>Either Bool a</code> to <code>Either Bool String</code>, where
+<code>a</code> needs to have a <code>Show</code> instance.</p>
 <p>But what if we want to go from <code>Either a x</code> to
 <code>Either b x</code>, given some <code>a -&gt; b</code>?</p>
 <p>Let's see how we could implement it ourselves:</p>
@@ -168,12 +172,12 @@ for tuples <code>(a, b)</code>.</p>
 for <code>Const</code>.</p>
 <p><em>Exercise 9</em>: Implement the <code>Bifunctor</code> instance
 for <code>(a, b, c)</code>.</p>
-<p><em>Exercise 10</em>: Find an example of a type with kind <code>*
--&gt; * -&gt; *</code> that cannot have a <code>Bifunctor</code>
+<p><em>Exercise 10</em>: Find an example of a type with kind
+<code>* -&gt; * -&gt; *</code> that cannot have a <code>Bifunctor</code>
 instance.</p>
-<p><em>Exercise 11</em>: Find an example of a type with kind <code>*
--&gt; * -&gt; *</code> which has a <code>Functor</code> instance when
-you fix one type argument, but can't have a <code>Bifunctor</code>
+<p><em>Exercise 11</em>: Find an example of a type with kind
+<code>* -&gt; * -&gt; *</code> which has a <code>Functor</code> instance
+when you fix one type argument, but can't have a <code>Bifunctor</code>
 instance.</p>
 
         <br>

@@ -1,5 +1,5 @@
 ---
-title: "Closed World Existentials"
+title: "Bridging the Gap: Engineering Managers and Trust"
 author: Evie Ciobanu
 date: Nov 20, 2023
 tags: [management, engineering]

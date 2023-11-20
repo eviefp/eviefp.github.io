@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie&#39;s Blog</title>
     <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2023-11-20T15:02:SZ</updated>
+  <updated>2023-11-20T15:21:SZ</updated>
   <author>
       <name>Evie Ciobanu</name>
   </author>
@@ -2181,7 +2181,7 @@ href="https://github.com/eviefp/dotfiles">config files</a>.</p>
 plan to write a blog post about it later.</p>]]></content>
   </entry>
   <entry>
-      <title>Closed World Existentials</title>
+      <title>Bridging the Gap: Engineering Managers and Trust</title>
       <link href="https://eevie.ro/posts/2023-11-20-building-trust-as-em.html"/>
       <id>https://eevie.roposts/2023-11-20-building-trust-as-em.html</id>
       <updated>2023-11-20T00:00:SZ</updated>

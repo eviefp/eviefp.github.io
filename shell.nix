@@ -1,8 +1,7 @@
 # Configure your own Haskell nix shell!
 let
   # Do not touch this part.
-  sources = import ./nix/sources.nix;
-  pkgs = import sources.nixpkgs { };
+  pkgs = import <nixpkgs> { };
 
   deps =
     [
@@ -13,17 +12,17 @@ let
   # use the system-wide version you might already have.
   commonTooling =
     [
-      pkgs.haskell.compiler.ghc8107 # GHC version as defined above at 'self'
-      pkgs.haskell.packages.ghc8107.cabal-install
+      pkgs.haskell.compiler.ghc946 # GHC version as defined above at 'self'
+      pkgs.haskell.packages.ghc946.cabal-install
     ];
 
   # Personal tooling: change/update as needed, e.g. `inputs.ghcide`.
   personalTooling =
     [
-      pkgs.haskell.packages.ghc8107.haskell-language-server
-      pkgs.haskell.packages.ghc8107.cabal2nix
-      pkgs.haskell.packages.ghc8107.hpack
-      pkgs.haskell.packages.ghc8107.implicit-hie
+      pkgs.haskell.packages.ghc946.haskell-language-server
+      pkgs.haskell.packages.ghc946.cabal2nix
+      pkgs.haskell.packages.ghc946.hpack
+      pkgs.haskell.packages.ghc946.implicit-hie
       pkgs.httplz
     ];
 in

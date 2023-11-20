@@ -41,7 +41,7 @@ siteMeta =
 outputFolder :: FilePath
 outputFolder = "docs/"
 
---Data models-------------------------------------------------------------------
+-- Data models-------------------------------------------------------------------
 
 withSiteMeta :: Value -> Value
 withSiteMeta (Object obj) = Object $ KM.union obj siteMetaObj

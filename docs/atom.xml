@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie&#39;s Blog</title>
     <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2023-11-20T15:21:SZ</updated>
+  <updated>2023-11-20T15:24:SZ</updated>
   <author>
       <name>Evie Ciobanu</name>
   </author>
@@ -2188,7 +2188,12 @@ plan to write a blog post about it later.</p>]]></content>
       <category term="management"/>
       <category term="engineering"/>
       <summary>Bridging the Gap: Engineering Managers and Trust</summary>
-      <content type="html"><![CDATA[<h2 id="-common-signs-for-lack-of-trust">🚧 Common Signs for Lack of
+      <content type="html"><![CDATA[<p>In the intricate dance of innovation and project execution, the
+linchpin holding the delicate balance is trust — especially between
+engineering teams and upper management. This foundational element serves
+as the bedrock upon which collaborative efforts, efficient
+communication, and successful outcomes rest.</p>
+<h2 id="-common-signs-for-lack-of-trust">🚧 Common Signs for Lack of
 Trust</h2>
 <p>There's usually a few <strong>signs</strong> you can look for to see
 if there's a significant gap in trust between upper management and

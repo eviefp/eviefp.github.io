@@ -34,7 +34,11 @@
             <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
-    <div id="theme-button">DAY</div>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
         </div>
     </header>
 
@@ -64,8 +68,8 @@
 href="/clasical-logic-in-haskell/">classical logic proofs in
 Haskell</a>, thanks to the Curry-Howard correspondence.</p>
 <p>This post will show how a simple proof works in Logic, Type Theory,
-and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove <code>(A ∧ B)
-∧ C</code>.</p>
+and Category Theory: given <code>A ∧ (B ∧ C)</code>, prove
+<code>(A ∧ B) ∧ C</code>.</p>
 <h2 id="logic">Logic</h2>
 <p>In logic, there are several systems that allows us to reason about
 propositions. One of them is the natural deduction system and is defined
@@ -92,9 +96,10 @@ from the hypothesis <code>A ∧ (B ∧ C)</code>, we would have to: 1.
 obtain an <code>A</code> by using <code>∧e1</code> on the hypothesis 2.
 obtain a <code>B ∧ C</code> by using <code>∧e2</code> on the hypothesis
 3. obtain a <code>B</code> by using <code>∧e1</code> on (2) 4. obtain a
-<code>C</code> by using <code>∧e2</code> on (2) 5. obtain a <code>A ∧
-B</code> by using <code>∧i</code> on (1) and (3) 6. reach the conclusion
-<code>(A ∧ B) ∧ C</code> by using <code>∧i</code> on (5) and (4)</p>
+<code>C</code> by using <code>∧e2</code> on (2) 5. obtain a
+<code>A ∧ B</code> by using <code>∧i</code> on (1) and (3) 6. reach the
+conclusion <code>(A ∧ B) ∧ C</code> by using <code>∧i</code> on (5) and
+(4)</p>
 <p>In natural deduction, it looks like this:</p>
 <pre><code>A ∧ (B ∧ C)          A ∧ (B ∧ C)
 ----------- (∧e1)   ------------- (∧e2)
@@ -129,9 +134,9 @@ tuple.</p>
 <pre><code>  (a, b) : (A, B)                  (a, b) : (A, B)
 ------------------- ((,)e1)      ------------------- ((,)e2)
        a : A                            b : B</code></pre>
-<p>which means, given a tuple <code>(a, b)</code> of type <code>(A,
-B)</code> we can obtain a term <code>a</code> or <code>b</code> of type
-<code>A</code> or <code>B</code>.</p>
+<p>which means, given a tuple <code>(a, b)</code> of type
+<code>(A, B)</code> we can obtain a term <code>a</code> or
+<code>b</code> of type <code>A</code> or <code>B</code>.</p>
 <p>If we translate the proposition above, then we have to prove
 <code>((A, B), C)</code> from <code>(A, (B, C))</code>.</p>
 <pre><code>(a, (b, c) : (A, (B, C))          (a, (b, c)) : (A, (B, C))
@@ -155,17 +160,17 @@ pattern matching.</p>
 <p>Given the proof above, it's easy to noice that <code>(,)i</code> is
 exactly the tuple constructor, <code>(,)e1</code> is <code>fst</code>
 and <code>(,)e2</code> is <code>snd</code>. Knowing this, and looking at
-the proof above, we could say, given hypothesis <code>h = (a, (b, c)) :
-(A, (B, C))</code>, we can obtain:</p>
+the proof above, we could say, given hypothesis
+<code>h = (a, (b, c)) : (A, (B, C))</code>, we can obtain:</p>
 <ol>
 <li><code>a : A</code> from <code>fst h</code></li>
 <li><code>(b, c) : (B, C)</code> from <code>snd h</code></li>
 <li><code>b : B</code> from <code>fst (snd h)</code></li>
 <li><code>c : C</code> from <code>snd (snd h)</code></li>
-<li><code>(a, b) : (A, B)</code> from <code>(fst h, fst (snd
-h))</code></li>
-<li><code>((a, b), c) : ((A, B), C)</code> from <code>((fst h, fst (snd
-h)), snd (snd h))</code></li>
+<li><code>(a, b) : (A, B)</code> from
+<code>(fst h, fst (snd h))</code></li>
+<li><code>((a, b), c) : ((A, B), C)</code> from
+<code>((fst h, fst (snd h)), snd (snd h))</code></li>
 </ol>
 <p>So, in Haskell:</p>
 <pre><code>assoc&#39; :: (a, (b, c)) -&gt; ((a, b), c)
@@ -189,47 +194,49 @@ term <code>a : A</code> from <code>() : ()</code>".</p>
 <p>Armed with this, we can now express the same problem in CT terms: -
 given an arrow <code>h : T → (A × (B × C))</code> - obtain an arrow
 <code>p : T → ((A × B) × C))</code></p>
-<p>Before we begin, let's review what a product is: - given <code>A ×
-B</code>, we know there are two arrows <code>p : A × B → A</code> and
-<code>q : A × B → B</code>, which we will write as <code>&lt;p,
-q&gt;</code> - given <code>A × B</code> is the product of <code>A</code>
-and <code>B</code>, and <code>C</code> is an object with two arrows
-<code>p' : C → A</code> and <code>q' : C → B</code>, there exists an
-unique arrow <code>m : C → A × B</code> such that <code>p ∘ m =
-p'</code> and <code>q ∘ m = q'</code></p>
-<p>Also, remember that we can compose any two arrows <code>f : A →
-B</code> and <code>g : B → C</code> via <code>g ∘ f</code>.</p>
+<p>Before we begin, let's review what a product is: - given
+<code>A × B</code>, we know there are two arrows
+<code>p : A × B → A</code> and <code>q : A × B → B</code>, which we will
+write as <code>&lt;p, q&gt;</code> - given <code>A × B</code> is the
+product of <code>A</code> and <code>B</code>, and <code>C</code> is an
+object with two arrows <code>p' : C → A</code> and
+<code>q' : C → B</code>, there exists an unique arrow
+<code>m : C → A × B</code> such that <code>p ∘ m = p'</code> and
+<code>q ∘ m = q'</code></p>
+<p>Also, remember that we can compose any two arrows
+<code>f : A → B</code> and <code>g : B → C</code> via
+<code>g ∘ f</code>.</p>
 <p>Now we are ready for the proof:</p>
-<p><code>T</code> is the terminal object, and <code>t : T → A × (B ×
-C)</code> is what we start with. We need to be able to obtain an arrow
-<code>t' : T → (A × B) × C)</code>.</p>
+<p><code>T</code> is the terminal object, and
+<code>t : T → A × (B × C)</code> is what we start with. We need to be
+able to obtain an arrow <code>t' : T → (A × B) × C)</code>.</p>
 <p><img src="/images/curry-howard/ct1.jpg" title="ct1" alt="ct1" /></p>
 <p>By <strong>product</strong> <code>A × (B × C)</code>, we know there
-exists <code>p : A × (B × C) → A</code> and <code>q : A × (B × C) → B ×
-C</code>.</p>
-<p>By <strong>composition</strong>, we can obtain the arrows <code>p ∘ t
-: T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
+exists <code>p : A × (B × C) → A</code> and
+<code>q : A × (B × C) → B × C</code>.</p>
+<p>By <strong>composition</strong>, we can obtain the arrows
+<code>p ∘ t : T → A</code> and <code>q ∘ t : T → B × C</code>.</p>
 <p>By <strong>product</strong> <code>B × C</code>, we know there exists
 <code>p' : B × C → B</code> and <code>q' : B × C → C</code>.</p>
-<p>By <strong>composition</strong>, we can obtain the arrow <code>p' ∘ q
-∘ t : T → B</code>.</p>
+<p>By <strong>composition</strong>, we can obtain the arrow
+<code>p' ∘ q ∘ t : T → B</code>.</p>
 <p>So now, we have the following arrows: - <code>p ∘ t : T → A</code> -
 <code>p' ∘ q ∘ t : T → B</code></p>
 <p><img src="/images/curry-howard/ct2.jpg" title="ct2" alt="ct2" /></p>
-<p>By definition of <strong>product</strong>, since we know <code>A ×
-B</code> is the product of <code>A</code> and <code>B</code>, and since
-we have the arrows <code>T → A</code> and <code>T → B</code>, then we
-know there must be an unique arrow which we'll name <code>l : T → A ×
-B</code>.</p>
-<p>By <strong>composition</strong> we can obtain the arrow <code>q' ∘ q
-∘ t : T → C</code>.</p>
+<p>By definition of <strong>product</strong>, since we know
+<code>A × B</code> is the product of <code>A</code> and <code>B</code>,
+and since we have the arrows <code>T → A</code> and <code>T → B</code>,
+then we know there must be an unique arrow which we'll name
+<code>l : T → A × B</code>.</p>
+<p>By <strong>composition</strong> we can obtain the arrow
+<code>q' ∘ q ∘ t : T → C</code>.</p>
 <p><img src="/images/curry-howard/ct3.jpg" title="ct3" alt="ct3" /></p>
 <p>Similarly to the step before, by definition of
 <strong>product</strong>, since we know <code>(A × B) × C</code> is a
 product of <code>A × B</code> and <code>C</code>, and since we have the
 arrows <code>l : T → A × B</code> and <code>q' ∘ q ∘ t : T → C</code>,
-then there must exist an unique arrow <code>t' : T → (A × B) ×
-C</code>.</p>
+then there must exist an unique arrow
+<code>t' : T → (A × B) × C</code>.</p>
 <p>Note: there are, in fact, as many arrows <code>T → (A × B) × C</code>
 as are elements in <code>(A × B) × C</code>, but <code>t'</code> is the
 unique one derived from the initial arrow, <code>t</code>.</p>
@@ -239,32 +246,32 @@ href="https://twitter.com/BartoszMilewski/status/1093565646036643841">twitter
 thread for a whiteboard proof of sum associativity</a>.</p>
 <h2 id="back-to-haskell">Back to Haskell</h2>
 <p>If we follow the CT arrows as we followed the logic proof: - we could
-rewrite the <code>l : T → A × B</code> arrow as <code>&lt;i,j&gt; : T →
-A × B</code>, where <code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q
-∘ t : T → B</code>. - we already have <code>k = q' ∘ q ∘ t : T →
-C</code></p>
+rewrite the <code>l : T → A × B</code> arrow as
+<code>&lt;i,j&gt; : T → A × B</code>, where
+<code>i = p ∘ t : T → A</code> and <code>j = p' ∘ q ∘ t : T → B</code>.
+- we already have <code>k = q' ∘ q ∘ t : T → C</code></p>
 <p>So, if instead of <code>t</code> we write <code>a_bc</code> to denote
 our hypothesis, or inputs, let's look closer at what <code>i</code>,
-<code>j</code> and <code>k</code> are: - <code>i</code> is <code>p ∘
-t</code>, which is the left projection of the premise, or <code>fst
-a_bc</code></p>
-<p>You may ask: Why?!? Well, <code>p ∘ t</code> means <code>p after
-t</code>. In our case, <code>t</code> represents the input, so it's
-equivalent to <code>a_bc</code>, and <code>p</code> is the left
-projection, which is equivalent to <code>fst</code>. Keep in mind that
-<code>a ∘ b ∘ c</code> means <code>c first, then b, then a</code> when
-reading the following.</p>
+<code>j</code> and <code>k</code> are: - <code>i</code> is
+<code>p ∘ t</code>, which is the left projection of the premise, or
+<code>fst a_bc</code></p>
+<p>You may ask: Why?!? Well, <code>p ∘ t</code> means
+<code>p after t</code>. In our case, <code>t</code> represents the
+input, so it's equivalent to <code>a_bc</code>, and <code>p</code> is
+the left projection, which is equivalent to <code>fst</code>. Keep in
+mind that <code>a ∘ b ∘ c</code> means
+<code>c first, then b, then a</code> when reading the following.</p>
 <ul>
-<li><code>j</code> is <code>p' ∘ q ∘ t</code>, which is <code>fst (snd
-a_bc)</code></li>
-<li><code>l = &lt;i,j&gt;</code>, so <code>l = (fst a_bc, fst (snd
-a_bc))</code></li>
+<li><code>j</code> is <code>p' ∘ q ∘ t</code>, which is
+<code>fst (snd a_bc)</code></li>
+<li><code>l = &lt;i,j&gt;</code>, so
+<code>l = (fst a_bc, fst (snd a_bc))</code></li>
 <li><code>k</code> is <code>snd (snd a_bc)</code></li>
-<li>the result, <code>T → (A × B) × C</code> is <code>&lt; &lt;i,j&gt;,
-k &gt; = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></li>
+<li>the result, <code>T → (A × B) × C</code> is
+<code>&lt; &lt;i,j&gt;, k &gt; = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></li>
 </ul>
-<p>If we look back at the Haskell definition: <code>assoc a_bc = ((fst
-a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
+<p>If we look back at the Haskell definition:
+<code>assoc a_bc = ((fst a_bc, fst (snd a_bc)), snd (snd a_bc))</code></p>
 <p>Which means we reached the same implementation/proof, again.</p>
 <p>Edit: Thank you to <a
 href="https://twitter.com/BartoszMilewski">Bartosz Milewski</a> and <a

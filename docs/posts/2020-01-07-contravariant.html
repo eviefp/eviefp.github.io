@@ -34,7 +34,11 @@
             <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
-    <div id="theme-button">DAY</div>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
         </div>
     </header>
 
@@ -89,25 +93,27 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a 
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Predicate</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span> \b <span class="ot">-&gt;</span> _welp</span></code></pre></div>
 <p>As the type hole above would suggest, we need to return a
-<code>Bool</code> value, and we have: - <code>b :: b</code> - <code>f ::
-a -&gt; b</code> - <code>g :: a -&gt; Bool</code></p>
+<code>Bool</code> value, and we have: - <code>b :: b</code> -
+<code>f :: a -&gt; b</code> - <code>g :: a -&gt; Bool</code></p>
 <p>There is no way we can combine these terms at all, let alone in such
 a way as to obtain a <code>Bool</code> value. The only way we would be
 able to obtain a <code>Bool</code> value is by calling <code>g</code>,
 but for that, we need an <code>a</code> -- but all we have is a
 <code>b</code>.</p>
-<p>What if <code>f</code> was reversed, though? If we had <code>f' :: b
--&gt; a</code>, then we could apply <code>b</code> to it <code>f' b ::
-a</code> and then pass it to <code>g</code> to get a <code>Bool</code>.
-Let's write this function outside of the <code>Functor</code> class:</p>
+<p>What if <code>f</code> was reversed, though? If we had
+<code>f' :: b -&gt; a</code>, then we could apply <code>b</code> to it
+<code>f' b :: a</code> and then pass it to <code>g</code> to get a
+<code>Bool</code>. Let's write this function outside of the
+<code>Functor</code> class:</p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapPredicate ::</span> (b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> <span class="dt">Predicate</span> a <span class="ot">-&gt;</span> <span class="dt">Predicate</span> b</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mapPredicate f (<span class="dt">Predicate</span> g) <span class="ot">=</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Predicate</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">$</span> \b <span class="ot">-&gt;</span> g (f b)</span></code></pre></div>
 <p>This looks very weird, compared to <code>Functor</code>s, right? If
-you want to go from <code>Predicate a</code> to <code>Predicate
-b</code>, you need a <code>b -&gt; a</code> function?</p>
+you want to go from <code>Predicate a</code> to
+<code>Predicate b</code>, you need a <code>b -&gt; a</code>
+function?</p>
 <p><em>Exercise 1</em>: fill in the typed hole <code>_e1</code>:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">greaterThan10 ::</span> <span class="dt">Predicate</span> <span class="dt">Int</span></span>

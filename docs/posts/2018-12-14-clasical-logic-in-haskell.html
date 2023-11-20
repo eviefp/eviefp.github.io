@@ -34,7 +34,11 @@
             <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
-    <div id="theme-button">DAY</div>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
         </div>
     </header>
 
@@ -91,11 +95,11 @@ like an <code>abort</code> method, or an early exit.</p>
 <p>The interesting part is that this monad looks very similar to
 <em>Peirce's law</em>:</p>
 <p>$ ((P \to Q) \to P) \to P $</p>
-<p>If we replace <code>P</code> with <code>a</code> (or <code>m
-a</code>) and <code>Q</code> with <code>m b</code>, we get the exact
-same thing. Since we are dealing with monads, we need to use Kleisli
-arrows, so all implications from logic must be lifted as such (so
-<code>P -&gt; Q</code> becomes <code>a -&gt; m b</code>).</p>
+<p>If we replace <code>P</code> with <code>a</code> (or
+<code>m a</code>) and <code>Q</code> with <code>m b</code>, we get the
+exact same thing. Since we are dealing with monads, we need to use
+Kleisli arrows, so all implications from logic must be lifted as such
+(so <code>P -&gt; Q</code> becomes <code>a -&gt; m b</code>).</p>
 <h2 id="proving-equivalences">Proving equivalences</h2>
 <p>In order to keep things clean, I decided to wrap each equivalent law
 in its own newtype and write an instance of <code>Iso</code> (which
@@ -144,8 +148,8 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a 
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>  m (<span class="dt">Either</span> a (a <span class="ot">-&gt;</span> m <span class="dt">Void</span>))</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <h3 id="double-negation">Double Negation</h3>
-<p>Nothing new here, just rewriting negation as <code>-&gt; m
-Void</code>:</p>
+<p>Nothing new here, just rewriting negation as
+<code>-&gt; m Void</code>:</p>
 <p>$ \forall P. \neg \neg P \to P $</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">DoubleNegation</span> m <span class="ot">=</span></span>

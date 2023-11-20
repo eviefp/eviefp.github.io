@@ -34,7 +34,11 @@
             <a class="ext-link" href="https://twitter.com/evie_fp">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
-    <div id="theme-button">DAY</div>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
         </div>
     </header>
 
@@ -70,8 +74,8 @@ depending on the position of the type argument. We have also seen that
 types of kind <code>* -&gt; * -&gt; *</code> can have
 <code>Bifunctor</code> instances. These types are morally
 <code>Functor</code> in both type arguments. We're left with one very
-common type which we can't map both arguments of: <code>a -&gt;
-b</code>. It does have a <code>Functor</code> instance for
+common type which we can't map both arguments of:
+<code>a -&gt; b</code>. It does have a <code>Functor</code> instance for
 <code>b</code>, but the <code>a</code> is morally
 <code>Contravariant</code> (so it can't have a <code>Bifunctor</code>
 instance). This is where <code>Profunctor</code>s come in.</p>
@@ -141,8 +145,9 @@ allow:</p>
 </table>
 <p>Although there are some exceptions, you will usually see
 <code>Contravariant</code> or <code>Profunctor</code> instances over
-function types. <code>Predicate</code> itself is a newtype over <code>a
--&gt; Bool</code>, and so are most types with these instances.</p>
+function types. <code>Predicate</code> itself is a newtype over
+<code>a -&gt; Bool</code>, and so are most types with these
+instances.</p>
 <p>Let's take a closer look at <code>a -&gt; b</code>. We can easily map
 over the <code>b</code>, but what about the <code>a</code>? For example,
 given <code>showInt :: Int -&gt; String</code>, what do we need to
@@ -158,16 +163,16 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a 
 would need a way to pass <code>b</code> to it, which means we'd need a
 function <code>f :: Bool -&gt; Int</code> and then <code>_help</code>
 would become <code>showInt (f b)</code>.</p>
-<p>But if we take a step back, in order to go from <code>Int -&gt;
-String</code> to <code>Bool -&gt; String</code>, we need <code>Bool
--&gt; Int</code>, which is exactly the <code>Contravariant</code> way of
-mapping types.</p>
+<p>But if we take a step back, in order to go from
+<code>Int -&gt; String</code> to <code>Bool -&gt; String</code>, we need
+<code>Bool -&gt; Int</code>, which is exactly the
+<code>Contravariant</code> way of mapping types.</p>
 <p><em>Exercise 1</em>: Implement a <code>mapInput</code> function
 like:</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">mapInput ::</span> (input <span class="ot">-&gt;</span> out) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> input) <span class="ot">-&gt;</span> (newInput <span class="ot">-&gt;</span> out)</span></code></pre></div>
-<p>Extra credit: try a pointfree implementation as <code>mapInput =
-_</code>.</p>
+<p>Extra credit: try a pointfree implementation as
+<code>mapInput = _</code>.</p>
 <p><em>Exercise 2</em>: Try to guess how the <code>Profunctor</code>
 class looks like. Look at <code>Functor</code>,
 <code>Contravariant</code>, and <code>Bifunctor</code> for

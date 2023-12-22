@@ -2,3 +2,4 @@
 *~
 .shake
 dist-newstyle/
+/.direnv/

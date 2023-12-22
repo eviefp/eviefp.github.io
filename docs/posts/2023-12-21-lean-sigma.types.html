@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Evie&#39;s Blog">
+    <meta name="author" content="Evie Ciobanu">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@evie_fp">
+<meta name="twitter:creator" content="@evie_fp">
+<meta name="twitter:title" content="Lean, Advent of Code and Sigma Types">
+    <meta name="twitter:description" content="TODO">
+        <title>Lean, Advent of Code and Sigma Types</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://twitch.tv/eviefp">
+            <img src="/images/twitch-logo.png" alt="Twitch Channel"/>
+        </a>
+
+            <a class="ext-link" href="https://github.com/eviefp">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/evie_fp">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+
+            <a class="ext-link" rel="me" href="https://hachyderm.io/@vie">
+              <img src="/images/mastodon-logo.svg" alt="Mastodon Profile"/>
+            </a>
+        <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Lean, Advent of Code and Sigma Types
+            </span>
+            <br>
+
+            <br>
+            <span class="byline">by Evie Ciobanu</span>
+            <br>
+            <span class="date">Dec 22, 2023</span>
+            <br>
+            <div class="metadata">
+            </div>
+            <div class="tags">
+              <a class="tag" href="/tag/lean.html">lean</a>
+              <a class="tag" href="/tag/advent-of-code.html">advent-of-code</a>
+              <a class="tag" href="/tag/dependent-types.html">dependent-types</a>
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <p>I've been doing this year's <a href="https://adventofcode.com">Advent
+of Code</a> in <a href="https://lean-lang.org/">Lean4</a>. If you're
+unfamiliar, it's a dependently language that's both a functional
+programming language and a theorem prover. But before I go any further,
+let me take a brief moment to cover some of the basics. Feel free to
+skip this part if you're familiar with dependent types and sized
+vectors.</p>
+<h2 id="sized-vectors">Sized vectors</h2>
+<p>Dependent languages, or languages that allow type-level natural
+numbers, allow you to store the size of a vector into its type:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>inductive <span class="dt">Vector</span> (α<span class="op">:</span> <span class="dt">Type</span>)<span class="op">:</span> <span class="dt">Nat</span> → <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> nil <span class="op">:</span> <span class="dt">Vector</span> α <span class="dv">0</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> cons<span class="op">:</span> α → <span class="dt">Vector</span> α n → <span class="dt">Vector</span> α (n <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>If you're unfamiliar with Lean syntax, it's essentially declaring a
+new type called <code>Vector</code>, which takes two arguments: an
+<code>α</code> which is the type of the elements the vector will hold,
+and a <code>Nat</code>, which stands for natural numbers. The result is
+a <code>Type</code>, which is essentially the type of
+<code>Vector α n</code>, for example <code>Vector Bool 3</code> is a
+vector of 3 booleans.</p>
+<p>The following two lines are the two constructors: <code>nil</code>
+which creates a vector of size 0 with no values, and <code>cons</code>,
+which takes one more value (the single <code>α</code>), and a vector of
+size <code>n</code> to create a vector of size <code>n + 1</code>.</p>
+<p>What this means is, an empty, or <code>nil</code> vector will
+<em>always</em> have a size of 0, because you can't construct it
+otherwise. Similarly, whatever the size of the vector, it will always
+have that many elements in it.</p>
+<p>Here are a few quick examples:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>def empty   <span class="op">:</span> <span class="dt">Vector</span> <span class="dt">Bool</span> <span class="dv">0</span> <span class="op">:=</span> nil</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>def oneBool <span class="op">:</span> <span class="dt">Vector</span> <span class="dt">Bool</span> <span class="dv">1</span> <span class="op">:=</span> cons true nil</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>def twoBools<span class="op">:</span> <span class="dt">Vector</span> <span class="dt">Bool</span> <span class="dv">2</span> <span class="op">:=</span> cons true (cons false nil)</span></code></pre></div>
+<p>If we ask for the element at some position, as long as that number is
+smaller than the natural parameter of the Vector, we can always just
+grab it! Lean has a type that helps with that: <code>Fin</code> carries
+a natural number, and the <em>proof</em> that it is
+<strong>smaller</strong> than some other natural number,
+<strong>n</strong>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>structure <span class="dt">Fin</span> (n <span class="op">:</span> <span class="dt">Nat</span>) <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  val  <span class="op">:</span> <span class="dt">Nat</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  isLt <span class="op">:</span> <span class="dt">LT</span><span class="op">.</span>lt val n     <span class="co">-- LT stands for Lower Than; this reads as &#39;val &lt; n&#39;</span></span></code></pre></div>
+<p>Which means we can now write a <code>get</code> function for our
+vector type:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>def get<span class="op">:</span> <span class="dt">Fin</span> n → <span class="dt">Vector</span> α n → α</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> ⟨<span class="dv">0</span>    , h⟩, <span class="op">.</span>cons x xs ⇒ x</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> ⟨i <span class="op">+</span> <span class="dv">1</span>, h⟩, <span class="op">.</span>cons x xs ⇒ get ⟨i, Nat.le_of_succ_le_succ h⟩ xs</span></code></pre></div>
+<p>How this works out is:</p>
+<ul>
+<li>you cannot write <code>Fin 0</code> because you can't create a proof
+that any <em>natural</em> number is smaller than 0</li>
+<li>which, in turn means, there's no missing case for <code>.nil</code>:
+it's impossible to call this function on an empty vector!</li>
+<li>if we reached 0 (the value stored in <code>Fin n</code>;
+<code>n</code> can never be 0!), we'll just return the top element of
+the (deconstructed) vector</li>
+<li>otherwise, we recursively call <code>get</code> with
+<code>i - 1</code> (or, rather, match on <code>i + 1</code> and call it
+with <code>i</code>)</li>
+<li>since <code>xs</code> now has size <code>n - 1</code>, we need to
+also construct a <code>Fin (n - 1)</code></li>
+<li>we need to create the proof that <code>i - 1 &lt; n - 1</code>,
+given <code>h: i &lt; n</code></li>
+<li>that proof already exists, and that's
+<code>Nat.le_of_succ_le_succ</code></li>
+<li>we know <code>Fin n</code> and <code>Vector α n</code> have the same
+<code>n</code>, so we can never reach 0 before running out of Vector
+<code>cons</code> or values</li>
+</ul>
+<p>Whew! There's a lot going in in those packed 2 lines of code.</p>
+<p>And before we move on, I just have to share this:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>def <span class="fu">length</span><span class="op">:</span> <span class="dt">Vector</span> α n → <span class="dt">Nat</span> <span class="op">:=</span> λ _ ⇒ n</span></code></pre></div>
+<p>Normally, with a list, we'd need to iterate through all of it to find
+its length. However, since we keep track of the size of the vector in
+its type, and well, Lean is a dependently typed language, we can just
+grab that <code>n</code> from Vector's type and return it as a
+value!</p>
+<p>It seems so natural, and yet, it's either impossible or requires
+quite some elaborate tricks in languages without dependent type
+support.</p>
+<h2 id="back-to-advent-of-code">Back to Advent of Code</h2>
+<p>This year's Advent of Code (AoC) featured quite a few puzzles where a
+<code>Grid</code> type comes in handy, specifically when a rectangular
+map is a reasonable way to model the problem. For example, if you wanted
+to represent a cell that can either be a wall or an empty space, one can
+easily write</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>inductive <span class="dt">Cell</span> <span class="kw">where</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">Wall</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">Space</span></span></code></pre></div>
+<p>And there's plenty of ways to represent a map, such as:</p>
+<ul>
+<li>a list of lists</li>
+<li>a (hash)map of coordinates to cell</li>
+<li>a function from coordinate to cell</li>
+</ul>
+<p>However, I went for a 2D vector, and since not all grids (/maps) are
+square, it'll need both a width (x) and a height (y):</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>structure <span class="dt">Grid</span> (x<span class="op">:</span> <span class="dt">Nat</span>) (y<span class="op">:</span> <span class="dt">Nat</span>) (α<span class="op">:</span> <span class="dt">Type</span>) <span class="kw">where</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span><span class="op">:</span> <span class="dt">Vector</span> (<span class="dt">Vector</span> α x) y</span></code></pre></div>
+<p>So once I wrote this and a few helper functions, I was ready to start
+using it. And naturally, I wanted to write a parser to read up the input
+for the day's puzzle:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>def parseInput<span class="op">:</span> <span class="dt">Parsec</span> (<span class="dt">Grid</span> x y <span class="dt">Cell</span>) <span class="op">:=</span> <span class="op">...</span></span></code></pre></div>
+<p>But, whoops. This won't work. <code>x</code> and <code>y</code> are
+universally quantified, which means that the <strong>caller</strong> of
+<code>parseInput</code> gets to decide what they are. However, it's not
+up to them! It's up to <code>parseInput</code> to read the input file
+and figure out <code>x</code> and <code>y</code>. So, essentially, they
+need to be existentially quantified. In other words, they are
+<em>outputs</em> and not <em>inputs</em>.</p>
+<p>And well, thanks to being used with Haskell and other non-dependently
+typed languages, I've been going for a different approach until
+today:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>def parseInput<span class="op">:</span> <span class="dt">Parsec</span> (<span class="dt">List</span> (<span class="dt">List</span> <span class="dt">Cell</span>)) <span class="op">:=</span> <span class="op">...</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- ...</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>def solve (inputs<span class="op">:</span> <span class="dt">List</span> (<span class="dt">List</span> <span class="dt">Cell</span>))<span class="op">:</span> <span class="dt">Nat</span> <span class="op">:=</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- convert the list of lists to a grid</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- and use the grid here</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- in this context we know `x` and `y` so it&#39;s fine</span></span></code></pre></div>
+<h2 id="sigma-types-to-the-rescue">Sigma types to the rescue!</h2>
+<p>But all the awkwardness of passing in that list of lists instead of a
+grid finally caught up to me, and today I spent more than a few seconds
+thinking about it, and well, I decided to see whether an existential
+type would work. I haven't gotten to use Lean that much yet, but I do
+remember seeing this type, which looks like what I need:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>structure <span class="dt">Sigma</span> {α <span class="op">:</span> <span class="dt">Type</span> u} (β <span class="op">:</span> α → <span class="dt">Type</span> v) <span class="kw">where</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fst</span> <span class="op">:</span> α</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">snd</span> <span class="op">:</span> β <span class="fu">fst</span></span></code></pre></div>
+<p>Let me explain the syntax for a bit: the curly braces mean "implicit
+argument", which basically means, Lean will figure it out on its own
+from the other arguments -- in this case, the second argument named
+<code>β</code>.</p>
+<p>And what is <code>β</code>? A type-level function that takes an
+<code>α</code> and returns a type.</p>
+<p>And this sounds exactly like what we want: we have our
+<code>Grid</code> type which takes two naturals, but we don't want to
+use them explicitly, so what if we wrote:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>def <span class="dt">SomeGrid</span> (pair<span class="op">:</span> <span class="dt">Nat</span> × <span class="dt">Nat</span>)<span class="op">:</span> <span class="dt">Type</span> <span class="op">:=</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Grid</span> pair<span class="op">.</span><span class="fu">fst</span> pair<span class="op">.</span><span class="fu">snd</span> <span class="dt">Cell</span></span></code></pre></div>
+<p>This basically says, give me a pair of natural numbers, and I'll give
+you a type. That type is a <code>Grid</code> where the <code>x</code> is
+the first part of the pair, and the <code>y</code> is the second. And
+yes, since types and values live at the same level, we don't need
+special syntax to define type-level functions: we can write it like any
+other function.</p>
+<p>And now, we can write our parser like this:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>def parseGrid<span class="op">:</span> <span class="dt">Parsec</span> (<span class="dt">Sigma</span> <span class="dt">SomeGrid</span>) <span class="op">:=</span> <span class="op">...</span></span></code></pre></div>
+<p>... and the awesome thing is, we can grab any
+<code>Sigma SomeGrid</code> value and use it as a regular pair:</p>
+<ul>
+<li>its <code>fst</code> argument will just be a pair of natural numbers
+which represent the size of the grid</li>
+<li>its <code>snd</code> argument is our <code>Grid x y Cell</code></li>
+</ul>
+<p>I'll admit I was rather surprised to see that it all worked as simply
+as I expected, without any surprises or hard-to-read type-level errors.
+It might just be the case that my Haskell experience trying to play with
+dependent types has scared me a bit too much, so I'm looking forward to
+using Lean a bit more!</p>
+<p>And since I've mentioned it, my full advent of code solutions up to
+today (day 22) are on github: <a
+href="https://github.com/eviefp/lean4-aoc2023"
+class="uri">https://github.com/eviefp/lean4-aoc2023</a></p>
+
+        <br>
+        <br>
+
+        <div class="comments">
+            Questions? Comments? <a href="https://hachyderm.io/@vie">Message me</a> or post an issue on this <a href="https://github.com/eviefp/eviefp.github.io/issues">blog's github repo</a>.
+        </div>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://eevie.ro" data-text="Check out: Lean, Advent of Code and Sigma Types - " data-via="evie_fp">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/evie_fp" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @evie_fp</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️  || <a href="/atom.xml">feed</a>
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

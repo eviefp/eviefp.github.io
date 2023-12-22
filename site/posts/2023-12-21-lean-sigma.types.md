@@ -3,7 +3,7 @@ title: "Lean, Advent of Code and Sigma Types"
 author: Evie Ciobanu
 date: Dec 22, 2023
 tags: [lean, advent-of-code, dependent-types]
-description: "TODO"
+description: "baby's first steps in beating the anxiety around using dependent types"
 ---
 
 I've been doing this year's [Advent of Code](https://adventofcode.com) in [Lean4](https://lean-lang.org/). If you're unfamiliar, it's a dependently language that's both a functional programming language and a theorem prover. But before I go any further, let me take a brief moment to cover some of the basics. Feel free to skip this part if you're familiar with dependent types and sized vectors.

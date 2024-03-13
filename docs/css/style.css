@@ -50,9 +50,10 @@ body {
 
 h2 {
   font-family: inherit;
-  font-size: 1.25em;
+  font-size: 1.6em;
   font-variant: small-caps;
   text-align: center;
+  font-weight: bold;
   width: 80%;
   margin: 0 auto 0;
   border-top: 1px solid #777;
@@ -60,10 +61,16 @@ h2 {
   padding: 1em 0 2em 0; }
 
 h3 {
-  font-size: 1.4em;
-  margin: 0.5em 0;
-  padding: 0.5em 0 1em 0;
-  text-align: center; }
+  font-size: 1.3em;
+  margin: 1em 0;
+  padding: 1em 0 1em 0;
+  font-weight: bold;
+}
+
+h3:before {
+    content: "\00BB";
+    margin-right: 6px;
+}
 
 blockquote {
   width: 90%;

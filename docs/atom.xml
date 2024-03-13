@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie&#39;s Blog</title>
     <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2023-12-22T01:02:SZ</updated>
+  <updated>2024-03-12T21:17:SZ</updated>
   <author>
       <name>Evie Ciobanu</name>
   </author>
@@ -2264,7 +2264,7 @@ to bridge the trust gap.</p>]]></content>
       <category term="lean"/>
       <category term="advent-of-code"/>
       <category term="dependent-types"/>
-      <summary>TODO</summary>
+      <summary>baby&#39;s first steps in beating the anxiety around using dependent types</summary>
       <content type="html"><![CDATA[<p>I've been doing this year's <a href="https://adventofcode.com">Advent
 of Code</a> in <a href="https://lean-lang.org/">Lean4</a>. If you're
 unfamiliar, it's a dependently language that's both a functional

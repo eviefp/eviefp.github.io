@@ -18,7 +18,7 @@ responsibilities I've had during this time.
 Lastly, I talk about my **technical interests**, which is basically the things that get me excited
 about technology and computer science.
 
-If you want to contact me, please use `hello@eevie.ro`.
+If you want to **contact** me, please use `hello@eevie.ro`.
 
 ## My core values
 
@@ -76,16 +76,18 @@ using the right tool for the job.
 💻 **Learning**: I learned Haskell, PureScript, Nix, Scala, and Rust, as well as a lot of
 advanced math topics. I am always learning new things and trying out new technologies.
 
-One fun and recent example is that I've used Lean to solve (the vast majority of) the 2023 Advent
-of Code problems. Using a theorem prover/dependently typed programming language to work on coding
-puzzles was a great learning experience.
+> One fun and recent example is that I've used [Lean](https://lean-lang.org/) to solve (the vast
+> majority of) the 2023 Advent of Code problems. Using a theorem prover/dependently typed
+> programming language to work on coding puzzles was a great
+> [learning experience](https://eevie.ro/posts/2023-12-21-lean-sigma.types.html).
 
 💻 **Presentations**: Held multiple presentations at local FP user groups and the local University,
-work presentations and workships, as well as a talk at Functional Conf about program testing and
+work presentations and workships, as well as a
+[talk at Functional Conf](https://www.youtube.com/watch?v=wpV8WbpuAKY) about program testing and
 software verification.
 
 💻 **Community involvement**: I'm an active member in the FP community, currently holding a position on the
-Haskell Foundation board.
+[Haskell Foundation board](https://haskell.foundation/who-we-are/).
 
 💻 **CI/CD**: I'm a strong believer in reproducible builds, easy and predictable deployments, and
 consistent developer local setup.
@@ -114,12 +116,12 @@ And while these are absolutely critical, there's one more kind of verification m
 Language. It's an authorization policy language that has a Lean-based implementation,
 proofs-included. This gives a different level of *security* and *guarantees* to critical paths.
 
-I really like **nix/NixOS**. I use it for all my devices, which are highly customized (you can check
-my github profile's *dotfiles* for details!). And while my personal use is fun and interesting, nix
-shines for **sharing** development environments by *pinning* dependencies exactly and giving developers
-*confidence* that their local build will be identical across devices, team members, CI/CD, and
-production.
+I really like [**nix/NixOS**](https://nixos.org/). I use it for all my devices, which are highly
+customized (you can check my github profile's [*dotfiles*](https://github.com/eviefp/dotfiles) for
+details!). And while my personal use is fun and interesting, nix shines for **sharing**
+development environments by *pinning* dependencies exactly and giving developers *confidence* that
+their local build will be identical across devices, team members, CI/CD, and production.
 
 
 
-Again, if you want to get in touch, please email me at `hello@eevie.ro`.
+Again, if you want to get in touch, please **email** me at `hello@eevie.ro`.

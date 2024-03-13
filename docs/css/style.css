@@ -75,7 +75,6 @@ h3:before {
 blockquote {
   width: 90%;
   margin: 0.7em auto;
-  text-align: center;
   padding-left: 0.5em;
   font-size: 1.1em;
   font-style: italic;
@@ -91,7 +90,7 @@ blockquote {
       -ms-flex-pack: center;
           justify-content: center; }
   blockquote > p {
-    padding-left: 7px;
+    padding-left: 20px;
     border-left: 5px solid rgba(76, 76, 76, 0.9);
     margin: auto; }
 

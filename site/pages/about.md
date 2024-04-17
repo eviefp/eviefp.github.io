@@ -27,7 +27,7 @@ people, I can empower them to do their best and feel good about the work they do
 
 👉 **Teamwork**: Better yet than individuals doing their best is a team that does its best. Holding
 regular team activities and making sure the team is empowered to make decisions and have its
-concerns heard is a great way to have teams that perform beter than the sum of their parts.
+concerns heard is a great way to have teams that perform better than the sum of their parts.
 
 👉 **Connection**: There’s a lot of depth in both upper management decisions and the work engineering
 teams perform on a daily basis. It’s very easy for these to become disconnected, and for members
@@ -57,7 +57,7 @@ proxies and libraries, a solid CS background and a keen interest in theoretical 
 (type theory, lambda calculus, abstract algebra, etc.).
 
 I have more than 7 years of experience in leading teams as either Team Lead or **Engineering Manager**.
-During this time, I have've been responsible for
+During this time, I have been responsible for
 
 🗨️ **People**: Handle recruitment, hold 1on1s, make sure everyone is productive, happy, and heard.
 

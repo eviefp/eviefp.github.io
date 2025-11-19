@@ -1,0 +1,4 @@
+.direnv/
+.shake/
+dist-newstyle/
+hls.log

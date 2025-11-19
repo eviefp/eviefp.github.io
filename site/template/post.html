@@ -1,0 +1,50 @@
+{{>site/template/header.html}}
+
+    <main>
+      <article>
+        <header>
+          <hgroup>
+            <div class="grid">
+              <div>
+                <h1>{{metadata.title}}</h1>
+              </div>
+              <div class="right">
+                <p>{{metadata.publish}}</p>
+              </div>
+            </div>
+            <div class="grid">
+              <div>
+                {{#metadata.tags}}
+                <a href="/tag/{{.}}" class="secondary">{{.}}</a>&nbsp;
+                {{/metadata.tags}}
+              </div>
+              {{#metadata.author}}
+              <div class="right">
+                <p>written by <i>{{.}}</i></p>
+              </div>
+              {{/metadata.author}}
+            </div>
+          </hgroup>
+        </header>
+        {{{metadata.content}}}
+
+        {{#metadata.renderChangelog}}
+        <aside>
+
+          <p>
+          <h5>Changelog</h5>
+          <ul>
+            {{#metadata.changelog}}
+              <li>{{.}}</li>
+            {{/metadata.changelog}}
+          </ul>
+          </p>
+
+        </aside>
+        {{/metadata.renderChangelog}}
+
+        <footer>{{metadata.footer}}</footer>
+      </article>
+    </main>
+
+{{>site/template/footer.html}}

@@ -1,0 +1,80 @@
+.right {
+  text-align: right;
+}
+
+article img {
+  width: 100%;
+  max-width: 350px !important;
+  float: left;
+  margin-right: 0.7em;
+}
+
+.unlink {
+  text-decoration: none;
+  color: gray;
+}
+
+nav .logo {
+  width: 26px !important;
+}
+
+aside {
+  margin: 0.5em;
+  background-color: rgb(19, 23, 20);
+}
+
+aside li {
+  display: list-item;
+}
+
+blockquote {
+  border-left: .25rem solid #de3b97;
+  padding: 0.5rem;
+}
+
+blockquote p {
+  margin-bottom: 0;
+}
+
+pre {
+    background-color: #F5FCFF;
+}
+
+.dark pre {
+    background-color: #393c31;
+}
+
+code {
+    background-color: #F5FCFF;
+}
+
+.dark code {
+    background-color: #393c31;
+}
+
+
+/* KeyWordTok */
+.sourceCode .kw { color: #600095; }
+.dark .sourceCode .kw { color: #b584d0; }
+/* DataTypeTok */
+.sourceCode .dt { color: #268BD2; }
+
+/* DecValTok (decimal value), BaseNTok, FloatTok */
+.sourceCode .dv, .sourceCode .bn, .sourceCode .fl { color: #AE81FF; }
+/* CharTok */
+.sourceCode .ch { color: #37ad2d; }
+/* StringTok */
+.sourceCode .st { color: #37ad2d; }
+/* CommentTok */
+.sourceCode .co { color: #7E8E91; }
+/* OtherTok */
+.sourceCode .ot { color: #EB005B; }
+/* AlertTok */
+.sourceCode .al { color: #A6E22E; font-weight: bold; }
+/* FunctionTok */
+.sourceCode .fu { color: #333; }
+.dark .sourceCode .fu { color: #a873a2; }
+/* RegionMarkerTok */
+.sourceCode .re { }
+/* ErrorTok */
+.sourceCode .er { color: #E6DB74; font-weight: bold; }

@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="/css/pico.min.css">
+    <link rel="stylesheet" href="/css/extra.css">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <title>Evie's Blog | How I Nix</title>
+
+    <meta property="og:locale" content="en_EN" />
+    <meta property="og:site_name" content="Evie's Blog" />
+    <meta property="og:url" content="https://eevie.ro/post/how-i-nix.html" />
+    <meta property="og:description" content="Evie's functional programming blog" />
+
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="How I Nix" />
+    <meta property="article:publisher" content="https://hachyderm.io/@vie" />
+    <meta property="article:published_time" content="2022-01-24" />
+  </head>
+  <body class="container">
+    <nav>
+      <ul>
+        <li>
+          <a href="/"> <strong>λevie.</strong> </a>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <a href="https://hachyderm.io/@vie">
+            <img src="/images/hachyderm.svg" alt="tech.lgbt logo" class="logo" />
+          </a>
+        </li>
+        <li>
+          <a href="https://codeberg.org/eviefp">
+            <img src="/images/codeberg.svg" alt="git logo" class="logo" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+      <article>
+        <header>
+          <hgroup>
+            <div class="grid">
+              <div>
+                <h1>How I Nix</h1>
+              </div>
+              <div class="right">
+                <p>24-01-2022</p>
+              </div>
+            </div>
+            <div class="grid">
+              <div>
+                <a href="/tag/nix" class="secondary">nix</a>&nbsp;
+              </div>
+              <div class="right">
+                <p>written by <i>Evie Ciobanu</i></p>
+              </div>
+            </div>
+          </hgroup>
+        </header>
+        <p>The earliest <a
+href="https://github.com/eviefp/dotfiles/commit/4879a6e3f9d915e1498f38412fab472f562b3a08">commit</a>
+I could find in my dotfiles repository of me using NixOS is 5th of
+February, 2020. So I have been running/using NixOS for about that long,
+which is not a lot. I definitely do not consider myself an expert. That
+being said, I put in a lot of hours into my NixOS setup. I enjoy
+everything being neat and tidy.</p>
+<p>I will try to explain how this works from the perspective of someone
+who is familiar with running Linux, but has little to no Nix/NixOS
+experience. If you're already familiar with NixOS and home-manager and
+just want to see my setup, the <a
+href="https://github.com/eviefp/dotfiles#readme">dotfiles repository
+README</a> might be enough.</p>
+<h2 id="what-is-nix">What is Nix?</h2>
+<p><code>Nix</code> is a functional programming language mainly used to
+power <code>nix</code>, the package manager.</p>
+<p><code>NixOS</code> uses the <code>nix</code> package manager, as well
+as <code>nix</code> the programming language to define and manage an
+entire Linux distribution, system settings, packages, etc.</p>
+<h2 id="why-nixos">Why NixOS</h2>
+<p>The most important thing for me is being able to find the exact
+versions of everything on my system with reasonable certainty, as well
+as the ability to update them. Of course, some of it might involve some
+digging, but I don't mind that.</p>
+<p>Secondly, I can easily reproduce any of my systems, entirely. My
+systems run the same version of everything. I've had to reinstall. I
+accidentally <code>rm -rf</code>ed parts of my system. I could trivially
+get everything system or configuration-related back.</p>
+<p>It also makes it easy to have different versions of various software
+installed (and even eaiser through the use of <code>nix-shell</code> and
+<code>direnv</code> / <code>lorri</code>).</p>
+<p>Another big plus for me is the ease of system configuration. I am not
+an expert in running Linux systems, and having the most common system
+options browsable through <a
+href="https://search.nixos.org/options">nixopts</a> makes it a lot
+easier.</p>
+<p>It also makes trying out new things very easy (as long as it's
+already packaged by somebody else), including trying out new system
+settings. You can also trivially revert your system to a previous
+configuration.</p>
+<p>However, with all the good, there's also downsides. The main problem
+is that it's definitley not mainstream so if you don't use relatively
+popular hardware, software, etc., you might end up having to dig quite a
+bit.</p>
+<p>Another downside is that since <code>NixOS</code> doesn't install
+anything globally, you will not be able to run pretty much any binary
+without nixifying it first, which at a minimum means patching its
+dynamic library paths. The good news is that there's already tools to do
+that. But it will still not work out of the box.</p>
+<p>You can read a bit more about how <code>nix</code> and
+<code>NixOS</code> work over on the official <a
+href="https://nixos.org/guides/how-nix-works.html">NixOS how it works
+page</a>.</p>
+<h2 id="trying-it-out">Trying it out</h2>
+<p>When I tried <code>nix</code> out, I wanted to get a good feel for
+it, so I jumped straight in by buying an extra disk and installed NixOS
+on it. It was fairly painless to set everything up, so a few months
+later I concluded the experiment was successful and migrated it to my
+main disk.</p>
+<p>That being said, you can take it slower by installing
+<code>nix</code> the <a
+href="https://nixos.org/download.html#download-nix">package
+manager</a>.</p>
+<p>Another option is installing a <a
+href="https://nixos.org/download.html#nixos-virtualbox">NixOS virtual
+machine</a>.</p>
+<p>This post details the first option (although you can easily use the
+same ideas in a NixOS VM).</p>
+<h2 id="installing-nixos">Installing NixOS</h2>
+<p>The <a
+href="https://nixos.org/manual/nixos/stable/#sec-installation">NixOS
+installation guide</a> is quite good and should get you up and
+running.</p>
+<p>Make sure you read the <a
+href="https://nixos.org/manual/nixos/stable/index.html#sec-x11">X Window
+System</a> section of the configuration and setup a minimal X server
+unless you are 100% comfortable using the console after the first
+reboot.</p>
+<p>I highly recommend you add a few of the things you need to your
+initial list of programs in your install
+<code>configuration.nix</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment this if needed (you&#39;ll know).</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># nixpkgs.config.allowUnfree = true;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>environment<span class="op">.</span>systemPackages = <span class="op">[</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or &#39;emacs&#39; or &#39;vscode&#39; or whichever editor you prefer</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># just make sure you have one</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  pkgs<span class="op">.</span>vim</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or &#39;chromium&#39; or &#39;google-chrome&#39; or whatever</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  pkgs<span class="op">.</span>firefox</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">]</span>;</span></code></pre></div>
+<p>You can lookup more programs that you might need over on the <a
+href="https://search.nixos.org/packages">NixOS package search</a>.</p>
+<p>Note: if a package is named <code>haskellPackages.ghcid</code>, then
+you'll need to add <code>pkgs.haskellPackages.ghcid</code>.</p>
+<h2 id="nix-channels-nix-env-and-why-i-avoid-them">Nix Channels,
+nix-env, and why I avoid them</h2>
+<p>Nix channels are a way to manage your system and globally installed
+programs (via <code>nix-env</code>). How this works is essentially, you
+subscribe to a channel (say, <code>nixos-21.11</code>) and then you can
+update to the latest released patch by doing
+<code>nix-channel --update</code>. The problem with that is that it's
+not easily reversible. Also, <code>nix-env</code> isn't a very pleasant
+package management experience.</p>
+<p>The package search I mentioned earlier shows install instructions
+using <code>nix-env</code>. I strongly recommend against that.</p>
+<p>Luckily, there's a pretty good alternative: we can use <a
+href="https://github.com/nmattia/niv">niv</a> to point to specific
+commits in the nixpkgs repository. Those are essentially the same as
+channels, but we get it written down in a file we control.</p>
+<p>We can also have multiple versions pinned for specific software if we
+need to.</p>
+<h2 id="pinning-your-nixos-configuration-and-system-packages">Pinning
+your NixOS configuration and system packages</h2>
+<p>There's a few things we need to do:</p>
+<ol>
+<li>Setup a pin for <code>nixpkgs</code></li>
+<li>Create a <code>shell.nix</code> file to make use of said pin</li>
+<li>Create a <code>configuration.nix</code> file</li>
+<li>Set everything up</li>
+</ol>
+<h3 id="pinning-nixpkgs">Pinning nixpkgs</h3>
+<p>Create a new directory, grab niv and init the repository.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> nixfiles</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> nixfiles</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span> <span class="at">-p</span> niv</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> init</span></code></pre></div>
+<p>You should now have a <code>nix</code> directory with two files:
+<code>sources.nix</code> and <code>sources.json</code>. The former
+contains basic nix code to load everything in the json file, while the
+latter contains the repository data including the commit SHA each
+dependency is currently pinned. If you put this file under version
+control, you can easily revert to a previously known working
+configuration.</p>
+<p>And now run <code>niv show</code>. You should see two dependencies:
+<code>niv</code> itself and <code>nixpkgs</code>. If
+<code>nixpkgs</code> is pinned to <code>NixOS/nixpkgs-channels</code>,
+it means you have an older version of <code>niv</code> and you need to
+update this dependency by running</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> drop nixpkgs</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> add nixos/nixpkgs <span class="at">--branch</span> nixos-21.11</span></code></pre></div>
+<p>Note: you should probably use the latest released version available
+on the <a href="https://github.com/NixOS/nixpkgs">nixpkgs repository</a>
+instead of <code>nixos-21.11</code>.</p>
+<h3 id="creating-a-shellnix-file">Creating a shell.nix file</h3>
+<p>Next, we need to create a <code>shell.nix</code> file:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Import pinned repositories</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">sources</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./nix/sources.nix</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab nixpkgs from there</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span> <span class="op">=</span> <span class="bu">import</span> sources<span class="op">.</span>nixpkgs <span class="op">{</span> <span class="va">config</span>.<span class="va">allowUnfree</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a shell</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>nixpkgs<span class="op">.</span>mkShell <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">nativeBuildInputs</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    nixpkgs<span class="op">.</span>niv <span class="co"># grab the latest version of niv</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Force this nixpkgs to be available for commands such as</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># nix-shell -p &lt;package&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">NIX_PATH</span> <span class="op">=</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nixpkgs=</span><span class="sc">${</span>sources<span class="op">.</span>nixpkgs<span class="sc">}</span><span class="st">:nixos-config=/etc/nixos/configuration.nix&quot;</span><span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>We can now launch a shell by running <code>nix-shell</code>. You can
+check that it's working by checking your <code>NIX_PATH</code>
+value:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$NIX_PATH</span></span></code></pre></div>
+<p>And you should see something like
+<code>nixpkgs=/nix/store/ynv2jfdrw7arx3q4xjir7mn0j2w97pcy-source:nixos-config=/etc/nixos/configuration.nix</code>.</p>
+<h3 id="system-configuration-file">System configuration file</h3>
+<p>The easiest way to get started is to copy the nixfiles that you used
+during the install phase over. They should be a good place to start:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/nixos/<span class="pp">*</span>.nix .</span></code></pre></div>
+<p>Without any additional changes, we can now rebuild everything using
+the new pin.</p>
+<h3 id="setting-everything-up">Setting everything up</h3>
+<p>In order for all this to work, we'll need to remove the files from
+<code>/etc/nixos</code> and symlink to their copies:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> rm /etc/nixos/<span class="pp">*</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> <span class="va">$PWD</span>/configuration.nix /etc/nixos/</span></code></pre></div>
+<p>And now you are ready to switch to this config using the freshly
+created pin:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> <span class="at">--preserve-env</span> nixos-rebuild switch</span></code></pre></div>
+<p>You don't need to re-enter the <code>nix-shell</code> if you have not
+left the one we entered when verifying the <code>NIX_PATH</code>.</p>
+<p>That's it! You can now update to the latest commit of the current
+branch by running <code>niv update</code>. You can also switch branches
+to a different NixOS release. Note that you should also update your
+<code>configuration.nix</code>'s <code>system.stateVersion</code>
+accordingly.</p>
+<h2 id="setting-up-home-manager">Setting up home-manager</h2>
+<p>The above is great for setting up your system, but it's not ideal for
+config files and user programs. For this, <a
+href="https://github.com/nix-community/home-manager">home-manager</a> is
+the better choice.</p>
+<p>First off, it does not need root (<code>sudo</code>) rights to change
+the settings. Secondly, it has a few more options for some programs, and
+some helpers around things like user services, emails, etc.</p>
+<p>In order to get started, we'll:</p>
+<ol>
+<li>Add <code>home-manager</code> to our pins</li>
+<li>Update our <code>shell.nix</code> accordingly</li>
+<li>Create a basic <code>home.nix</code> file to start us off</li>
+</ol>
+<h3 id="pin-home-manager">Pin home-manager</h3>
+<p>We'll start in the same directory where we created the
+<code>shell.nix</code> file previously, and add a pin for
+<code>home-manager</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">niv</span> add home-manager <span class="at">--branch</span> release-21.11</span></code></pre></div>
+<p>Make sure the branch release matches your NixOS version!</p>
+<h3 id="update-shell-file">Update shell file</h3>
+<p>Next, we need to reference this in our <code>shell.nix</code>:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Import pinned repositories</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">sources</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./nix/sources.nix</span><span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab nixpkgs from there</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span> <span class="op">=</span> <span class="bu">import</span> sources<span class="op">.</span>nixpkgs <span class="op">{</span> <span class="va">config</span>.<span class="va">allowUnfree</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grab home-manager as well</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">home-manager</span> <span class="op">=</span> <span class="bu">import</span> sources<span class="op">.</span>home<span class="op">-</span>manager <span class="op">{</span> <span class="op">};</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a shell</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>nixpkgs<span class="op">.</span>mkShell <span class="op">{</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="va">nativeBuildInputs</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    nixpkgs<span class="op">.</span>niv <span class="co"># grab the latest version of niv</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">NIX_PATH</span> <span class="op">=</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nixpkgs=</span><span class="sc">${</span>sources<span class="op">.</span>nixpkgs<span class="sc">}</span><span class="st">:home-manager=</span><span class="sc">${</span>sources<span class="op">.</span>home<span class="op">-</span>manager<span class="sc">}</span><span class="st">:nixos-config=/etc/nixos/configuration.nix&quot;</span><span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Note that we added <code>home-manager</code> to our
+<code>NIX_PATH</code>. That's all we need to do for now.</p>
+<h3 id="create-our-first-home-nix-file">Create our first home nix
+file</h3>
+<p>Let's create a new <code>home.nix</code> file. I added some ideas of
+things you might want. Feel free to remove anything you don't care
+about:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">home</span>.<span class="va">packages</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>killall</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>ripgrep</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>wget</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>unzip</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>zip</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">];</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">home</span>.<span class="va">file</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If you keep these, you&#39;ll have to move the files here first.</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;.config/nvim/init.vim&quot;</span>.<span class="va">source</span> <span class="op">=</span> <span class="ss">./init.vim</span><span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;.config/nvim/coc-settings.json&quot;</span>.<span class="va">source</span> <span class="op">=</span> <span class="ss">./coc-settings.json</span><span class="op">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="va">programs</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Better &#39;cat&#39;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">bat</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>      <span class="va">config</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">theme</span> <span class="op">=</span> <span class="st">&quot;TwoDark&quot;</span><span class="op">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">pager</span> <span class="op">=</span> <span class="st">&quot;less -FR&quot;</span><span class="op">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Really useful for auto-running &#39;shell.nix&#39;, see also: lorri</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">direnv</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Better &#39;ls&#39;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="va">exa</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableAliases</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># My favorite shell</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="va">fish</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>      <span class="va">package</span> <span class="op">=</span> pkgs<span class="op">.</span>fish<span class="op">;</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>      <span class="va">interactiveShellInit</span> <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_normal &quot;#a4c337&quot;</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_command &quot;#77c337&quot;</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_quote &quot;#37c393&quot;</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_redirection &quot;#37b5c3&quot;</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_end &quot;#3776c3&quot;</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="st">        set fish_color_error &quot;#c33759&quot;</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="st">      &#39;&#39;</span><span class="op">;</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>      <span class="va">shellAliases</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># exa</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>        <span class="va">ls</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>exa<span class="sc">}</span><span class="st">/bin/exa&quot;</span><span class="op">;</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>        <span class="va">ll</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>exa<span class="sc">}</span><span class="st">/bin/exa -l&quot;</span><span class="op">;</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>        <span class="va">la</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>exa<span class="sc">}</span><span class="st">/bin/exa -a&quot;</span><span class="op">;</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>        <span class="va">lt</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>exa<span class="sc">}</span><span class="st">/bin/exa --tree&quot;</span><span class="op">;</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>        <span class="va">lla</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>exa<span class="sc">}</span><span class="st">/bin/exa -la&quot;</span><span class="op">;</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># git</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>        <span class="va">gs</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>git<span class="sc">}</span><span class="st">/bin/git status&quot;</span><span class="op">;</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>        <span class="co"># bat</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>        <span class="va">cat</span> <span class="op">=</span> <span class="st">&quot;</span><span class="sc">${</span>pkgs<span class="op">.</span>bat<span class="sc">}</span><span class="st">/bin/bat&quot;</span><span class="op">;</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>    <span class="va">fzf</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="va">git</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>      <span class="va">delta</span>.<span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>      <span class="va">aliases</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>        <span class="va">lol</span> <span class="op">=</span> <span class="st">&quot;log --graph --decorate --oneline --abbrev-commit&quot;</span><span class="op">;</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>        <span class="va">lola</span> <span class="op">=</span> <span class="st">&quot;log --graph --decorate --oneline --abbrev-commit --all&quot;</span><span class="op">;</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>        <span class="va">hist</span> <span class="op">=</span></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short&quot;</span><span class="op">;</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>        <span class="va">work</span> <span class="op">=</span> <span class="st">&quot;log --pretty=format:&#39;%h%x09%an%x09%ad%x09%s&#39;&quot;</span><span class="op">;</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>      <span class="va">extraConfig</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>        <span class="va">init</span>.<span class="va">defaultBranch</span> <span class="op">=</span> <span class="st">&quot;main&quot;</span><span class="op">;</span></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>        <span class="va">pull</span>.<span class="va">ff</span> <span class="op">=</span> <span class="st">&quot;only&quot;</span><span class="op">;</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>        <span class="va">merge</span>.<span class="va">conflictstyle</span> <span class="op">=</span> <span class="st">&quot;diff3&quot;</span><span class="op">;</span></span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>      <span class="va">ignores</span> <span class="op">=</span> <span class="op">[];</span></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>      <span class="va">userEmail</span> <span class="op">=</span> <span class="st">&quot;your email here&quot;</span><span class="op">;</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>      <span class="va">userName</span> <span class="op">=</span> <span class="st">&quot;your name here&quot;</span><span class="op">;</span></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Should probably keep this</span></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>    <span class="va">home-manager</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This makes it so that if you type the name of a program that</span></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># isn&#39;t installed, it will tell you which package contains it.</span></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>    <span class="va">nix-index</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>      <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableFishIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>      <span class="va">enableBashIntegration</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>You can find all <a
+href="https://nix-community.github.io/home-manager/options.html">settings
+for home-manager on their wiki page</a>.</p>
+<p>Next, you'll have to symlink this file:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="va">$PWD</span>/shell.nix <span class="va">$HOME</span>/.config/nixpkgs/home.nix</span></code></pre></div>
+<h3 id="installing-home-manager">Installing home-manager</h3>
+<p>The first time you install <code>home-manager</code>, you'll have to
+run:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nix-shell</span> <span class="st">&#39;&lt;home-manager&gt;&#39;</span> <span class="at">-A</span> install</span></code></pre></div>
+<p>The same command needs to be executed if you update the pin for
+it.</p>
+<p>However, if you just update your configuration file, you can simply
+run</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">home-manager</span> switch</span></code></pre></div>
+<h2 id="have-fun">Have fun!</h2>
+<p>And that's pretty much it! You can find more inspiration in my <a
+href="https://github.com/eviefp/dotfiles">config files</a>.</p>
+<p>Please note I use modules a lot which I have not covered here. I do
+plan to write a blog post about it later.</p>
+
+
+        <footer></footer>
+      </article>
+    </main>
+
+
+  </body>
+</html>

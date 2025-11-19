@@ -1,0 +1,17 @@
+{{>site/template/header.html}}
+
+    <main>
+      <h1>recent posts</h1>
+      <section class="striped">
+      <table class="striped">
+      {{#posts}}
+        <tr>
+          <td><a class="unlink" href="/post/{{id}}">{{title}}</a></td>
+          <td class="right">{{publish}}</td>
+        </tr>
+      {{/posts}}
+      </table>
+      </section>
+    </main>
+
+{{>site/template/footer.html}}

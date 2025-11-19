@@ -1,0 +1,30 @@
+
+{{>site/template/header.html}}
+
+    <main>
+      <h1>{{tagName}}</h1>
+      <section class="striped">
+      <table class="striped">
+      {{#posts}}
+        <tr>
+          <td><a class="unlink" href="/post/{{id}}">{{title}}</a></td>
+          <td class="right">{{publish}}</td>
+        </tr>
+      {{/posts}}
+      {{#pages}}
+        <tr>
+          <td><a class="unlink" href="/page/{{id}}">{{title}}</a></td>
+          <td class="right">{{publish}}</td>
+        </tr>
+      {{/pages}}
+      {{#wikis}}
+        <tr>
+          <td><a class="unlink" href="/wiki/{{id}}">{{title}}</a></td>
+          <td class="right">{{publish}}</td>
+        </tr>
+      {{/wikis}}
+      </table>
+      </section>
+    </main>
+
+{{>site/template/footer.html}}

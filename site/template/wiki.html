@@ -1,0 +1,36 @@
+{{>site/template/header.html}}
+
+    <main>
+      <article>
+        <header>
+          <hgroup>
+            <h1>{{wiki.title}}</h1>
+            <p>
+              {{#wiki.tags}}
+                <a href="/wiki/tag/{{.}}.html" class="secondary">{{.}}</a>&nbsp;
+              {{/wiki.tags}}
+            </p>
+          </hgroup>
+        </header>
+        {{{wiki.content}}}
+
+        {{#wiki.renderChangelog}}
+        <aside>
+
+          <p>
+          <h5>Changelog</h5>
+          <ul>
+            {{#wiki.changelog}}
+              <li>{{.}}</li>
+            {{/wiki.changelog}}
+          </ul>
+          </p>
+
+        </aside>
+        {{/wiki.renderChangelog}}
+
+        <footer>{{wiki.footer}}</footer>
+      </article>
+    </main>
+
+{{>site/template/footer.html}}

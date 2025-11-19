@@ -6,8 +6,7 @@ author: Evie Ciobanu
 tags: [ nix ]
 ---
 
-The earliest [commit](https://github.com/eviefp/dotfiles/commit/4879a6e3f9d915e1498f38412fab472f562b3a08)
-I could find in my dotfiles repository of me using NixOS is 5th of
+The earliest commit I could find in my dotfiles repository of me using NixOS is 5th of
 February, 2020. So I have been running/using NixOS for about that long,
 which is not a lot. I definitely do not consider myself an expert. That
 being said, I put in a lot of hours into my NixOS setup. I enjoy
@@ -16,7 +15,7 @@ everything being neat and tidy.
 I will try to explain how this works from the perspective of someone
 who is familiar with running Linux, but has little to no Nix/NixOS
 experience. If you're already familiar with NixOS and home-manager and
-just want to see my setup, the [dotfiles repository README](https://github.com/eviefp/dotfiles#readme)
+just want to see my setup, the [dotfiles repository README](https://codeberg.org/eviefp/nixfiles)
 might be enough.
 
 ## What is Nix?
@@ -440,7 +439,7 @@ home-manager switch
 ## Have fun!
 
 And that's pretty much it! You can find more inspiration in my [config
-files](https://github.com/eviefp/dotfiles).
+files](https://codeberg.org/eviefp/nixfiles).
 
 Please note I use modules a lot which I have not covered here. I do plan
 to write a blog post about it later.

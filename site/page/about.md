@@ -115,7 +115,7 @@ Language. It's an authorization policy language that has a Lean-based implementa
 proofs-included. This gives a different level of *security* and *guarantees* to critical paths.
 
 I really like [**nix/NixOS**](https://nixos.org/). I use it for all my devices, which are highly
-customized (you can check my github profile's [*dotfiles*](https://github.com/eviefp/dotfiles) for
+customized (you can check my github profile's [*nixfiles*](https://codeberg.org/eviefp/nixfiles) for
 details!). And while my personal use is fun and interesting, nix shines for **sharing**
 development environments by *pinning* dependencies exactly and giving developers *confidence* that
 their local build will be identical across devices, team members, CI/CD, and production.

@@ -1,18 +1,13 @@
 module Main where
 
--- This is basically like Haskell's default prelude minus a couple of footguns, plus a couple of useful things
+import Blog
+import qualified Blog.Content as Content
+import qualified Blog.Path.Rel as RelPath
 import Blog.Prelude
 
--- This is imported unqualified because pretty much every function is from here
-import Blog
-
--- This makes it easier to spot path related functions.
-import qualified Blog.Path.Rel as RelPath
-
--- JSON helper functions
+import qualified Chronos
+import Data.Aeson (ToJSON)
 import qualified Data.Aeson as Aeson
-
--- a 'KeyMap' is how JSON objects are encoded by Aeson
 import qualified Data.Aeson.KeyMap as KeyMap
 
 make :: Rules ()
@@ -20,6 +15,9 @@ make = do
   -- point of entry: we want to generate the 'index.html' file
   -- the 'index.html' rule will 'need' the rest of the website
   want [[RelPath.outputFile|index.html|]]
+
+  -- atom feed
+  want [[RelPath.outputFile|atom.xml|]]
 
   -- CNAME is needed for github pages
   want [[RelPath.outputFile|CNAME|]]
@@ -73,6 +71,15 @@ make = do
     writeFile [RelPath.sourceFile|template/index.html|] path
       . withMetadataObject "posts"
       . fmap metadata
+      $ sortedPosts
+
+  "atom.xml" %> \path -> do
+    posts <- itemsCache post
+    sortedPosts <- traverse (addPostContent posts) . sortBy (Down . publish) $ posts
+    now <- liftIO Chronos.now
+    writeFile [RelPath.sourceFile|template/atom.xml|] path
+      . addKey "now" (dateToISO8601 $ Chronos.timeToDatetime now)
+      . withMetadataObject "posts"
       $ sortedPosts
 
   -- static content, just copy files
@@ -173,6 +180,15 @@ make = do
 
   "CNAME" %> \path -> copyFile (RelPath.asSource path) path
 
+addPostContent :: (ItemKind, [Item]) -> Item -> Action RssItem
+addPostContent posts item = do
+  content <- Content.generateHtmlWithFixedWikiLinks [posts] (fst posts) (documentContent item)
+  pure
+    RssItem
+      { content = content
+      , meta = metadata item
+      }
+
 -- this is the entry point for the program
 main :: IO ()
 main = do
@@ -181,3 +197,18 @@ main = do
     settings = Settings [reldir|site|] [reldir|docs|] Info
    in
     runEngine settings make
+
+dateToISO8601 :: Chronos.Datetime -> Aeson.Value
+dateToISO8601 =
+  Aeson.String
+    . (<> "Z")
+    . Chronos.encode_YmdHMS
+      (Chronos.SubsecondPrecisionFixed 0)
+      (Chronos.DatetimeFormat (Just '-') (Just 'T') (Just ':'))
+
+data RssItem = RssItem
+  { meta :: Aeson.Value
+  , content :: Aeson.Value
+  }
+  deriving stock (Generic)
+  deriving anyclass (ToJSON)

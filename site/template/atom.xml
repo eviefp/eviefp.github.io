@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Evie's Tech Blog</title>
+  <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
+  <updated>{{now}}</updated>
+  <author>
+      <name>Evie</name>
+  </author>
+    <id>https://eevie.ro/</id>
+
+  {{#posts}}
+  <entry>
+      <title>{{meta.title}}</title>
+      <link href="https://eevie.ro/post/{{meta.id}}"/>
+      <id>https://eevie.ro/{{meta.id}}</id>
+      <updated>{{meta.isoPublishDate}}T00:00:00Z</updated>
+      {{#meta.tags}}
+      <category term="{{.}}"/>
+      {{/meta.tags}}
+      <content type="html"><![CDATA[{{{content}}}]]></content>
+  </entry>
+  {{/posts}}
+</feed>

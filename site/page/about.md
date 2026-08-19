@@ -1,6 +1,6 @@
 ---
 id: about
-publish: 12-03-2024
+publish: 19-08-2026
 title: About Evie
 ---
 

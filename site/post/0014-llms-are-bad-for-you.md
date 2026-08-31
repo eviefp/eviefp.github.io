@@ -143,7 +143,7 @@ stance. This is very hard at the moment, so for now I am settling for *at least 
 to use these things*.
 
 [^1]: [Forbes: AI Companies Are Buying And Destroying Antique Books](https://www.forbes.com/sites/maryroeloffs/2026/08/17/ai-companies-are-buying-and-destroying-antique-books-heres-why/) and [404 Media: We Tracked a Shipment of Rare Books. It Ended at an Amazon AI Training Facility](https://www.404media.co/we-tracked-a-shipment-of-rare-books-it-ended-at-an-amazon-ai-training-facility/). **Note**: they have obviously been trying to hide it. I also find it interesting they are deliberately buying books before 2022, because they don't want books with LLM generated content. Curious!
-[^2]: [Mea Cupla — Dark Hours](https://blog.terrygodier.com/2026/08/09/mea-culpa-dark-hours.html); what's not clear from this post is that the already existing app was ALSO vibe-coded with Claude.
+[^2]: [Mea Culpa — Dark Hours](https://blog.terrygodier.com/2026/08/09/mea-culpa-dark-hours.html); what's not clear from this post is that the already existing app was ALSO vibe-coded with Claude.
 [^3]: [Impact of AI-Generated Text on the Internet](https://ai-on-the-internet.github.io/)
 [^4]: [Exploitative Labour to Train Datasets](https://ohiostate.pressbooks.pub/llmsharmconsiderations/chapter/exploitative-labour-to-train-datasets/)
 [^5]: [OpenAI Used Kenyan Workers on Less than $2 Per Hour To Make ChatGPT Less Toxic](https://time.com/6247678/openai-chatgpt-kenya-workers/)

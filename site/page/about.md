@@ -4,115 +4,50 @@ publish: 19-08-2026
 title: About Evie
 ---
 
+![[content/evie.png]] Hi. I'm Evie, and I like tech so much that I do it both professionally
+and as a hobby. I have over 15 years of experience with Haskell, C#, and a little bit of Rust.
+I also do a lot of nix. I am currently working as a Staff Engineer.
 
-![[content/evie.png]] Hey, I'm Evie! Welcome to my about page. I generally use this to promote myself when I'm available
-for my next gig.
+I usually share a link to this page when I'm looking for work. So, if you want to **contact** me,
+please use `hello ❬at❭ eevie ❬dot❭ ro`.
 
-In the paragraphs below, you'll find what my **core values** are in respect to leading teams.
+I advocate for [hiring and training juniors](https://eevie.ro/post/hire-junior-developers),
+[against LLMs](https://eevie.ro/post/llms-are-bad-for-you), and for
+[workers rights](https://hachyderm.io/@vie/116795290331663049).
 
-You can also find my **work experience**, the technologies I've worked with, and some of the
-responsibilities I've had during this time.
+I think about tech **a lot**. I care about tech **a lot**. But I will never assume I'm right, and
+I will always approach conversations with curiosity and empathy. I never pull rank and always try
+to reach consensus.
 
-Lastly, I talk about my **technical interests**, which is basically the things that get me excited
-about technology and computer science.
+I am trans, queer, pan, poly, neurodivergent and exploring my DID. I value diversity a lot and
+am a fierce believer in diversity in teams.
 
-If you want to **contact** me, please use `hello@eevie.ro`.
+## Things I enjoy doing in my free time
+As advertised, I do tech as a hobby. My [nixfiles](https://codeberg.org/eviefp/nixfiles) has over 1100
+commits, and I manage 2 desktops, 1 laptop, 1 bare-metal server and 3 virtual servers, all with NixOS.
+I host a bunch of services for myself and my family (email, calendar, matrix server, media and minecraft
+servers, local git forge, etc.) and I enjoy using a highly-customized environment for myself.
 
-## My core values
+I built a simple [static website generator](https://codeberg.org/eviefp/website-engine) in Haskell using
+pandoc and shake that uses markdown for content. I initially built it for a national trans group I'm
+organising (and we have a bunch of localized articles to help the local community), and also ported this
+website to use it.
 
-- **Empathy**: I believe everyone wants to do their best. By being honest, kind, and understanding with
-people, I can empower them to do their best and feel good about the work they do.
+I also recently built a [(fish) shell prompt](https://codeberg.org/eviefp/kuina) because I got frustrated
+with starfish embracing LLMs, and I wanted an alternative.
 
-- **Teamwork**: Better yet than individuals doing their best is a team that does its best. Holding
-regular team activities and making sure the team is empowered to make decisions and have its
-concerns heard is a great way to have teams that perform better than the sum of their parts.
+When I'm not coding, I'm either catching up to One Piece, listening to or playing music, and spending time
+with my partners.
 
-- **Connection**: There’s a lot of depth in both management decisions and the work engineering
-teams perform on a daily basis. It’s very easy for these to become disconnected, and for members
-of either group to become enstrangered. It’s the job of the experienced engineers to act as a liason and
-ensure everybody is aligned and communicates openly and effectively.
+## And finally,
+Ideally, I would really love to work for a company that is either a coop or has a workers union, that has
+a strong no-LLM policy, and that is making a real positive change in the world.
 
-- **Diversity**: As a member of multiple marginalized groups, I am keenly aware of the
-struggles that minorities face in tech. The teams I join strive to be inclusive, kind and welcoming
-to everyone. These teams see diversity as power, an ability to gain a better perspective and
-unique views on the problems we face.
+But that's a very high bar to reach. I will settle for a company that is:
 
-## My Work Experience
+- not adjacent in any way to the military industrial complex,
+- not forcing or expecting me to use LLMs,
+- not creating a product around crypto, NFTs, web3, or anything cryptocurrency/blockchain-adjacent.
 
-I have been doing tech professionally for over 15 years.
-
-I started my career with C# and Javascript/Typescript developing large-scale web applications and
-web services. At the mid-point of my career, I decided to switch it up so I picked up Functional
-Programming through Haskell, Purescript, and nix. I've worked with FP for almost 8 years. For the
-past year, I've been back doing C#, although still doing a lot of nix and Haskell in my free time.
-
-I also have experience with compilers, theorem provers, GraphQL, Postgres, database access
-proxies and libraries, a solid CS background, and a keen interest in theoretical computer science
-(type theory, lambda calculus, abstract algebra, etc.).
-
-I have more than 8 years of experience in leading teams as either Team Lead, Staff Engineer or Engineering Manager.
-During this time, I have been responsible for:
-
-- **People**: Handle recruitment, hold 1on1s, make sure everyone is productive, happy, and heard.
-
-- **Team**: Team exercises and activities, games, help individuals work and act as a team through
-a strong sense of team ownership and unity.
-
-- **Process**: Hold retrospectives, find bottlenecks, resolve team dysfunctions, find creative and
-team and company-specific ways to improve the way we work.
-
-I have over 15 years of doing individual contributions as a **Software Engineer**:
-
-- **First Principles**: I rely on both a strong theoretical background and many years of personal
-experiences to make informed decisions. I strongly believe in simplicity and clarity of code and
-using the right tool for the job.
-
-- **Learning**: I learned Haskell, PureScript, Nix, Scala, and Rust, as well as a lot of
-advanced math topics. I am always learning new things and trying out new technologies.
-
-> One fun and recent example is that I've used [Lean](https://lean-lang.org/) to solve (the vast
-> majority of) the 2023 Advent of Code problems. Using a theorem prover/dependently typed
-> programming language to work on coding puzzles was a great
-> [learning experience](https://eevie.ro/posts/2023-12-21-lean-sigma.types.html).
-
-- **Presentations**: Held multiple presentations at local FP user groups and the local University,
-work presentations and workships, as well as a
-[talk at Functional Conf](https://www.youtube.com/watch?v=wpV8WbpuAKY) about program testing and
-software verification.
-
-- **Community involvement**: I'm an active member in the FP community, and held a position on the
-[Haskell Foundation board](https://haskell.foundation/who-we-are/).
-
-- **CI/CD**: I'm a strong believer in reproducible builds, easy and predictable deployments, and
-consistent developer local setup.
-
-## My Technical Interests
-
-I am often times using (theoretical) **computer science** when working on technical projects. Using
-a common *mathematical* language that has the benefit of having *provable* and *testable* statements
-can greatly improve technical *conversations*. I have successfully used theoretical methods to
-*refactor*, *optimize*, and *clarify* both small and large areas of code. I am mostly interested
-in **type theory**, **lambda calculus**, and **abstract algebra**.
-
-**Functional programming** ties in very well with theoretical computer science, and it's generally
-easier to translate FP to theory and back (it's possible for all paradigms, but FP is closest). I
-mostly have experience with *Haskell* and *Purescript*, but a lot of languages can now be used in a
-functional style or share a lot of features with functional programming languages (e.g. Elixir,
-Scala, Kotlin, Clojure, Typescript, etc.).
-
-Most programs have **critical paths** -- paths that can cause a company to lose a lot of money or even
-fail of they contain bugs. A lot of companies rely on engineer dilligence and automated testing.
-And while these are absolutely critical, there's one more kind of verification that's often overlooked: we can
-**formally prove** these critical paths are correct. One great example is Amazon's Cedar Policy
-Language. It's an authorization policy language that has a Lean-based implementation,
-proofs-included. This gives a different level of *security* and *guarantees* to critical paths.
-
-I really like [**nix/NixOS**](https://nixos.org/). I use it for all my devices, which are highly
-customized (you can check my codeberg profile's [*nixfiles*](https://codeberg.org/eviefp/nixfiles) for
-details!). And while my personal use is fun and interesting, nix shines for **sharing**
-development environments by *pinning* dependencies exactly and giving developers *confidence* that
-their local build will be identical across devices, team members, CI/CD, and production.
-
-
-
-If you want to get in touch, please **email** me at `hello@eevie.ro`.
+If you want to get in touch, please **email** me at `hello@eevie.ro`. Happy to send a business-friendly
+resume :)

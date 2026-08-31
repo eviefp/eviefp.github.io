@@ -2,12 +2,308 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Evie's Tech Blog</title>
   <link href="https://eevie.ro/atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2026-08-19T15:06:54Z</updated>
+  <updated>2026-08-31T10:54:05Z</updated>
   <author>
       <name>Evie</name>
   </author>
     <id>https://eevie.ro/</id>
 
+  <entry>
+      <title>LLMs are bad for you</title>
+      <link href="https://eevie.ro/post/llms-are-bad-for-you"/>
+      <id>https://eevie.ro/llms-are-bad-for-you</id>
+      <updated>2026-08-27T00:00:00Z</updated>
+      <category term="llm"/>
+      <content type="html"><![CDATA[<p>I do not use LLMs. I do not call them <em>AI</em>. I often speak up
+against LLMs.</p>
+<p>This post is my current stance on LLMs. I am primarily exploring the
+topic from the perspective of someone that <strong>writes code</strong>,
+although a lot of the arguments apply in many other scenarios or
+fields.</p>
+<p>There are over 20 references and <strong>sources</strong> cited
+below, simply because I wanted to keep this post short without going
+into a lot of details on every single point. To me, all of these points
+are obvious and important factors contributing to <strong>why</strong> I
+don't use LLMs.</p>
+<p>I <strong>oppose</strong> LLMs for four main reasons:</p>
+<ul>
+<li>ethical,</li>
+<li>socio-political,</li>
+<li>psychological safety, and</li>
+<li>environmental.</li>
+</ul>
+<h2 id="ethical">Ethical</h2>
+<p>LLMs are trained with <strong>stolen work</strong> from the public
+(and private) domain. Books, websites, posts, open source code,
+everything people wrote for the benefit of other <strong>people</strong>
+is now fed as training data into LLMs, regardless of whether it's
+ethical or legal to do so. <a href="#fn1" class="footnote-ref"
+id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Whether you believe patents or copyright should be opposed or not,
+it's still blatantly obvious the same rules are not currently applied to
+companies training LLMs. A lot of specialized LLM outputs are often
+direct copies of existing work. <a href="#fn2" class="footnote-ref"
+id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Even worse, the content generated using LLMs is growing in size, and
+it's getting harder to find legitimate, <strong>real content</strong> on
+the internet (even for people who deliberately avoid using LLM-enabled
+search engines, summaries, etc.). <a href="#fn3" class="footnote-ref"
+id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>LLMs are also not trained <em>passively</em>, there's tons of
+<strong>underpaid labor</strong> (often from the global south) that is
+basically used to oversee the training of these models. Similarly to
+content moderation teams on large social media platforms, these jobs are
+awful and often involve going through disturbing and traumatic content.
+<a href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a> <a href="#fn5" class="footnote-ref"
+id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>LLMs are extensively used by the police, <strong>ICE</strong>, the
+<strong>IOF</strong>, and <strong>military</strong> forces in operations
+that casually infringe the rights of citizens, international law, and
+actively participate in <em>citizen surveillance</em>,
+<em>deportation</em>, <em>genocide</em>, and (primary imperialist)
+<em>wars</em>. <a href="#fn6" class="footnote-ref" id="fnref6"
+role="doc-noteref"><sup>6</sup></a> <a href="#fn7" class="footnote-ref"
+id="fnref7" role="doc-noteref"><sup>7</sup></a> <a href="#fn8"
+class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> <a
+href="#fn9" class="footnote-ref" id="fnref9"
+role="doc-noteref"><sup>9</sup></a></p>
+<h2 id="socialpolitical">Social/Political</h2>
+<p><strong>Enshittification</strong> is the natural result of the profit
+motive being the driver for all goods and services. Racing to the
+bottom, extracting as much value as possible, and cutting costs have
+always been key pillars in companies (especially as they grow and
+distance themselves from any humanity and towards
+spreadsheet/capital-centric entities). This did not start with LLMs, but
+LLMs have definitely been supercharging and accelerating this trend.</p>
+<p>On top of all of this, LLMs themselves are subject to
+enshittification. Right now they are still in the early phase of gaining
+widespread use, and even so they've already started showing
+<strong>ads</strong> <a href="#fn10" class="footnote-ref" id="fnref10"
+role="doc-noteref"><sup>10</sup></a>. Next steps are likely to include
+cutting costs as much as possible, increasing the subscription price,
+selling your data/conversations, etc. <a href="#fn11"
+class="footnote-ref" id="fnref11"
+role="doc-noteref"><sup>11</sup></a></p>
+<p><strong>Taylorism</strong> (ridiculously rebranded as <em>scientific
+management</em>) is the framework which, among other things, is about
+turning workers into <strong>replaceable cogs</strong> that focus on
+monotonous or singular tasks that they are expected to do as fast and
+cheap as possible. It's a significant factor in work
+<strong>alienation</strong>, and made possible by various advances in
+workplace automation.</p>
+<p>LLMs bring the prospective of introducing taylorism to <strong>white
+collar</strong> (and artistic-adjacent jobs). Smart workers that have
+unique talents are terrible for business: they are costly, have
+opinions, care about quality, some may even have morals.</p>
+<p>LLMs are also a tool for further <strong>displacing labour</strong>
+and extracting more value from workers, at everyone else's expense
+(which is somewhat a consequence of Taylorism). It means <em>fewer
+jobs</em>, <em>worse quality</em>, worse everything for everyone except
+the people <em>owning</em> the LLMs and companies using them: they get
+even more profits/capital. <a href="#fn12" class="footnote-ref"
+id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<h2 id="psychological">Psychological</h2>
+<p>LLMs are deliberately built to <em>mimic human connection</em>,
+friendships, and maximize how much time people spend using them.
+Companies encourage people to use more LLMs because they can get workers
+to do work <em>faster</em>, while keeping all responsibility on the side
+of the worker (and mask that behind declaring the output is still your
+responsibility, while also increasing your load, and hide behind
+pseudo-science terms like <em>prompt engineering</em>).</p>
+<p>All of this also significantly erodes <strong>human
+connections</strong> at work and throughout our society and deteriorates
+mental health and happiness.<a href="#fn13" class="footnote-ref"
+id="fnref13" role="doc-noteref"><sup>13</sup></a> <a href="#fn14"
+class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a>
+<a href="#fn15" class="footnote-ref" id="fnref15"
+role="doc-noteref"><sup>15</sup></a></p>
+<p>An LLM is a powerful statistical model. And it will use the way you
+address it as input to craft familiar phrases, and over time it will
+craft and fine-tune its responses to you in ways that feel
+<em>trustworthy</em>, <em>familiar</em>, making you want to interact
+with it more. It's very hard for our brains to tell the difference
+between it and a <strong>real human</strong>; we can't evolve as fast as
+our technology.</p>
+<p>I've seen a lot of people respect go into this kind of <em>LLM
+psychosis</em>, and I don't think I am <em>smarter</em> or
+<em>better</em> than them. I am honestly <strong>terrified</strong> to
+use LLMs. I can definitely see myself going into such a psychosis if I
+started using them (and were able to ignore all the other issues I have
+with them). <a href="#fn16" class="footnote-ref" id="fnref16"
+role="doc-noteref"><sup>16</sup></a> <a href="#fn17"
+class="footnote-ref" id="fnref17"
+role="doc-noteref"><sup>17</sup></a></p>
+<h2 id="environmental">Environmental</h2>
+<p>I don't think I need to go too deep into this one. They use a
+shit-ton of <strong>water</strong> and <strong>energy</strong>, they
+don't care about keeping said water clean, and they're loud as fuck
+(disturbing the environment around them as well). <a href="#fn18"
+class="footnote-ref" id="fnref18"
+role="doc-noteref"><sup>18</sup></a></p>
+<p>They are also at the forefront of the resurgence of non-green energy
+throughout the world through its immense power demand.</p>
+<h2 id="bonus-round-theyre-not-even-competent">Bonus round: they're not
+even competent</h2>
+<p>LLMs produce <strong>average</strong> code at best, and I want to
+keep <strong>learning</strong> and do better than that. I enjoy what I'm
+doing. If I were a musician or painter, I would be so because I enjoy
+creating music or paintings, not because I want to listen to my own
+music or look at my paintings.</p>
+<p>Personally, using LLMs would take the <strong>fun</strong> and
+pleasure out of writing software. Even if it's <em>boring</em>
+boilerplate code, I welcome that. I want to feel the annoyance, and have
+that drive my <strong>refactoring</strong> later. I want to get a feel
+of the code, such that I can think of ways to <strong>improve</strong>
+it.</p>
+<p>There's plenty of examples of LLMs getting things wrong,
+<strong>breaking production</strong>, deleting databases or home
+directories, hallucinating answers, etc. <a href="#fn19"
+class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>
+<a href="#fn20" class="footnote-ref" id="fnref20"
+role="doc-noteref"><sup>20</sup></a> <a href="#fn21"
+class="footnote-ref" id="fnref21"
+role="doc-noteref"><sup>21</sup></a></p>
+<p>I would even go one further: there's no concept of understanding and
+of answers. It's just an incredibly expensive auto-complete feature. It
+has no mental context, no understanding. Even the AGENTS.md file is just
+a placebo <a href="#fn22" class="footnote-ref" id="fnref22"
+role="doc-noteref"><sup>22</sup></a>.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>I won't presume to tell anyone what to do. I will just share how I am
+dealing with this.</p>
+<p><strong>Language</strong>: I do not use the term <em>AI</em>. I
+deliberately always use the term LLM.</p>
+<p><strong>Personal use</strong>: I do not touch LLMs. I write and
+create the things I want to create all on my own. I do not ask LLMs
+questions, I use search engines (with LLM overviews turned off), and I
+try to avoid LLM-generated content (to the best of my knowledge).</p>
+<p>I also actively try to <em>avoid</em> software tools and projects
+that use LLMs in any capacity, and try to gravitate towards alternatives
+that have a strong stance against LLM use. This is unfortunately not
+always possible (e.g. there's no viable alternative to the Linux
+kernel).</p>
+<p><strong>Personal relations</strong>: I try to advocate against LLM
+use and try to help the people around me both see my perspective (this
+is partly why I'm writing this blog post) and reduce their LLM use. I
+try, to the best of my abilities, not to be aggressive or personally
+attack people, especially if they're using LLMs exclusively at work in
+order to make a living (unless their job involves doing propaganda that
+advocates for LLM usage).</p>
+<p><strong>Professional use</strong>: I would ideally love to work for
+companies that have a clear anti-LLM stance. This is very hard at the
+moment, so for now I am settling for <em>at least don't force me to use
+these things</em>.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a
+href="https://www.forbes.com/sites/maryroeloffs/2026/08/17/ai-companies-are-buying-and-destroying-antique-books-heres-why/">Forbes:
+AI Companies Are Buying And Destroying Antique Books</a> and <a
+href="https://www.404media.co/we-tracked-a-shipment-of-rare-books-it-ended-at-an-amazon-ai-training-facility/">404
+Media: We Tracked a Shipment of Rare Books. It Ended at an Amazon AI
+Training Facility</a>. <strong>Note</strong>: they have obviously been
+trying to hide it. I also find it interesting they are deliberately
+buying books before 2022, because they don't want books with LLM
+generated content. Curious!<a href="#fnref1" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a
+href="https://blog.terrygodier.com/2026/08/09/mea-culpa-dark-hours.html">Mea
+Cupla — Dark Hours</a>; what's not clear from this post is that the
+already existing app was ALSO vibe-coded with Claude.<a href="#fnref2"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://ai-on-the-internet.github.io/">Impact
+of AI-Generated Text on the Internet</a><a href="#fnref3"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a
+href="https://ohiostate.pressbooks.pub/llmsharmconsiderations/chapter/exploitative-labour-to-train-datasets/">Exploitative
+Labour to Train Datasets</a><a href="#fnref4" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a
+href="https://time.com/6247678/openai-chatgpt-kenya-workers/">OpenAI
+Used Kenyan Workers on Less than $2 Per Hour To Make ChatGPT Less
+Toxic</a><a href="#fnref5" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a
+href="https://blog.sharmavishal.com/2025/05/palantirs-llm-synthesiser-bolstering.html">Palantir
+Boasting About Synthesizing Multiple LLMs</a> to increase their ability
+to do terrible things.<a href="#fnref6" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a
+href="https://www.dhs.gov/ai/use-case-inventory/ice">DHS Page Boasting
+LLM Use</a> throughout their agencies.<a href="#fnref7"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><a
+href="https://en.wikipedia.org/wiki/AI-assisted_targeting_in_the_Gaza_Strip">Wikipedia:
+AI-Assisted Targeting in the Gaza Strip</a> the act itself is appalling,
+and the neutral tone on this wikipedia article is infuriating.<a
+href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a
+href="https://responsiblestatecraft.org/ai-war-iran/">US Used Claude to
+Strike Over 1000 Targets in First 24 Hours of War</a><a href="#fnref9"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a
+href="https://qz.com/chatgpt-ads-vs-anthropic-no-ads-ai-trust">ChatGPT
+Sells Out</a>: the article seems to be praising Anthropic for not adding
+ads to Claude, but it's probably just a matter of time, given ChatGPT
+set the precedent already.<a href="#fnref10" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a
+href="https://www.emarketer.com/content/why-llm-conversations-next-big-source-of-consumer-intent-data">LLM
+Conversations Are The Next Big Source Of Consumer Intent Data</a>: this
+is framed as a good thing or opportunity, but obviously an incredibly
+dangerous breach of privacy.<a href="#fnref11" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a
+href="https://www.challengergray.com/blog/challenger-report-april-job-cuts-rise-38-from-march-ytd-cuts-down-50/">Challenger
+Report On Job Cuts</a> and <a
+href="https://polsci.institute/perspectives-public-administration/criticisms-limitations-scientific-management/">Criticisms
+and Limitations of Scientific Management</a><a href="#fnref12"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a
+href="https://dl.acm.org/doi/10.1145/3442188.3445922">On the Dangers of
+Stochastic Parrots</a><a href="#fnref13" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p><a
+href="hthettps://pmc.ncbi.nlm.nih.gov/articles/PMC12967755/">Potentially
+Harmful Consequence of AI Chatbot Use Among Patients With Mental
+Illness</a><a href="#fnref14" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p><a
+href="https://www.brown.edu/news/2025-10-21/ai-mental-health-ethics">AI
+Chatbots Systematically Violate Mental Health Ethics Standards</a><a
+href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><a
+href="https://www.psychiatrypodcast.com/psychiatry-psychotherapy-podcast/episode-253-ai-psychosis-emerging-cases-of-delusion-amplification-associated-with-chatgpt-and-llm-chatbot">Emerging
+Cases of Delusion Amplification Associated with LLM Chatbot Use</a><a
+href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p><a
+href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/">Your
+Brain On ChatGPT</a><a href="#fnref17" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p><a
+href="https://www.garfieldtech.com/blog/selfish-ai">Selfish AI</a><a
+href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p><a
+href="https://cacm.acm.org/news/nonsense-and-malicious-packages-llm-hallucinations-in-code-generation/">LLM
+Hallucinations in Code Generation</a><a href="#fnref19"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p><a
+href="https://www.infosecurity-magazine.com/news/llms-vulnerable-code-default/">Popular
+LLMs Found to Produce Vulnerable Code by Default</a><a href="#fnref20"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p><a
+href="https://www.bbc.com/news/articles/cgrkd41n2v9o">Ford Rehires Human
+Engineers After AI Fails to Match Quality Checks</a><a href="#fnref21"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p><a
+href="https://pivot-to-ai.com/2026/08/27/your-agents-md-file-doesnt-actually-do-anything/">Pivot
+to AI</a>: AGENTS.md file doesn't actually do anything.<a
+href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>]]></content>
+  </entry>
   <entry>
       <title>Lean, Advent of Code, and Sigma Types</title>
       <link href="https://eevie.ro/post/lean-sigma-types"/>

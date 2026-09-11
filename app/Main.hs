@@ -22,6 +22,9 @@ make = do
   -- CNAME is needed for github pages
   want [[RelPath.outputFile|CNAME|]]
 
+  -- human.json, see https://codeberg.org/robida/human.json
+  want [[RelPath.outputFile|human.json|]]
+
   let
     post = ("post", ["post//*.md"])
     page = ("page", ["page//*.md"])
@@ -179,6 +182,7 @@ make = do
       $ tagName
 
   "CNAME" %> \path -> copyFile (RelPath.asSource path) path
+  "human.json" %> \path -> copyFile (RelPath.asSource path) path
 
 addPostContent :: (ItemKind, [Item]) -> Item -> Action RssItem
 addPostContent posts item = do

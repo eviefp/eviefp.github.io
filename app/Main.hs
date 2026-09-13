@@ -198,7 +198,7 @@ main :: IO ()
 main = do
   let
     -- define output and source as 'docs' and 'site', with logging verbosity set to 'Info'
-    settings = Settings [reldir|site|] [reldir|docs|] Info
+    settings = Settings [reldir|site|] [reldir|generated|] Info
    in
     runEngine settings make
 

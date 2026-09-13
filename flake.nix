@@ -86,7 +86,7 @@
             cabal v2-repl eviefp-blog
           '';
           http-server = mkCommand [] ''
-            http-server docs
+            http-server generated
           '';
           browse-site = mkCommand [] ''
             xdg-open http://localhost:8080

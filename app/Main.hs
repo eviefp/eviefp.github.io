@@ -197,8 +197,8 @@ addPostContent posts item = do
 main :: IO ()
 main = do
   let
-    -- define output and source as 'docs' and 'site', with logging verbosity set to 'Info'
-    settings = Settings [reldir|site|] [reldir|generated|] Info
+    -- define output and source as 'docs' (forced by github pages) and 'source', with logging verbosity set to 'Info'
+    settings = Settings [reldir|source|] [reldir|docs|] Info
    in
     runEngine settings make
 

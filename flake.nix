@@ -86,7 +86,7 @@
             cabal v2-repl eviefp-blog
           '';
           http-server = mkCommand [] ''
-            http-server generated
+            http-server docs
           '';
           browse-site = mkCommand [] ''
             xdg-open http://localhost:8080
@@ -141,7 +141,7 @@
             pkgs.zlib.dev
           ];
           shellHook = ''
-            ln - sf ${pico-css}/css/pico.min.css site/css/pico.min.css
+            ln - sf ${pico-css}/css/pico.min.css source/css/pico.min.css
           '';
         };
       }
